@@ -8,7 +8,7 @@ type Props = {
 const MemoForm: React.VFC<Props> = ({inputMemo, setInputMemo}) => {
   return (
     <div className='px-2 pb-1 text-sm'>
-      <label className='inline-block' htmlFor="inputDescribe">備考、注意点、補足説明：</label>
+      <label className='inline-block' htmlFor="inputDescribe">まとめ：</label>
       <textarea
         className='w-full p-2 border border-gray-300 focus:text-gray-700'
         rows={3}

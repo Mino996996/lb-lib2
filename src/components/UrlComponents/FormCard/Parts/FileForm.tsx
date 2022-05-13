@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {convertPdfToImages} from "../FormCard";
 
 type Props = {
   inputFile: File|null;
@@ -7,6 +8,12 @@ type Props = {
 }
 
 const FileForm: React.FC<Props> = (props) => {
+  const [image, setImage] = useState('');
+  
+  // useEffect(()=>{
+  //
+  // }, [image]);
+  
   return (
     <div className='px-2 pb-1 text-sm'>
       {/*<label className='inline-block w-16' htmlFor="inputFile">ファイル:</label>*/}
@@ -23,10 +30,16 @@ const FileForm: React.FC<Props> = (props) => {
               alert('ファイルサイズの上限は12MBです');
             } else {
               props.setInputFile(e.target.files[0]);
+              try {
+                setImage(await convertPdfToImages(e.target.files[0]));
+              } catch (e) {
+                console.log(e)
+              }
             }
           }
         }}
       />
+      <img src={image} alt=""/>
     </div>
   );
 };

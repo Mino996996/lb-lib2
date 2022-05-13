@@ -8,7 +8,8 @@ import UrlKeyword from "./UrlCard/UrlKeyword";
 
 type Props = {}
 
-const blankUrlInfo: UrlInfo = {id: '', title:'', url: '', pageTitle:'', pageImage:'', pageDescription:'', tagList:[], memo:'', addTime:0, fileUrl:'', fileName:'', fileId:''};
+const nowTime = new Date();
+const blankUrlInfo: UrlInfo = {id: '', title:'', url: '', pageTitle:'', pageImage:'', pageDescription:'', tagList:[], memo:'', addTime: Math.floor(nowTime.getTime()/1000), fileUrl:'', fileName:'', fileId:''};
 
 const UrlArea: React.VFC<Props> = () => {
 

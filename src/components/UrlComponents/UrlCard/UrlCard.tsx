@@ -46,7 +46,7 @@ export const UrlCard: React.VFC<Props> = ({urlInfo, index}) => {
   
           {/* 日付 */}
           <div className="px-4 pt-1 border-b border-gray-300">
-            <p className="inline-block w-full text-gray-700">@{dateStr.toLocaleDateString()}</p>
+            <p className="inline-block w-full text-gray-700">{dateStr.toLocaleDateString()} 発表</p>
           </div>
           
           {/* File */}

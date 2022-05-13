@@ -7,7 +7,8 @@ type Props = {
 
 const changeToDateStr = (unix:number) => {
   const date = new Date(unix*1000);
-  return date.toLocaleDateString();
+  const dateList =  date.toLocaleDateString().split('/');
+  return `${dateList[0]}-${('00'+dateList[1]).slice(-2)}-${('00'+dateList[2]).slice(-2)}`;
 }
 
 export const changeDateStyle = (dateStr:string) => {

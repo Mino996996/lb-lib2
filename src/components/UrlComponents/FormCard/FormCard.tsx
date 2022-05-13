@@ -3,7 +3,7 @@ import TitleForm from "./Parts/TitleForm";
 import UrlForm from "./Parts/UrlForm";
 import TagForm from "./Parts/TagForm";
 import MemoForm from "./Parts/MemoForm";
-import {createId} from "../cardFunctions";
+import {createId, readFileData} from "../cardFunctions";
 import {UrlInfo} from "../../utilTypes";
 import {addUrl, fbStorageDelete, fbStorageUpload, updateUrl} from "../../../firebase/firebase";
 import {ClosedFormCard} from "./ClosedFormCard";
@@ -11,17 +11,39 @@ import {AppContext} from "../../state/ContextProvider";
 import FormButtonArea from "./Parts/FormButtonArea";
 import FileForm from "./Parts/FileForm";
 import DateForm from "./Parts/DateForm";
+import * as pdfjs from 'pdfjs-dist/legacy/build/pdf'
+// @ts-ignore
+import PDFJSWorker from 'pdfjs-dist/legacy/build/pdf.worker.entry'
 
-const nowDay = new Date();
-const unixTime = Math.floor(nowDay.getTime()/1000);
-
+pdfjs.GlobalWorkerOptions.workerSrc = PDFJSWorker;
 type Props = {
   initUrlInfo: UrlInfo;
   mode: 'update'|'create';
-  // isEdit: boolean;
   setIsEdit?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+export const convertPdfToImages = async (file:File) => {
+  const data = await readFileData(file);
+  
+  // PDFファイルのパース
+  const pdf = await pdfjs.getDocument({
+    // @ts-ignore
+    data: data as string,
+    cMapUrl: '/cmaps/',
+    cMapPacked: true,
+  }).promise
+  const canvas = document.createElement("canvas");
+  const page = await pdf.getPage(1);
+  const viewport = page.getViewport({ scale: 0.4 });
+  const context = canvas.getContext("2d");
+  canvas.height = viewport.height;
+  canvas.width = viewport.width;
+  const imageRef = { canvasContext: context!, viewport: viewport };
+  await page.render(imageRef).promise;
+  const pngImage = canvas.toDataURL();
+  canvas.remove();
+  return pngImage;
+}
 
 // createとupdateを兼ねるコンポーネント。編集時は両立性に注意
 export const FormCard: React.VFC<Props> = (prop) => {
