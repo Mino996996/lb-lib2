@@ -79,4 +79,18 @@ export const createInitTagList = (tagList:string[], selectedTag:string): string[
   return [];
 }
 
+export const readFileData = (file:File) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      resolve(reader.result);
+    };
+    reader.onerror = (err) => {
+      reject(err);
+    };
+    reader.readAsArrayBuffer(file);
+  });
+};
+
+
 

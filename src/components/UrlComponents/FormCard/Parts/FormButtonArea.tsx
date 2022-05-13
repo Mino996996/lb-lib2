@@ -20,7 +20,9 @@ const FormButtonArea: React.FC<Props> = (prop) => {
   const deleteUrlInfo = async () => {
     if(window.confirm('この情報を削除しますか？')){
       try {
-        await fbStorageDelete(prop.initUrlInfo.fileId);
+        if(prop.initUrlInfo.fileId) {
+          await fbStorageDelete(prop.initUrlInfo.fileId);
+        }
         await urlDb.delete(prop.initUrlInfo);
         const newList = allUrl.filter(urlInfo => urlInfo.id !== prop.initUrlInfo.id);
         setAllUrl([...newList]);

@@ -12,6 +12,7 @@
     "@types/react": "^18.0.5",
     "@types/react-dom": "^18.0.1",
     "firebase": "^9.6.11",
+    "pdfjs-dist": "^2.8.335",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-scripts": "5.0.1",
