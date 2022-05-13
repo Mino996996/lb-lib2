@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.edit-scrollbar {
+  -ms-overflow-style: -ms-autohiding-scrollbar;    /* IE, Edge 対応 */
+  scrollbar-width: thin;       /* Firefox 対応 */
+}
+
+.edit-scrollbar::-webkit-scrollbar {  /* Chrome, Safari 対応 */
+  width: 4px;
+  height: 8px;
+  background-color: #555; /* or add it to the track */
+}
+
+.edit-scrollbar::-webkit-scrollbar-thumb {  /* Chrome, Safari 対応 */
+  background: #ddd;
+}
