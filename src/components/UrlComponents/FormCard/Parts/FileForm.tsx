@@ -5,14 +5,11 @@ type Props = {
   inputFile: File|null;
   setInputFile: React.Dispatch<React.SetStateAction<File|null>>;
   inputFileName: string;
+  base64Image: string;
+  setBase64Image: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const FileForm: React.FC<Props> = (props) => {
-  const [image, setImage] = useState('');
-  
-  // useEffect(()=>{
-  //
-  // }, [image]);
   
   return (
     <div className='px-2 pb-1 text-sm'>
@@ -30,16 +27,18 @@ const FileForm: React.FC<Props> = (props) => {
               alert('ファイルサイズの上限は12MBです');
             } else {
               props.setInputFile(e.target.files[0]);
-              try {
-                setImage(await convertPdfToImages(e.target.files[0]));
-              } catch (e) {
-                console.log(e)
+              if(e.target.files[0].name.includes('.pdf')){
+                try {
+                  props.setBase64Image(await convertPdfToImages(e.target.files[0]));
+                } catch (e) {
+                  console.log(e)
+                }
               }
             }
           }
         }}
       />
-      <img src={image} alt=""/>
+      <img src={props.base64Image} alt=""/>
     </div>
   );
 };

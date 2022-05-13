@@ -13,6 +13,8 @@ export type UrlInfo = {
   fileId: string;
   fileUrl: string;
   fileName: string;
+  fileImageId: string;
+  fileImageUrl: string;
 }
 
 export type CategoryInfo = {
@@ -24,5 +26,10 @@ export type CategoryInfo = {
 export type UploadFileData = {
   id: string;
   name: string;
+  url: string;
+}
+
+export type UploadFileImageData = {
+  id: string;
   url: string;
 }

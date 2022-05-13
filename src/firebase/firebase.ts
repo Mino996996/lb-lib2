@@ -16,7 +16,7 @@ import {
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { getStorage, ref, uploadBytes, deleteObject, getDownloadURL } from "firebase/storage";
 
-import {CategoryInfo, UploadFileData, UrlInfo} from "../components/utilTypes";
+import {CategoryInfo, UploadFileData, UploadFileImageData, UrlInfo} from "../components/utilTypes";
 import {urlInfoList} from "../fixtures/stab/urlStab";
 import {createId, Obj} from "../components/UrlComponents/cardFunctions";
 
@@ -160,11 +160,38 @@ export const getOgpData = async (message: string): Promise<Obj> => {
 export const fbStorageUpload = async (file: File): Promise<UploadFileData> => {
   const fileId = `${createId(8)}_${file.name}`;
   const storageRef = ref(storage, fileId);
-  const res = await uploadBytes(storageRef, file);
+  await uploadBytes(storageRef, file);
   const url = await getDownloadURL(storageRef);
   return {
     id: fileId,
     name: file.name,
+    url: url
+  };
+}
+
+export const fbPdfImageUpload = async (base64Data: string): Promise<UploadFileImageData> => {
+  // Base64から画像ファイルに
+  const tmp = base64Data.split(',')
+  const data = atob(tmp[1])
+  const mime = tmp[0].split(':')[1].split(';')[0]
+  const buf = new Uint8Array(data.length)
+  for (let i = 0; i < data.length; i++) {
+    buf[i] = data.charCodeAt(i)
+  }
+  const blob = new Blob([buf], { type: mime })
+  const imageFile = new File([blob], 'image.png', {
+    lastModified: new Date().getTime(),
+  })
+  // アップロードしたのちにURL取得
+  const fileId = `image/${createId(12)}_fileImage.png`;
+  const storageRef = ref(storage, fileId);
+  const metadata = {
+    contentType: 'image/png',
+  };
+  await uploadBytes(storageRef, imageFile, metadata);
+  const url = await getDownloadURL(storageRef);
+  return {
+    id: fileId,
     url: url
   };
 }

@@ -62,7 +62,7 @@ export const UrlCard: React.VFC<Props> = ({urlInfo, index}) => {
           </div>
           
           {/* URLイメージデータ */}
-          {urlInfo.pageImage &&
+          {(urlInfo.pageTitle || urlInfo.fileImageUrl) &&
             <div className='py-1 border-b border-gray-300 flex'>
               {visible ? (
                 <InputPageInfo urlInfo={urlInfo} setVisible={setVisible} />

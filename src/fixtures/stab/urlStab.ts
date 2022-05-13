@@ -13,7 +13,9 @@ export const urlInfoList:UrlInfo[] = [
     addTime: 1,
     fileId: "f_123",
     fileUrl: "https://google/tttt",
-    fileName: "file_123.zip"
+    fileName: "file_123.zip",
+    fileImageUrl: "",
+    fileImageId: ""
   },
   {
     id:'135421341585',
@@ -27,7 +29,9 @@ export const urlInfoList:UrlInfo[] = [
     addTime: 2,
     fileId: "f_1234",
     fileUrl: "https://google/tttt123",
-    fileName: "file_1234.zip"
+    fileName: "file_1234.zip",
+    fileImageUrl: "",
+    fileImageId: ""
   },
   {
     id:'135421341586',
@@ -42,5 +46,7 @@ export const urlInfoList:UrlInfo[] = [
     fileId: "f_1235",
     fileUrl: "https://google/tttt333",
     fileName: "file_1235.zip",
+    fileImageUrl: "",
+    fileImageId: ""
   },
 ];

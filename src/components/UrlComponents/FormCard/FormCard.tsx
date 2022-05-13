@@ -5,7 +5,7 @@ import TagForm from "./Parts/TagForm";
 import MemoForm from "./Parts/MemoForm";
 import {createId, readFileData} from "../cardFunctions";
 import {UrlInfo} from "../../utilTypes";
-import {addUrl, fbStorageDelete, fbStorageUpload, updateUrl} from "../../../firebase/firebase";
+import {addUrl, fbPdfImageUpload, fbStorageDelete, fbStorageUpload, updateUrl} from "../../../firebase/firebase";
 import {ClosedFormCard} from "./ClosedFormCard";
 import {AppContext} from "../../state/ContextProvider";
 import FormButtonArea from "./Parts/FormButtonArea";
@@ -14,17 +14,11 @@ import DateForm from "./Parts/DateForm";
 import * as pdfjs from 'pdfjs-dist/legacy/build/pdf'
 // @ts-ignore
 import PDFJSWorker from 'pdfjs-dist/legacy/build/pdf.worker.entry'
-
 pdfjs.GlobalWorkerOptions.workerSrc = PDFJSWorker;
-type Props = {
-  initUrlInfo: UrlInfo;
-  mode: 'update'|'create';
-  setIsEdit?: React.Dispatch<React.SetStateAction<boolean>>;
-}
 
+//
 export const convertPdfToImages = async (file:File) => {
   const data = await readFileData(file);
-  
   // PDFファイルのパース
   const pdf = await pdfjs.getDocument({
     // @ts-ignore
@@ -32,18 +26,29 @@ export const convertPdfToImages = async (file:File) => {
     cMapUrl: '/cmaps/',
     cMapPacked: true,
   }).promise
+  
+  // 1ページ目をcanvasにレンダリング
   const canvas = document.createElement("canvas");
   const page = await pdf.getPage(1);
-  const viewport = page.getViewport({ scale: 0.4 });
+  const viewport = page.getViewport({ scale: 0.5 });
   const context = canvas.getContext("2d");
   canvas.height = viewport.height;
   canvas.width = viewport.width;
   const imageRef = { canvasContext: context!, viewport: viewport };
   await page.render(imageRef).promise;
-  const pngImage = canvas.toDataURL();
+  
+  // canvasにレンダリングされた画像をファイル化
+  const pngImage = canvas.toDataURL(); //指定がなければPNGのBase64データ
   canvas.remove();
   return pngImage;
 }
+
+type Props = {
+  initUrlInfo: UrlInfo;
+  mode: 'update'|'create';
+  setIsEdit?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
 
 // createとupdateを兼ねるコンポーネント。編集時は両立性に注意
 export const FormCard: React.VFC<Props> = (prop) => {
@@ -63,6 +68,9 @@ export const FormCard: React.VFC<Props> = (prop) => {
   const [inputFileId, setInputFileId] = useState(prop.initUrlInfo.fileId);
   const [inputFileUrl, setInputFileUrl] = useState(prop.initUrlInfo.fileUrl);
   const [inputFileName, setInputFileName] = useState(prop.initUrlInfo.fileName);
+  const [base64Image, setBase64Image] = useState('');
+  const [fileImageId, setFileImageId] = useState(prop.initUrlInfo.fileImageId);
+  const [fileImageUrl, setFileImageUrl] = useState(prop.initUrlInfo.fileImageUrl);
   const [status, setStatus] = useState(false);
   
   const clearInputData = () => {
@@ -77,6 +85,12 @@ export const FormCard: React.VFC<Props> = (prop) => {
     setInputTagList([]);
     setInputFile(null);
     setInputAddTime(Math.floor(nowDate.getTime()/1000));
+    setInputFileId('');
+    setInputFileUrl('');
+    setInputFileName('');
+    setBase64Image('');
+    setFileImageId('');
+    setFileImageUrl('')
   }
 
   const post = async () => {
@@ -95,16 +109,50 @@ export const FormCard: React.VFC<Props> = (prop) => {
       fileUrl: inputFileUrl ? inputFileUrl: '',
       fileName: inputFileName ? inputFileName: '',
       fileId: inputFileId ? inputFileName: '',
+      fileImageId: fileImageId ? fileImageId: '',
+      fileImageUrl: fileImageUrl ? fileImageUrl : '',
     }
     try {
       setStatus(true);
       if(prop.mode === 'update') { // 更新時の処理
-        if (inputFileId && inputFile) {
+        if (inputFileId && inputFile && inputFile.name.includes('.pdf')) {
           await fbStorageDelete(inputFileId);
-          const newFileDate = await fbStorageUpload(inputFile);
-          urlInfo.fileId = newFileDate.id;
-          urlInfo.fileName = newFileDate.name;
-          urlInfo.fileUrl = newFileDate.url;
+          const result = await Promise.all([
+            fbStorageUpload(inputFile),
+            fbPdfImageUpload(base64Image),
+            fbStorageDelete(inputFileId),
+            fbStorageDelete(fileImageId)
+          ]);
+          urlInfo.fileId = result[0].id;
+          urlInfo.fileName = result[0].name;
+          urlInfo.fileUrl = result[0].url;
+          urlInfo.fileImageId = result[1].id;
+          urlInfo.fileImageUrl = result[1].url;
+        } else if (inputFileId && inputFile) {
+          const result = await Promise.all([
+            fbStorageUpload(inputFile),
+            fbStorageDelete(inputFileId),
+          ]);
+          urlInfo.fileId = result[0].id;
+          urlInfo.fileName = result[0].name;
+          urlInfo.fileUrl = result[0].url;
+          urlInfo.fileImageId = '';
+          urlInfo.fileImageUrl = '';
+        } else if (inputFile && inputFile.name.includes('.pdf')) {
+          const result = await Promise.all([
+            fbStorageUpload(inputFile),
+            fbPdfImageUpload(base64Image)
+          ]);
+          urlInfo.fileId = result[0].id;
+          urlInfo.fileName = result[0].name;
+          urlInfo.fileUrl = result[0].url;
+          urlInfo.fileImageId = result[1].id;
+          urlInfo.fileImageUrl = result[1].url;
+        } else if (inputFile) {
+          const result = await fbStorageUpload(inputFile);
+          urlInfo.fileId = result.id;
+          urlInfo.fileName = result.name;
+          urlInfo.fileUrl = result.url;
         }
         await updateUrl(urlInfo);
         const indexNum = allUrl.findIndex(urlInfo => urlInfo.id === id);
@@ -113,11 +161,21 @@ export const FormCard: React.VFC<Props> = (prop) => {
         prop.setIsEdit!(false);
         setIsInputFieldOpen(false);
       } else { // 新規投稿時の処理
-        if (inputFile) {
-          const newFileDate = await fbStorageUpload(inputFile);
-          urlInfo.fileId = newFileDate.id;
-          urlInfo.fileName = newFileDate.name;
-          urlInfo.fileUrl = newFileDate.url;
+        if (inputFile && inputFile.name.includes('.pdf')) {
+          const result = await Promise.all([
+            fbStorageUpload(inputFile),
+            fbPdfImageUpload(base64Image)
+          ]);
+          urlInfo.fileId = result[0].id;
+          urlInfo.fileName = result[0].name;
+          urlInfo.fileUrl = result[0].url;
+          urlInfo.fileImageId = result[1].id;
+          urlInfo.fileImageUrl = result[1].url;
+        } else if (inputFile) {
+          const result = await fbStorageUpload(inputFile);
+          urlInfo.fileId = result.id;
+          urlInfo.fileName = result.name;
+          urlInfo.fileUrl = result.url;
         }
         await addUrl(urlInfo);
         allUrl.push(urlInfo);
@@ -142,7 +200,9 @@ export const FormCard: React.VFC<Props> = (prop) => {
           {status && <h2 className="text-green-500 text-sm p-2">Now Uploading...</h2>}
           <TitleForm inputTitle={inputTitle} setInputTitle={setInputTitle} />
           <DateForm publicationTime={inputAddTime} setPublicationTime={setInputAddTime} />
-          <FileForm inputFile={inputFile} setInputFile={setInputFile} inputFileName={inputFileName}/>
+          <FileForm inputFile={inputFile} setInputFile={setInputFile} inputFileName={inputFileName}
+                    base64Image={base64Image} setBase64Image={setBase64Image}
+          />
           <UrlForm inputUrl={inputUrl} setInputUrl={setInputUrl} setInputPageImage={setInputPageImage}
                    setInputPageTitle={setInputPageTitle} setInputPageDescription={setInputPageDescription}
                    inputPageTitle={inputPageTitle}
