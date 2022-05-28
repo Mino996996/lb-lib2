@@ -34,8 +34,8 @@ const ConfigArea: React.VFC<Props> = () => {
     <>
       <div className="pt-6 text-gray-200 text-lg font-bold text-center">
         <h2 className="text-center mb-2 text-red-300">= URL表示設定 =</h2>
-        <p>URLイメージ：OFF<ToggleButton kind={'image'}/>ON</p>
-        <p>メモ表示：省略<ToggleButton kind={'memo'} />全文</p>
+        <p>イメージ画像：OFF<ToggleButton kind={'image'}/>ON</p>
+        <p>コメント：省略<ToggleButton kind={'memo'} />全文</p>
         <p>表示順：OLD<ToggleSortButton />NEW</p>
       </div>
       <div className="pt-6 text-lg font-bold text-center">
