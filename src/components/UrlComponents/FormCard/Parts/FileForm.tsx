@@ -18,7 +18,7 @@ const FileForm: React.FC<Props> = (props) => {
         <span className="mr-4">{props.inputFileName}</span>
       )}
       <input
-        className='w-8/12 whitespace-nowrap overflow-hidden'
+        className='w-8/12 whitespace-nowrap overflow-hidden text-xs sm:text-sm'
         id='inputFile'
         type="file"
         onChange={async (e: React.ChangeEvent<HTMLInputElement>)=>{

@@ -47,8 +47,8 @@ const UrlArea: React.VFC<Props> = () => {
   return (
     <div className='relative' style={{'height': '96vh'}} >
       {/* URLデータのOutput */}
-      <div className="sm:pr-6 w-full absolute top-0 left-0 overflow-y-scroll edit-scrollbar" style={{'height': '90vh'}} >
-        {/* 選択中のカテゴリとタグ */}
+      <div className="pr-2 lg:pr-6 w-full absolute top-0 left-0 overflow-y-scroll edit-scrollbar url-height">
+       {/* 選択中のカテゴリとタグ */}
         <UrlKeyword />
         {/* URL情報一覧 */}
         {urlInfos.map((urlInfo, index)=>(
@@ -56,7 +56,7 @@ const UrlArea: React.VFC<Props> = () => {
         ))}
       </div>
       {/* URLデータのInput */}
-      <div className="w-full absolute bottom-0 left-0 pt-4 bg-gray-800">
+      <div className="w-full absolute bottom-14 lg:bottom-0 left-0 pt-4 bg-gray-800">
         <FormCard initUrlInfo={blankUrlInfo} mode={'create'}/>
       </div>
     </div>

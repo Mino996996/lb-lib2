@@ -34,7 +34,7 @@ export const UrlCard: React.VFC<Props> = ({urlInfo, index}) => {
         <div className={"border-l-8 " + (index % 2 === 0 ? "border-red-500": "border-green-500")}>
           
           {/* タイトル */}
-          <div className="flex justify-between px-4 font-bold py-1 text-lg border-b border-gray-300 overflow-hidden whitespace-nowrap h-9">
+          <div className="flex justify-between px-4 font-bold py-1 text-base sm:text-lg border-b border-gray-300 overflow-hidden whitespace-nowrap sm:h-9">
             <span className='w-5/6 overflow-hidden'>{urlInfo.title}</span>
             <button
               className="ml-2 px-1 text-sm cursor-pointer"
@@ -75,7 +75,7 @@ export const UrlCard: React.VFC<Props> = ({urlInfo, index}) => {
           {/* 備考欄 */}
           <div className="px-4 py-1 border-b border-gray-300">
             <div className="flex w-full">
-              <p className={"inline-block w-11/12 whitespace-pre-wrap truncate overflow-hidden " + (allMemo ? "": "h-5")}>{urlInfo.memo}</p>
+              <p className={"inline-block w-10/12 mr-2 sm:mr-0 sm:w-11/12 whitespace-pre-wrap truncate overflow-hidden " + (allMemo ? "": "h-5")}>{urlInfo.memo}</p>
               <span className="cursor-pointer text-xs font-bold" onClick={()=> setAllMemo(!allMemo)}>{allMemo ?  "[省略]" : "[全文]"}</span>
             </div>
           </div>

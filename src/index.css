@@ -16,3 +16,29 @@
 .edit-scrollbar::-webkit-scrollbar-thumb {  /* Chrome, Safari 対応 */
   background: #ddd;
 }
+
+.url-height {
+  max-height: 80vh;
+}
+
+.category-height {
+  max-height: 85vh;
+}
+
+@media (min-width: 640px) {
+  .url-height {
+    max-height: 85vh;
+  }
+  .category-height {
+    max-height: 75vh;
+  }
+}
+
+@media (min-width: 1024px) {
+  .url-height {
+    max-height: 90vh;
+  }
+  .category-height {
+    max-height: 70vh;
+  }
+}

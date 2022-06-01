@@ -1,5 +1,7 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useState} from 'react';
 import {Dialog, Transition} from "@headlessui/react";
+import CategoryArea from "../CategoryComponents/CategoryArea";
+import ConfigArea from "../ConfigComponents/ConfigArea";
 
 type Props = {
   sidebarOpen: boolean;
@@ -7,9 +9,10 @@ type Props = {
 }
 
 const MobileSideBar: React.VFC<Props> = ({sidebarOpen, setSidebarOpen}) => {
+  const [categoryTab, setCategoryTab] = useState(true);
   return (
     <Transition.Root show={sidebarOpen} as={Fragment}>
-      <Dialog as="div" className="fixed inset-0 flex z-40 md:hidden" onClose={setSidebarOpen}>
+      <Dialog as="div" className="fixed inset-0 flex z-40 lg:hidden" onClose={setSidebarOpen}>
         <Transition.Child
           as={Fragment}
           enter="transition-opacity ease-linear duration-300"
@@ -43,36 +46,25 @@ const MobileSideBar: React.VFC<Props> = ({sidebarOpen, setSidebarOpen}) => {
               <div className="absolute top-0 right-0 -mr-12 pt-2">
                 <button
                   type="button"
-                  className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                  className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none text-white"
                   onClick={() => setSidebarOpen(false)}
                 >
-                  <span className="sr-only">Close sidebar</span>
-                  X
+                  [X]
                 </button>
               </div>
             </Transition.Child>
-            <div className="flex-shrink-0 flex items-center px-4">
-              <img
-                className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/workflow-logo-indigo-300-mark-white-text.svg"
-                alt="Workflow"
-              />
+            <div className="md:hidden ml-4 border-b-2 border-gray-400 pb-1 box-content">
+              <span onClick={()=>setCategoryTab(true)} className={"ml-1 border-2 border-b-0 border-gray-400 rounded-t-lg p-2 cursor-pointer font-bold box-content " + (categoryTab ? "bg-indigo-200": "bg-gray-300 text-gray-600") }>カテゴリ選択</span>
+              <span onClick={()=>setCategoryTab(false)} className={"ml-0.5 border-2 border-b-0 border-gray-400 rounded-t-lg p-2 cursor-pointer font-bold box-content " + (categoryTab ? "bg-gray-300 text-gray-600": "bg-indigo-200") }>表示/タグ選択</span>
             </div>
-            <div className="mt-5 flex-1 h-0 overflow-y-auto">
-              <nav className="px-2 space-y-1">
-                {/*{navigation.map((item) => (*/}
-                {/*  <a*/}
-                {/*    key={item.name}*/}
-                {/*    href={item.href}*/}
-                {/*    className={(*/}
-                {/*      item.current ? 'bg-indigo-800 text-white' : 'text-indigo-100 hover:bg-indigo-600' ) +*/}
-                {/*      'group flex items-center px-2 py-2 text-base font-medium rounded-md'*/}
-                {/*    }*/}
-                {/*  >*/}
-                {/*    {item.name}*/}
-                {/*  </a>*/}
-                {/*))}*/}
-              </nav>
+            <div className="items-center px-4">
+              {
+                categoryTab ? (
+                  <CategoryArea />
+                ):(
+                  <ConfigArea />
+                )
+              }
             </div>
           </div>
         </Transition.Child>

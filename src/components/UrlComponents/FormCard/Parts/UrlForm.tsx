@@ -17,9 +17,9 @@ const UrlForm: React.VFC<Props> = (props) => {
   
   return (
     <div className='px-2 pb-1 text-sm'>
-      <label className='inline-block w-12' htmlFor="inputUrl">URL:</label>
+      <label className='inline-block w-12 text-xs sm:text-sm' htmlFor="inputUrl">URL:</label>
       <input
-        className='w-7/12 border border-gray-300'
+        className='pl-1 w-9/12 sm:w-7/12 border border-gray-300'
         id='inputUrl'
         type="url"
         placeholder="https://example.com"

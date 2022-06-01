@@ -16,7 +16,7 @@ const UrlKeyword: React.VFC<Props> = () => {
   }
   
   return (
-    <div className='py-4 text-white font-bold text-lg'>
+    <div className='pb-2 sm:py-4 text-white font-bold text-lg'>
       <p>
         <span>カテゴリ：</span>
         {selectedCategory ? (

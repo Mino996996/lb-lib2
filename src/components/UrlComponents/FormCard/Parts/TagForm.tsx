@@ -45,7 +45,7 @@ const TagForm: React.VFC<Props> = ({inputTagStr, setInputTagStr, inputTagList, s
       </div>
       <label className='inline-block w-12' htmlFor="inputTag">タグ：</label>
       <input
-        className='w-10/12 border border-gray-300'
+        className='w-10/12 border border-gray-300 pl-2'
         id='inputTag'
         placeholder='単語入力後→[Enter]で追加されます'
         value={inputTagStr}
