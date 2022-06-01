@@ -47,7 +47,7 @@ const Main: React.VFC<Props> = (props) => {
           alt=''
           onClick={() => setSidebarOpen(!sidebarOpen)}
         />
-        <h2 className="m-1 pt-2 text-3xl font-bold text-green-400">LBの図書館</h2>
+        <h2 className="inline-block w-5/12 m-1 text-3xl font-bold text-green-700 text-center">LBの図書館</h2>
         <button
           className="ml-6 px-2 bg-gray-200 rounded border border-gray-400 text-sm"
           onClick={async ()=>{

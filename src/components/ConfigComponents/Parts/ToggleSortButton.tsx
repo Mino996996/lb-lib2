@@ -14,14 +14,13 @@ export const ToggleSortButton: React.VFC = () => {
       checked={asc}
       className={classNames(
         asc ? 'bg-green-600' : 'bg-gray-200',
-        'mx-2 relative inline-flex flex-shrink-0 h-4 w-9 border-2 border-transparent border-gray-400 rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
+        'mx-2 relative inline-flex flex-shrink-0 h-4 w-9 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-700'
       )}
       onChange={() => {
         asc ? localStorage.setItem('asc', ''): localStorage.setItem('asc', 'true');
         setAsc(!asc);
       }}
     >
-      <span className="sr-only">Use setting</span>
       <span
         aria-hidden="true"
         className={classNames(

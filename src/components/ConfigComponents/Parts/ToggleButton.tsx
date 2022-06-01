@@ -29,7 +29,6 @@ export const ToggleButton: React.VFC<Props> = ({kind}) => {
         setVisible(!visible);
       }}
     >
-      <span className="sr-only">Use setting</span>
       <span
         aria-hidden="true"
         className={classNames(
