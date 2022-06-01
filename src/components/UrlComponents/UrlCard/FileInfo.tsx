@@ -25,9 +25,9 @@ const FileInfo: React.FC<Props> = ({urlInfo, setVisible}) => {
     // const url = URL.createObjectURL(await response.blob());
     // console.log(url);
     // setPdf(url);
-    window.open(urlInfo.fileUrl);
+    // window.open(urlInfo.fileUrl);
     await setPreview(true);
-    console.log('done');
+    // console.log('done');
   }
 
   // 添付ファイルがあれば資料表示を優先。
@@ -39,6 +39,7 @@ const FileInfo: React.FC<Props> = ({urlInfo, setVisible}) => {
         <>
           {preview ? ( //pdfプレビューモード
             <FilePreview urlInfo={urlInfo} setVisible={setVisible} />
+            // <iframe src={urlInfo.fileUrl} width="100%" height="100%"> </iframe>
           ):(　//サムネイルモード
             <FileThumbnail urlInfo={urlInfo} setVisible={setVisible} />
           )}

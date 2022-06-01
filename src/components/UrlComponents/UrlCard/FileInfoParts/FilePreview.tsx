@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
-import {Document, Page} from "react-pdf";
+import React, {useEffect, useState} from 'react';
 import {UrlInfo} from "../../../utilTypes";
+import {pdfPageImage} from "../../cardFunctions";
 
 type Props = {
   urlInfo: UrlInfo;
@@ -11,42 +11,23 @@ export const FilePreview: React.FC<Props> = ({urlInfo, setVisible}) => {
 
   const [pdf, setPdf] = useState<any>('');
   const [numPages, setNumPages] = useState<null|number>(null);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [preview, setPreview] = useState(false);
+  const [pageNumber, setPageNumber] = useState(4);
+  const [imageUrl, setImageUrl] = useState('');
 
-  // @ts-ignore
-  const onDocumentLoadSuccess = ({numPages}) => {
-    console.log(numPages);
-    setNumPages(numPages);
-    setPageNumber(1);
+  const test = async () => {
+    setImageUrl(await pdfPageImage(urlInfo, 0.7, pageNumber))
   }
-
-  const readPdfData = async (): Promise<void> => {
-    // const response = await fetch(urlInfo.fileUrl);
-    // console.log(response.url);
-    // console.log(response.url === urlInfo.fileUrl);
-    // const fileData = {
-    //   data: await response.body,
-    //   httpHeaders: response.headers,
-    //   withCredentials: true
-    // }
-    // await setPdf(response.blob);
-    // console.log(await response.blob())
-    // const url = URL.createObjectURL(await response.blob());
-    // console.log(url);
-    // setPdf(url);
-    window.open(urlInfo.fileUrl);
-    await setPreview(true);
-    console.log('done');
-  }
-
 
   return (
     <div className="flex">
       <div>
-        <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
-          <Page pageNumber={pageNumber}/>
-        </Document>
+        {/*<Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>*/}
+        {/*  <Page pageNumber={pageNumber}/>*/}
+        {/*</Document>*/}
+        {/*{async () => pdfImagePage(urlInfo.fileUrl,1)}*/}
+        <div>
+          <img src={imageUrl} alt=""/>
+        </div>
         <p>
           Page {pageNumber} of {numPages}
         </p>
@@ -57,6 +38,7 @@ export const FilePreview: React.FC<Props> = ({urlInfo, setVisible}) => {
           pageNumber !== numPages ? (<span onClick={() => setPageNumber(pageNumber+1)}>進む</span>):(<span>'---'</span>)
         }
         </p>
+        <p onClick={test}>test</p>
       </div>
       <span className="text-lg font-bold cursor-pointer" onClick={() => {
         setVisible(false)

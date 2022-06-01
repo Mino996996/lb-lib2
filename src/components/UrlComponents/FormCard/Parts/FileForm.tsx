@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {convertPdfToImages} from "../FormCard";
+import {convertPdfToImages} from "../../cardFunctions";
 
 type Props = {
   inputFile: File|null;
