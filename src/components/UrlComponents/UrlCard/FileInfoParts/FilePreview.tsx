@@ -1,44 +1,49 @@
-import React, {useEffect, useState} from 'react';
-import {UrlInfo} from "../../../utilTypes";
+import React, {useState} from 'react';
+import {PDFDocumentProxy} from "pdfjs-dist";
 import {pdfPageImage} from "../../cardFunctions";
+import {UrlInfo} from "../../../utilTypes";
 
 type Props = {
-  urlInfo: UrlInfo;
+  urlInfo: UrlInfo
+  pdfData: PDFDocumentProxy|undefined;
+  pdfPageNumber: number|null;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const FilePreview: React.FC<Props> = ({urlInfo, setVisible}) => {
+export const FilePreview: React.FC<Props> = ({urlInfo, pdfData, pdfPageNumber, setVisible}) => {
 
-  const [pdf, setPdf] = useState<any>('');
-  const [numPages, setNumPages] = useState<null|number>(null);
-  const [pageNumber, setPageNumber] = useState(4);
-  const [imageUrl, setImageUrl] = useState('');
+  const [page, setPage] = useState(1);
+  const [imageUrl, setImageUrl] = useState(urlInfo.fileImageUrl);
 
-  const test = async () => {
-    setImageUrl(await pdfPageImage(urlInfo, 0.7, pageNumber))
+  const changeImageUrl = async (page: number) => {
+    pdfData && setImageUrl(await pdfPageImage(pdfData, 0.7, page));
+    setPage(page);
   }
 
   return (
     <div className="flex">
       <div>
-        {/*<Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>*/}
-        {/*  <Page pageNumber={pageNumber}/>*/}
-        {/*</Document>*/}
-        {/*{async () => pdfImagePage(urlInfo.fileUrl,1)}*/}
         <div>
           <img src={imageUrl} alt=""/>
         </div>
-        <p>
-          Page {pageNumber} of {numPages}
+        <p className="text-center font-bold">
+          Page {page} of {pdfPageNumber}
         </p>
-        <p>
+        <p className="mt-2 text-center font-bold">
           {
-            pageNumber >=1 ?(<span onClick={() => setPageNumber(pageNumber-1)}>戻る</span>):(<span>'---'</span>)
-          } / {
-          pageNumber !== numPages ? (<span onClick={() => setPageNumber(pageNumber+1)}>進む</span>):(<span>'---'</span>)
-        }
+            page - 1 !== 0 ?(
+              <span className="py-0.5 px-4 mr-4 bg-green-200 rounded border border-green-500 cursor-pointer" onClick={() => changeImageUrl(page-1)}>戻る</span>
+            ):(
+              <span className="py-0.5 px-4 mr-4 bg-gray-200 rounded border border-gray-500">---</span>
+            )} /
+          {
+            page !== pdfPageNumber ? (
+              <span className="py-0.5 px-4 ml-4 bg-green-200 rounded border border-green-500 cursor-pointer" onClick={() => changeImageUrl(page+1)}>進む</span>
+            ):(
+              <span className="py-0.5 px-4 ml-4 bg-gray-200 rounded border border-gray-500">---</span>
+            )
+          }
         </p>
-        <p onClick={test}>test</p>
       </div>
       <span className="text-lg font-bold cursor-pointer" onClick={() => {
         setVisible(false)

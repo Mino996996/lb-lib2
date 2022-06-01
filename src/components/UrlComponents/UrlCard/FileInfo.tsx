@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import {UrlInfo} from "../../utilTypes";
 import {FilePreview} from "./FileInfoParts/FilePreview";
 import {FileThumbnail} from "./FileInfoParts/FileThumbnail";
+import {PDFDocumentProxy} from "pdfjs-dist";
+import {createPdfPars} from "../cardFunctions";
 
 type Props = {
   urlInfo: UrlInfo;
@@ -11,23 +13,18 @@ type Props = {
 const FileInfo: React.FC<Props> = ({urlInfo, setVisible}) => {
 
   const [preview, setPreview] = useState(false);
+  const [pdfData, setPdfData] = useState<PDFDocumentProxy|undefined>();
+  const [pdfPageNumber, setPdfPageNumber] = useState<number|null>(null);
+
+  // pdfファイルのurlからデータを取得してメモリに保存
   const readPdfData = async (): Promise<void> => {
-    // const response = await fetch(urlInfo.fileUrl);
-    // console.log(response.url);
-    // console.log(response.url === urlInfo.fileUrl);
-    // const fileData = {
-    //   data: await response.body,
-    //   httpHeaders: response.headers,
-    //   withCredentials: true
-    // }
-    // await setPdf(response.blob);
-    // console.log(await response.blob())
-    // const url = URL.createObjectURL(await response.blob());
-    // console.log(url);
-    // setPdf(url);
-    // window.open(urlInfo.fileUrl);
+    if(!pdfData) {
+      const response = await fetch(urlInfo.fileUrl);
+      const pdf = await createPdfPars(await response.arrayBuffer());
+      setPdfData(pdf);
+      setPdfPageNumber(pdf.numPages);
+    }
     await setPreview(true);
-    // console.log('done');
   }
 
   // 添付ファイルがあれば資料表示を優先。
@@ -38,8 +35,7 @@ const FileInfo: React.FC<Props> = ({urlInfo, setVisible}) => {
       {urlInfo.fileImageUrl ? (
         <>
           {preview ? ( //pdfプレビューモード
-            <FilePreview urlInfo={urlInfo} setVisible={setVisible} />
-            // <iframe src={urlInfo.fileUrl} width="100%" height="100%"> </iframe>
+            <FilePreview urlInfo={urlInfo} pdfData={pdfData} pdfPageNumber={pdfPageNumber} setVisible={setVisible} />
           ):(　//サムネイルモード
             <FileThumbnail urlInfo={urlInfo} setVisible={setVisible} />
           )}

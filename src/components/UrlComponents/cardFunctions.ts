@@ -2,7 +2,7 @@ import {CategoryInfo, UrlInfo} from "../utilTypes";
 import * as pdfjs from 'pdfjs-dist/legacy/build/pdf'
 // @ts-ignore
 import PDFJSWorker from 'pdfjs-dist/legacy/build/pdf.worker.entry'
-import {PDFDocumentProxy} from "pdfjs-dist/types/web/base_viewer";
+import {PDFDocumentProxy} from "pdfjs-dist";
 pdfjs.GlobalWorkerOptions.workerSrc = PDFJSWorker;
 
 export type Obj = {
@@ -104,7 +104,7 @@ const readFileData = (file:File) => {
 };
 
 // PDFファイルのパース
-const createPdfPars = async (data:any) => {
+export const createPdfPars = async (data:any) => {
   return pdfjs.getDocument({
     // @ts-ignore
     data: data as string,
@@ -129,23 +129,19 @@ const pdfCanvasData = async (pdfData: any, scale: number, pageNum: number) => {
 export const convertPdfToImages = async (file:File) => {
   const data = await readFileData(file); // ファイルのArrayBufferデータ取得
   const pdf = await createPdfPars(data); // PDFファイルのパース
-  // 1ページ目をcanvasにレンダリング
-  const canvas = await pdfCanvasData(pdf, 0.5, 1);
+  const canvas = await pdfCanvasData(pdf, 0.5, 1); // 1ページ目をcanvasにレンダリング
   // canvasにレンダリングされた画像をファイル化
   const pngImage = canvas.toDataURL(); //指定がなければPNGのBase64データ
   canvas.remove();
   return pngImage;
 }
 
-// pdfファイルの画像データをリンクUrlから取得
-export const pdfPageImage = async (urlInfo:UrlInfo, scale:number, pageNum:number) => {
-  const response = await fetch(urlInfo.fileUrl);
-  const data = await response.arrayBuffer();
-  const pdf = await createPdfPars(data); // PDFファイルのパース
-  // 1ページ目をcanvasにレンダリング
-  const canvas = await pdfCanvasData(pdf, scale, pageNum);
+// pdfファイルの指定ページ画像をフェッチしたデータから生成して返却
+export const pdfPageImage = async (pdfData:PDFDocumentProxy, scale:number, pageNum:number) => {
+  const canvas = await pdfCanvasData(pdfData, scale, pageNum);
   // canvasにレンダリングされた画像をファイル化
   const pngImage = canvas.toDataURL(); //指定がなければPNGのBase64データ
   canvas.remove();
   return pngImage;
 }
+
