@@ -3,14 +3,14 @@ import {UrlInfo} from "../../utilTypes";
 import {AppContext} from "../../state/ContextProvider";
 import {isCategoryTag} from "../cardFunctions";
 import {FormCard} from "../FormCard/FormCard";
-import InputPageInfo from "./InputPageInfo";
+import FileInfo from "./FileInfo";
 
 type Props = {
   urlInfo: UrlInfo;
   index: number
 }
 
-export const UrlCard: React.VFC<Props> = ({urlInfo, index}) => {
+export const UrlCard: React.FC<Props> = ({urlInfo, index}) => {
 
   const {imageVisible, memoVisible, allCategory, setSelectedCategory, setKeywords, allUrl, setAllUrl} = useContext(AppContext);
   const [visible, setVisible] = useState(imageVisible);
@@ -61,11 +61,11 @@ export const UrlCard: React.VFC<Props> = ({urlInfo, index}) => {
             <a href={urlInfo.url} target="_blank" className="inline-block w-full text-blue-600 overflow-hidden" rel="noreferrer">{urlInfo.url}</a>
           </div>
           
-          {/* URLイメージデータ */}
+          {/* ファイルとURLのイメージデータ */}
           {(urlInfo.pageTitle || urlInfo.fileImageUrl) &&
             <div className='py-1 border-b border-gray-300'>
               {visible ? (
-                <InputPageInfo urlInfo={urlInfo} setVisible={setVisible} />
+                <FileInfo urlInfo={urlInfo} setVisible={setVisible} />
               ):(
                 <button className="px-2 mr-8 ml-auto text-sm font-bold cursor-pointer bg-gray-200 border border-gray-400 rounded shadow" onClick={()=>{setVisible(true)}}>イメージ表示</button>
               )}

@@ -1,27 +1,16 @@
 import React, {useState} from 'react';
 import {UrlInfo} from "../../utilTypes";
-import { Document, Page } from 'react-pdf';
-import {readFile} from "fs";
+import {FilePreview} from "./FileInfoParts/FilePreview";
+import {FileThumbnail} from "./FileInfoParts/FileThumbnail";
 
 type Props = {
   urlInfo: UrlInfo;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const InputPageInfo: React.VFC<Props> = ({urlInfo, setVisible}) => {
+const FileInfo: React.FC<Props> = ({urlInfo, setVisible}) => {
 
-  const [pdf, setPdf] = useState<any>('');
-  const [numPages, setNumPages] = useState<null|number>(null);
-  const [pageNumber, setPageNumber] = useState(1);
   const [preview, setPreview] = useState(false);
-
-  // @ts-ignore
-  const onDocumentLoadSuccess = ({numPages}) => {
-    console.log(numPages);
-    setNumPages(numPages);
-    setPageNumber(1);
-  }
-
   const readPdfData = async (): Promise<void> => {
     // const response = await fetch(urlInfo.fileUrl);
     // console.log(response.url);
@@ -41,7 +30,6 @@ const InputPageInfo: React.VFC<Props> = ({urlInfo, setVisible}) => {
     console.log('done');
   }
 
-
   // 添付ファイルがあれば資料表示を優先。
   // 無ければURLイメージ。
   // URLイメージが無ければ何も表示しない
@@ -50,38 +38,9 @@ const InputPageInfo: React.VFC<Props> = ({urlInfo, setVisible}) => {
       {urlInfo.fileImageUrl ? (
         <>
           {preview ? ( //pdfプレビューモード
-            <div className="flex">
-              <div>
-                <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
-                  <Page pageNumber={pageNumber}/>
-                </Document>
-                <p>
-                  Page {pageNumber} of {numPages}
-                </p>
-                <p>
-                  {
-                    pageNumber >=1 ?(<span onClick={() => setPageNumber(pageNumber-1)}>戻る</span>):(<span>'---'</span>)
-                  } / {
-                    pageNumber !== numPages ? (<span onClick={() => setPageNumber(pageNumber+1)}>進む</span>):(<span>'---'</span>)
-                  }
-                </p>
-              </div>
-              <span className="text-lg font-bold cursor-pointer" onClick={() => {
-                setVisible(false)
-              }}>[x]</span>
-            </div>
+            <FilePreview urlInfo={urlInfo} setVisible={setVisible} />
           ):(　//サムネイルモード
-            <div className="flex">
-              <div
-                className='w-11/12 sm:w-80 mx-auto sm:mx-4 my-1 border border-gray-500 rounded-lg text-sm shadow-md bg-white'>
-                <div className='p-2 w-full h-36 sm:h-auto overflow-hidden'>
-                  <img className="w-full sm:h-full" src={urlInfo.fileImageUrl} alt=""/>
-                </div>
-              </div>
-              <span className="text-lg font-bold cursor-pointer" onClick={() => {
-                setVisible(false)
-              }}>[x]</span>
-            </div>
+            <FileThumbnail urlInfo={urlInfo} setVisible={setVisible} />
           )}
           <div className="py-2 px-4 block">
             {preview ? (
@@ -130,4 +89,4 @@ const InputPageInfo: React.VFC<Props> = ({urlInfo, setVisible}) => {
   );
 };
 
-export default InputPageInfo;
+export default FileInfo;
