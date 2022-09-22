@@ -19,6 +19,8 @@ interface AppContextType {
   setAllUrl: React.Dispatch<React.SetStateAction<UrlInfo[]>>;
   asc: boolean;
   setAsc: React.Dispatch<React.SetStateAction<boolean>>;
+  isAnalysisMode: boolean,
+  setIsAnalysisMode: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export const AppContext = createContext({} as AppContextType);
@@ -38,6 +40,7 @@ export const ContextProvider: React.VFC<Props> = (props) => {
   const [selectedCategory, setSelectedCategory] = useState(localStorage.getItem('category')? localStorage.getItem('category')! : '');
   const [allCategory, setAllCategory] = useState<CategoryInfo[]>([]);
   const [allUrl, setAllUrl] = useState<UrlInfo[]>([]);
+  const [isAnalysisMode, setIsAnalysisMode] = useState(false);
 
   const value: AppContextType = {
     login: authState.isLogin,
@@ -55,7 +58,9 @@ export const ContextProvider: React.VFC<Props> = (props) => {
     allUrl: allUrl,
     setAllUrl: setAllUrl,
     asc: asc,
-    setAsc: setAsc
+    setAsc: setAsc,
+    isAnalysisMode: isAnalysisMode,
+    setIsAnalysisMode: setIsAnalysisMode
   }
 
   return (

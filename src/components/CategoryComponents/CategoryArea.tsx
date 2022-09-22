@@ -6,11 +6,12 @@ import {logoutType} from "../state/authReducer";
 import {Theme, themeOptions} from "./themeList";
 import {CategoryTheme} from "./Parts/CategoryTheme";
 
-type Props = {}
+type Props = {
+}
 
-const CategoryArea: React.VFC<Props> = () => {
+const CategoryArea: React.FC<Props> = () => {
 
-  const {dispatch} = useContext(AppContext);
+  const {dispatch, isAnalysisMode, setIsAnalysisMode} = useContext(AppContext);
 
   return (
     <div className="relative w-full text-gray-400 focus-within:text-gray-600 pr-2 sm:pt-4 min-h-screen">
@@ -24,6 +25,12 @@ const CategoryArea: React.VFC<Props> = () => {
             dispatch({type: logoutType})}}
         >
           ログアウト
+        </button>
+        <button
+          className="px-2 bg-green-50 rounded border border-gray-400 text-sm text-gray-700"
+          onClick={()=> setIsAnalysisMode(!isAnalysisMode)}
+        >
+          {isAnalysisMode ? '蔵書室へ':'分析室へ'}
         </button>
       </div>
 

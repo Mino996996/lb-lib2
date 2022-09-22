@@ -11,13 +11,14 @@ import {CategoryInfo, UrlInfo} from "./utilTypes";
 
 type Props = {}
 
-const Main: React.VFC<Props> = (props) => {
+const Main: React.FC<Props> = (props) => {
   
-  const {login, dispatch, setAllCategory, setAllUrl} = useContext(AppContext);
+  const {login, dispatch, setAllCategory, setAllUrl, isAnalysisMode, setIsAnalysisMode} = useContext(AppContext);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   
   // ログイン状態の変更でカテゴリとURLの各データを取得/消去する
   useEffect(() => {
+    // useEffect内の非同期処理用関数/全データ取得してuseContextで管理
     const getAllData = async () => {
       try {
         const urls = await getAllUrls() as UrlInfo[];
@@ -32,7 +33,9 @@ const Main: React.VFC<Props> = (props) => {
       setAllUrl([]);
       setAllCategory([]);
     }
-    login && getAllData(); // ログインしているならデータを取得しにいく
+    
+    // ログインしているならデータを取得しにいく
+    login && getAllData();
     
     return cleanData2; // クリーンアップ関数でページを閉じる際にデータを消去
   },[]);
@@ -62,12 +65,18 @@ const Main: React.VFC<Props> = (props) => {
         <div className="hidden lg:block w-72 mr-3 ">
           <CategoryArea />
         </div>
-        <div className="w-full py-2 sm:w-3/5 lg:w-2/5 sm:py-1 sm:pl-6 sm:mr-6 lg:border-l border-gray-500 " >
-          <UrlArea />
-        </div>
-        <div className="hidden sm:block w-80 pl-4 border-l border-gray-500 ">
-          <ConfigArea />
-        </div>
+        { isAnalysisMode ? (
+          '分析室'
+        ):(
+          <>
+            <div className="w-full py-2 sm:w-3/5 lg:w-2/5 sm:py-1 sm:pl-6 sm:mr-6 lg:border-l border-gray-500 " >
+              <UrlArea />
+            </div>
+            <div className="hidden sm:block w-80 pl-4 border-l border-gray-500 ">
+              <ConfigArea />
+            </div>
+          </>
+        )}
       </div>
     </>
   );

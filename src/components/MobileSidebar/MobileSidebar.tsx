@@ -1,14 +1,15 @@
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useContext, useState} from 'react';
 import {Dialog, Transition} from "@headlessui/react";
 import CategoryArea from "../CategoryComponents/CategoryArea";
 import ConfigArea from "../ConfigComponents/ConfigArea";
+import {AppContext} from "../state/ContextProvider";
 
 type Props = {
   sidebarOpen: boolean;
   setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const MobileSideBar: React.VFC<Props> = ({sidebarOpen, setSidebarOpen}) => {
+const MobileSideBar: React.FC<Props> = ({sidebarOpen, setSidebarOpen}) => {
   const [categoryTab, setCategoryTab] = useState(true);
   return (
     <Transition.Root show={sidebarOpen} as={Fragment}>
