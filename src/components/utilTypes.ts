@@ -21,6 +21,7 @@ export type CategoryInfo = {
   id: string;
   category: string;
   theme: Theme;
+  point?: number[];
 }
 
 export type UploadFileData = {

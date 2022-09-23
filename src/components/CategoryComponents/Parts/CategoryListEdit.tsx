@@ -15,15 +15,19 @@ const CategoryListEdit: React.VFC<Props> = ({categoryInfo, isEditMode, setIsEdit
   const {allCategory, setAllCategory, setAllUrl} = useContext(AppContext);
   const [categoryName, setCategoryName] = useState(categoryInfo.category);
   const [theme, setTheme] = useState(categoryInfo.theme);
+  const [points, setPoints] = useState(categoryInfo.point?.length ? String(categoryInfo.point) : String([0,0,0]));
   
   const updateCategory = async () => {
-    if (categoryInfo.category !== categoryName) {
+    // 変化点の有無をチェック
+    if (categoryInfo.category !== categoryName || categoryInfo.theme !== theme || String(categoryInfo.point) !== points) {
       const isUniqueName = await checkCategoryName(categoryName);
-      if(categoryName && isUniqueName && !!theme) {
+      const isUnique = (isUniqueName || categoryInfo.theme !== theme || String(categoryInfo.point) !== points)
+      if(categoryName && isUnique) {
         const categoryData: CategoryInfo = {
           id: categoryInfo.id,
           category: categoryName,
-          theme
+          theme,
+          point: points.split(',').map(v=>Number(v))
         }
         await categoryDb.update(categoryData);
         const newCategories = allCategory.filter(value => value.category !== categoryInfo.category)
@@ -58,6 +62,14 @@ const CategoryListEdit: React.VFC<Props> = ({categoryInfo, isEditMode, setIsEdit
           setCategoryName(e.target.value);
         }}
       />
+      <input
+        className="bg-green-50 w-11/12 pl-2 mb-1 border border-gray-500 rounded text-gray-700"
+        type="text"
+        value={String(points)}
+        onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{
+          setPoints(e.target.value);
+        }}
+      />
       <select
         className="w-6/12 bg-green-50 mt-1 mb-2 text-gray-700"
         onChange={(e:React.ChangeEvent<HTMLSelectElement>)=>{setTheme(Number(e.target.value))}}
@@ -67,7 +79,7 @@ const CategoryListEdit: React.VFC<Props> = ({categoryInfo, isEditMode, setIsEdit
           <option key={themeOption.value} value={themeOption.value}>{themeOption.text}</option>
         ))}
       </select>
-      <button className="ml-4 p-0.5 bg-green-100 rounded border border-gray-600 cursor-pointer text-sm text-gray-700" onClick={async() => updateCategory()}>
+      <button className="ml-4 p-0.5 bg-green-100 rounded border border-gray-600 cursor-pointer text-sm text-gray-700" onClick={() => updateCategory()}>
         更新
       </button>
       <button className="ml-4 p-0.5 bg-gray-200 rounded border border-gray-600 cursor-pointer text-sm text-gray-700" onClick={() => setIsEditMode(false)}>

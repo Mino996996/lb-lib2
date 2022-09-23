@@ -106,6 +106,7 @@ export const addCategory = async (categoryData: CategoryInfo): Promise<void> => 
 
 export const updateCategory = async (categoryData: CategoryInfo): Promise<void> => {
   const category = {...categoryData};
+  console.log(category);
   const urlDocRef = doc(db, 'category', categoryData.id);
   await updateDoc(urlDocRef, category);
 }
