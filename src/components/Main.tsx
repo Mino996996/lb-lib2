@@ -8,14 +8,21 @@ import ConfigArea from "./ConfigComponents/ConfigArea";
 import {AppContext} from "./state/ContextProvider";
 import {firebaseSignOut, getAllCategories, getAllUrls} from "../firebase/firebase";
 import {CategoryInfo, UrlInfo} from "./utilTypes";
+import BaseButton from "./UrlComponents/Buttons/BaseButton";
 
 type Props = {}
 
-const Main: React.FC<Props> = (props) => {
+const Main: React.FC<Props> = () => {
   
   const {login, dispatch, setAllCategory, setAllUrl, isAnalysisMode, setIsAnalysisMode} = useContext(AppContext);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  
+
+  const logoutOnclick = async () => {
+    await firebaseSignOut();
+    localStorage.setItem('loginState', '');
+    dispatch({type: logoutType})
+  }
+
   // ログイン状態の変更でカテゴリとURLの各データを取得/消去する
   useEffect(() => {
     // useEffect内の非同期処理用関数/全データ取得してuseContextで管理
@@ -43,6 +50,7 @@ const Main: React.FC<Props> = (props) => {
   return (
     <>
       <MobileSideBar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      {/*スマホ用の固定ヘッダー*/}
       <div className="sticky top-0 z-10 py-2 bg-gray-50 lg:hidden shadow display-none">
         <img
           src={bars}
@@ -51,20 +59,15 @@ const Main: React.FC<Props> = (props) => {
           onClick={() => setSidebarOpen(!sidebarOpen)}
         />
         <h2 className="inline-block w-5/12 m-1 text-3xl font-bold text-green-700 text-center">LBの図書館</h2>
-        <button
-          className="ml-6 px-2 bg-gray-200 rounded border border-gray-400 text-sm"
-          onClick={async ()=>{
-            await firebaseSignOut();
-            localStorage.setItem('loginState', '');
-            dispatch({type: logoutType})}}
-        >
-          ログアウト
-        </button>
+        <BaseButton onClickCallback={logoutOnclick} name={'ログアウト'} />
+        <BaseButton onClickCallback={()=> setIsAnalysisMode(!isAnalysisMode)} name={isAnalysisMode ? '蔵書室へ':'分析室へ'}  />
       </div>
       <div className="p-2 sm:py-0 flex justify-center">
+        {/*表示左サイドバー：カテゴリリスト*/}
         <div className="hidden lg:block w-72 mr-3 ">
           <CategoryArea />
         </div>
+        {/*表示メイン部分*/}
         { isAnalysisMode ? (
           '分析室'
         ):(
