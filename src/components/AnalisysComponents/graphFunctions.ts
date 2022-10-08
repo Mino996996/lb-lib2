@@ -7,9 +7,15 @@ export enum Tend {
   join
 }
 
-const scores = (allUrl:UrlInfo[], allCategory:CategoryInfo[], person:string, tend:Tend):number[]=>{
-  return allUrl.filter(value => value.tagList.includes(person))
-    .map(v => {
+const scores = (allUrl:UrlInfo[], allCategory:CategoryInfo[], person:string|'all', year:string|'all', tend:Tend):number[] => {
+  let urls = allUrl;
+  if (person !== 'all') {
+    urls = urls.filter(value => value.tagList.includes(person));
+  }
+  if (year !== 'all') {
+    urls = urls.filter(value => value.tagList.includes(year));
+  }
+  return urls.map(v => {
       let score = 0;
       for (const tag of v.tagList) {
         if (!tag.includes("さん") && !tag.includes("年")) {
@@ -23,19 +29,32 @@ const scores = (allUrl:UrlInfo[], allCategory:CategoryInfo[], person:string, ten
     });
 }
 
+const titles = (allUrl:UrlInfo[], allCategory:CategoryInfo[], person:string|'all', year:string|'all'):string[] => {
+  let urls = allUrl;
+  if (person !== 'all') {
+    urls = urls.filter(value => value.tagList.includes(person));
+  }
+  if (year !== 'all') {
+    urls = urls.filter(value => value.tagList.includes(year));
+  }
+  return urls.map(v=>v.title);
+}
+
+
 export const colorHex = (r:number, g:number, b:number):string => {
   return `#${(r % 255).toString(16)}${(g % 255).toString(16)}${(b % 255).toString(16)}`
 }
 
-const threeScatterData = (allUrl:UrlInfo[], allCategory:CategoryInfo[], person:string, color:Color):Partial<PlotData> => {
+const threeScatterData = (allUrl:UrlInfo[], allCategory:CategoryInfo[], person:string|'all', year:string|'all', color:Color):Partial<PlotData> => {
   return {
     type: "scatter3d",
-    x: scores(allUrl, allCategory, person, Tend.social),
-    y: scores(allUrl, allCategory, person, Tend.education),
-    z: scores(allUrl, allCategory, person, Tend.join),
+    x: scores(allUrl, allCategory, person, year, Tend.social),
+    y: scores(allUrl, allCategory, person, year, Tend.education),
+    z: scores(allUrl, allCategory, person, year, Tend.join),
     marker:{symbol:"circle", opacity:1, size:3, color:color},
     mode: "markers",
-      text: allUrl.filter(value => value.tagList.includes(person)).map(v=>v.title)
+    text: titles(allUrl, allCategory, person, year),
+    name: person,
   }
 };
 
