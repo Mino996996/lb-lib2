@@ -23,14 +23,8 @@ const scores = (allUrl:UrlInfo[], allCategory:CategoryInfo[], person:string, ten
     });
 }
 
-export const colorHex = (pattern: number):string => {
-  const redCoefficient = 64;
-  const greenCoefficient = 83;
-  const blueCoefficient = 31;
-  const r = (redCoefficient * pattern % 255).toString(16);
-  const g = (greenCoefficient * pattern % 255).toString(16);
-  const b = (blueCoefficient * pattern % 255).toString(16);
-  return `#${r}${g}${b}`
+export const colorHex = (r:number, g:number, b:number):string => {
+  return `#${(r % 255).toString(16)}${(g % 255).toString(16)}${(b % 255).toString(16)}`
 }
 
 const threeScatterData = (allUrl:UrlInfo[], allCategory:CategoryInfo[], person:string, color:Color):Partial<PlotData> => {
