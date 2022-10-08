@@ -33,7 +33,7 @@ const threeScatterData = (allUrl:UrlInfo[], allCategory:CategoryInfo[], person:s
     x: scores(allUrl, allCategory, person, Tend.social),
     y: scores(allUrl, allCategory, person, Tend.education),
     z: scores(allUrl, allCategory, person, Tend.join),
-    marker:{symbol:"diamond", opacity:1, size:4, color:color},
+    marker:{symbol:"circle", opacity:1, size:3, color:color},
     mode: "markers",
       text: allUrl.filter(value => value.tagList.includes(person)).map(v=>v.title)
   }

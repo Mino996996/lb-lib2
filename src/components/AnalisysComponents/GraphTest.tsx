@@ -2,15 +2,15 @@ import React, {useContext, useState} from 'react';
 import Plot from 'react-plotly.js';
 import {AppContext} from "../state/ContextProvider";
 import {PlotData} from "plotly.js";
-import {threeScatterData} from "./graphFunctions";
+import {colorHex, threeScatterData} from "./graphFunctions";
 
 type Props = {}
 
 const GraphTest: React.FC<Props> = (props) => {
   const {allUrl, allCategory} = useContext(AppContext);
 
-  const data1:Partial<PlotData> = threeScatterData(allUrl, allCategory, "赤堀さん", "#FF5733");
-  const data2:Partial<PlotData> = threeScatterData(allUrl, allCategory, "内山さん", "#45B39D");
+  const data1:Partial<PlotData> = threeScatterData(allUrl, allCategory, "赤堀さん", colorHex(250,86,44));
+  const data2:Partial<PlotData> = threeScatterData(allUrl, allCategory, "内山さん", colorHex(100,86,254));
   
   const lineX:Partial<PlotData> = {
       type: "scatter3d",
