@@ -14,9 +14,23 @@ import GraphTest from "./AnalisysComponents/GraphTest";
 
 type Props = {}
 
+
+// const saveAsJson = (data: any, fileName: string) => {
+//   const name = `${fileName}.json`;
+//   const blobData = new Blob([JSON.stringify(data)], { type: 'text/json' });
+//   const jsonURL = window.URL.createObjectURL(blobData);
+//   const link = document.createElement('a');
+//   document.body.appendChild(link);
+//   link.href = jsonURL;
+//   link.setAttribute('download', name);
+//   link.click();
+//   document.body.removeChild(link);
+// }
+
+
 const Main: React.FC<Props> = () => {
   
-  const {login, dispatch, setAllCategory, setAllUrl, isAnalysisMode, setIsAnalysisMode} = useContext(AppContext);
+  const {login, dispatch, setAllCategory, setAllUrl, isAnalysisMode, setIsAnalysisMode, allUrl, allCategory} = useContext(AppContext);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const logoutOnclick = async () => {
@@ -63,6 +77,8 @@ const Main: React.FC<Props> = () => {
         <h2 className="inline-block w-5/12 m-1 text-3xl font-bold text-green-700 text-center">LBの図書館</h2>
         <BaseButton onClickCallback={logoutOnclick} name={'ログアウト'} />
         <BaseButton onClickCallback={()=> setIsAnalysisMode(!isAnalysisMode)} name={isAnalysisMode ? '蔵書室へ':'分析室へ'}  />
+        {/*<BaseButton onClickCallback={()=> saveAsJson(allUrl, 'urls')} name={'発表データ出力'}  />*/}
+        {/*<BaseButton onClickCallback={()=> saveAsJson(allCategory, 'categories')} name={'カテゴリデータ出力'}  />*/}
       </div>
       <div className="p-2 sm:py-0 flex justify-center">
         {/*表示左サイドバー：カテゴリリスト*/}
