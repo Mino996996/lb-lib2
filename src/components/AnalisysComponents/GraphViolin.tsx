@@ -27,7 +27,7 @@ const GraphViolin: React.FC<Props> = (props) => {
     y:scores(allUrl, allCategory, '赤堀さん', 'all', Tend.education)
   }
   
-  const layout1:Partial<Layout> = { title: "発表傾向：教養-実用型", yaxis: {zeroline: false}};
+  const layout1:Partial<Layout> = { title: "発表傾向：教養-実用型", yaxis: {zeroline: true}};
   const allData = [data1, data2, data3]
   return (
     <Plot data={allData} layout={layout1} />
