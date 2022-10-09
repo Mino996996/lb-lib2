@@ -9,7 +9,9 @@ const createEdges = (urls: UrlInfo[]):Edge[] => {
   let edges: Edge[] =[];
   for (const url of urls) {
     for (const tag of url.tagList) {
-      edges.push({from:url.title, to: tag})
+      if (tag.includes('さん')) {
+        edges.push({from:url.title, to: tag});
+      }
     }
   }
   return edges;
@@ -30,7 +32,7 @@ const NetworkGraph: React.FC<Props> = (props) => {
   
   const nodes:Node[] = [...categoryNodes, ...titleNodes];
   
-  const edges:Edge[] = createEdges(allUrl);
+  const edges:Edge[] = [];
   
   const options = {};
   
@@ -41,7 +43,7 @@ const NetworkGraph: React.FC<Props> = (props) => {
     // Use `network` here to configure events, etc
   }, [container, nodes, edges]);
   
-  return <div ref={container} style={{ height: '1200px', width: '1800px' }}/>;
+  return <div ref={container} style={{ height: '600px', width: '1200px' }}/>;
 };
 
 export default NetworkGraph;

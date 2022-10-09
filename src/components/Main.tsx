@@ -91,8 +91,8 @@ const Main: React.FC<Props> = () => {
         { isAnalysisMode ? (
           // <Graph3D />
           // <GraphTest />
-          // <GraphViolin />
-          <NetworkGraph />
+          <GraphViolin />
+          // <NetworkGraph />
         ):(
           <>
             <div className="w-full py-2 sm:w-3/5 lg:w-2/5 sm:py-1 sm:pl-6 sm:mr-6 lg:border-l border-gray-500 " >
