@@ -12,6 +12,7 @@ import BaseButton from "./UrlComponents/Buttons/BaseButton";
 import Graph3D from "./AnalisysComponents/Graph3D";
 import GraphTest from "./AnalisysComponents/GraphTest";
 import GraphViolin from "./AnalisysComponents/GraphViolin";
+import NetworkGraph from "./AnalisysComponents/NetworkGraph";
 
 type Props = {}
 
@@ -89,8 +90,9 @@ const Main: React.FC<Props> = () => {
         {/*表示メイン部分*/}
         { isAnalysisMode ? (
           // <Graph3D />
-          <GraphTest />
+          // <GraphTest />
           // <GraphViolin />
+          <NetworkGraph />
         ):(
           <>
             <div className="w-full py-2 sm:w-3/5 lg:w-2/5 sm:py-1 sm:pl-6 sm:mr-6 lg:border-l border-gray-500 " >
