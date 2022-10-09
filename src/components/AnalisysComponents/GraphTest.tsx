@@ -1,7 +1,7 @@
 import React, {useContext, useState} from 'react';
 import Plot from 'react-plotly.js';
 import {AppContext} from "../state/ContextProvider";
-import {PlotData} from "plotly.js";
+import {Layout, PlotData} from "plotly.js";
 import {colorHex, threeScatterData} from "./graphFunctions";
 
 type Props = {}
@@ -37,7 +37,7 @@ const GraphTest: React.FC<Props> = (props) => {
     line:{color:"black"}
   };
   
-  const layout1 = { title: "３次元グラフ" };
+  const layout1:Partial<Layout> = { title: "３次元グラフ"};
   const allData = [data1, data2, lineX, lineY, lineZ]
   return (
     <Plot data={allData} layout={layout1} />

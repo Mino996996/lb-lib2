@@ -8,7 +8,7 @@ export enum Tend {
 }
 
 // 傾向値の計算用
-const scores = (allUrl:UrlInfo[], allCategory:CategoryInfo[], person:string|'all', year:string|'all', tend:Tend):number[] => {
+export const scores = (allUrl:UrlInfo[], allCategory:CategoryInfo[], person:string|'all', year:string|'all', tend:Tend):number[] => {
   let urls = allUrl;
   if (person !== 'all') {
     urls = urls.filter(value => value.tagList.includes(person));
