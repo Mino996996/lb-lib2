@@ -3,32 +3,30 @@ import {AppContext} from "../state/ContextProvider";
 import {Layout, ViolinData} from "plotly.js";
 import Plot from "react-plotly.js";
 import {scores, Tend} from "./graphFunctions";
+import {CategoryInfo, UrlInfo} from "../utilTypes";
+import {Theme} from "../CategoryComponents/themeList";
 
 type Props = {}
+
+const violinData = (urls:UrlInfo[], categories:CategoryInfo[], tend:Tend):Partial<ViolinData>[] => {
+  const persons = categories.filter(value => value.theme === Theme.member)
+  return persons.map(value => {
+    return {
+      type: 'violin',
+      points: 'all',
+      name: value.category,
+      x: scores(urls, categories, value.category, 'all', tend),
+      orientation: "h"
+      // text: urls.map(value => value.title)
+    }
+  })
+}
 
 const GraphViolin: React.FC<Props> = (props) => {
   const {allUrl, allCategory} = useContext(AppContext);
   
-  const data1:Partial<ViolinData> = {
-    type:'violin',
-    points: 'all',
-    y:scores(allUrl, allCategory, '沖藤拓さん', 'all', Tend.education)
-  }
-  
-  const data2:Partial<ViolinData> = {
-    type:'violin',
-    points: 'all',
-    y:scores(allUrl, allCategory, '小橋さん', 'all', Tend.education)
-  }
-  
-  const data3:Partial<ViolinData> = {
-    type:'violin',
-    points: 'all',
-    y:scores(allUrl, allCategory, '赤堀さん', 'all', Tend.education)
-  }
-  
-  const layout1:Partial<Layout> = { title: "発表傾向：教養-実用型", yaxis: {zeroline: true}};
-  const allData = [data1, data2, data3]
+  const layout1:Partial<Layout> = { title: "発表傾向：個人-社会的", xaxis: {zeroline: true}, autosize: true, width:1200};
+  const allData = violinData(allUrl, allCategory, Tend.social)
   return (
     <Plot data={allData} layout={layout1} />
   );
