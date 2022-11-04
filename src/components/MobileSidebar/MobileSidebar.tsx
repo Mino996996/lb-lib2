@@ -1,16 +1,15 @@
-import React, {Fragment, useContext, useState} from 'react';
-import {Dialog, Transition} from "@headlessui/react";
-import CategoryArea from "../CategoryComponents/CategoryArea";
-import ConfigArea from "../ConfigComponents/ConfigArea";
-import {AppContext} from "../state/ContextProvider";
+import React, { Fragment, useState } from 'react'
+import { Dialog, Transition } from '@headlessui/react'
+import CategoryArea from '../CategoryComponents/CategoryArea'
+import ConfigArea from '../ConfigComponents/ConfigArea'
 
-type Props = {
-  sidebarOpen: boolean;
-  setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+interface Props {
+  sidebarOpen: boolean
+  setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const MobileSideBar: React.FC<Props> = ({sidebarOpen, setSidebarOpen}) => {
-  const [categoryTab, setCategoryTab] = useState(true);
+const MobileSideBar: React.FC<Props> = ({ sidebarOpen, setSidebarOpen }) => {
+  const [categoryTab, setCategoryTab] = useState(true)
   return (
     <Transition.Root show={sidebarOpen} as={Fragment}>
       <Dialog as="div" className="fixed inset-0 flex z-40 lg:hidden" onClose={setSidebarOpen}>
@@ -55,16 +54,18 @@ const MobileSideBar: React.FC<Props> = ({sidebarOpen, setSidebarOpen}) => {
               </div>
             </Transition.Child>
             <div className="md:hidden ml-4 border-b-2 border-gray-400 pb-1 box-content">
-              <span onClick={()=>setCategoryTab(true)} className={"ml-1 border-2 border-b-0 border-gray-400 rounded-t-lg p-2 cursor-pointer font-bold box-content " + (categoryTab ? "bg-indigo-200": "bg-gray-300 text-gray-600") }>カテゴリ選択</span>
-              <span onClick={()=>setCategoryTab(false)} className={"ml-0.5 border-2 border-b-0 border-gray-400 rounded-t-lg p-2 cursor-pointer font-bold box-content " + (categoryTab ? "bg-gray-300 text-gray-600": "bg-indigo-200") }>表示/タグ選択</span>
+              <span onClick={() => setCategoryTab(true)} className={'ml-1 border-2 border-b-0 border-gray-400 rounded-t-lg p-2 cursor-pointer font-bold box-content ' + (categoryTab ? 'bg-indigo-200' : 'bg-gray-300 text-gray-600') }>カテゴリ選択</span>
+              <span onClick={() => setCategoryTab(false)} className={'ml-0.5 border-2 border-b-0 border-gray-400 rounded-t-lg p-2 cursor-pointer font-bold box-content ' + (categoryTab ? 'bg-gray-300 text-gray-600' : 'bg-indigo-200') }>表示/タグ選択</span>
             </div>
             <div className="items-center px-4">
               {
-                categoryTab ? (
+                categoryTab
+                  ? (
                   <CategoryArea />
-                ):(
+                    )
+                  : (
                   <ConfigArea />
-                )
+                    )
               }
             </div>
           </div>
@@ -74,7 +75,7 @@ const MobileSideBar: React.FC<Props> = ({sidebarOpen, setSidebarOpen}) => {
         </div>
       </Dialog>
     </Transition.Root>
-  );
-};
+  )
+}
 
-export default MobileSideBar;
+export default MobileSideBar
