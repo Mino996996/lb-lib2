@@ -25,10 +25,13 @@ const CategoryList: React.FC<Props> = ({ categoryInfo, isEditMode, setIsEditMode
     }
   }
 
-  const deleteCategory = async (categoryInfo: CategoryInfo): Promise<void> => {
+  const deleteCategory = (categoryInfo: CategoryInfo): void => {
     if (window.confirm(`カテゴリから "${categoryInfo.category}" を削除しますか？`)) {
-      await categoryDb.delete(categoryInfo)
-      setAllCategory([...allCategory.filter(value => value.id !== categoryInfo.id)])
+      categoryDb.delete(categoryInfo)
+        .then(() => {
+          setAllCategory([...allCategory.filter(value => value.id !== categoryInfo.id)])
+        })
+        .catch(e => alert(e))
     }
   }
 
@@ -46,13 +49,7 @@ const CategoryList: React.FC<Props> = ({ categoryInfo, isEditMode, setIsEditMode
       >[編集]</span>
       <span
         className='pt-0.5 mr-2 text-sm text-gray-400 cursor-pointer'
-        onClick={async () => {
-          try {
-            await deleteCategory(categoryInfo)
-          } catch (e) {
-            alert(e)
-          }
-        }}
+        onClick={() => deleteCategory(categoryInfo)}
       >[x]</span>
     </li>
   )
