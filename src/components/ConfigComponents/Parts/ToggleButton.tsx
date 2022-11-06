@@ -1,15 +1,17 @@
-import React, { useContext } from 'react'
-import { Switch } from '@headlessui/react'
-import { AppContext } from '../../state/ContextProvider'
+import React, { useContext } from 'react';
+import { Switch } from '@headlessui/react';
+import { AppContext } from '../../state/ContextProvider';
 
-const classNames = (...classes: string[]): string => classes.filter(Boolean).join(' ')
+const classNames = (...classes: string[]): string => classes.filter(Boolean).join(' ');
 
-interface Props { kind: 'image' | 'memo' }
+interface Props {
+  kind: 'image' | 'memo';
+}
 
 export const ToggleButton: React.FC<Props> = ({ kind }) => {
-  const { imageVisible, setImageVisible, memoVisible, setMemoVisible } = useContext(AppContext)
-  const visible = kind === 'image' ? imageVisible : memoVisible
-  const setVisible = kind === 'image' ? setImageVisible : setMemoVisible
+  const { imageVisible, setImageVisible, memoVisible, setMemoVisible } = useContext(AppContext);
+  const visible = kind === 'image' ? imageVisible : memoVisible;
+  const setVisible = kind === 'image' ? setImageVisible : setMemoVisible;
 
   return (
     <Switch
@@ -20,11 +22,11 @@ export const ToggleButton: React.FC<Props> = ({ kind }) => {
       )}
       onChange={() => {
         if (kind === 'image') {
-          visible ? localStorage.setItem('image', '') : localStorage.setItem('image', 'true')
+          visible ? localStorage.setItem('image', '') : localStorage.setItem('image', 'true');
         } else {
-          visible ? localStorage.setItem('memo', '') : localStorage.setItem('memo', 'true')
+          visible ? localStorage.setItem('memo', '') : localStorage.setItem('memo', 'true');
         }
-        setVisible(!visible)
+        setVisible(!visible);
       }}
     >
       <span
@@ -35,5 +37,5 @@ export const ToggleButton: React.FC<Props> = ({ kind }) => {
         )}
       />
     </Switch>
-  )
-}
+  );
+};
