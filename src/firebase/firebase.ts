@@ -1,24 +1,22 @@
-import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword, signOut , signInAnonymously} from "firebase/auth";
+import { initializeApp } from 'firebase/app'
+import { getAuth, signOut, signInAnonymously } from 'firebase/auth'
 import {
   collection,
   deleteDoc,
   doc,
-  getDoc,
   getDocs,
   getFirestore,
   query,
   setDoc,
   updateDoc,
-  where,
-  collectionGroup
-} from "firebase/firestore";
-import { getFunctions, httpsCallable } from 'firebase/functions';
-import { getStorage, ref, uploadBytes, deleteObject, getDownloadURL } from "firebase/storage";
+  where
+} from 'firebase/firestore'
+import { getFunctions, httpsCallable } from 'firebase/functions'
+import { getStorage, ref, uploadBytes, deleteObject, getDownloadURL } from 'firebase/storage'
 
-import {CategoryInfo, UploadFileData, UploadFileImageData, UrlInfo} from "../components/utilTypes";
-import {urlInfoList} from "../fixtures/stab/urlStab";
-import {createId, Obj} from "../components/UrlComponents/cardFunctions";
+import { CategoryInfo, UploadFileData, UploadFileImageData, UrlInfo } from '../components/utilTypes'
+// import {urlInfoList} from "../fixtures/stab/urlStab";
+import { createId, Obj } from '../components/UrlComponents/cardFunctions'
 
 const firebaseApp = initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -27,16 +25,16 @@ const firebaseApp = initializeApp({
   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
   storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_FIREBASE_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID,
-});
+  appId: process.env.REACT_APP_FIREBASE_APP_ID
+})
 
-const auth = getAuth(firebaseApp);
-const db = getFirestore(firebaseApp);
-const functions = getFunctions(firebaseApp,'asia-northeast1');
-const storage = getStorage(firebaseApp);
+const auth = getAuth(firebaseApp)
+const db = getFirestore(firebaseApp)
+const functions = getFunctions(firebaseApp, 'asia-northeast1')
+const storage = getStorage(firebaseApp)
 
 // 外部functionsの呼び出し
-const firebaseFunction = httpsCallable(functions, 'helloWorld');
+const firebaseFunction = httpsCallable(functions, 'helloWorld')
 
 // サインイン
 // export const signIn = () => {
@@ -50,41 +48,41 @@ const firebaseFunction = httpsCallable(functions, 'helloWorld');
 //     });
 // }
 
-export const signIn = () => {
+export const signIn = (): void => {
   signInAnonymously(auth)
     .then((userCredential) => {
       console.log('OKOK123')
-      console.log(userCredential.user.uid);
+      console.log(userCredential.user.uid)
     })
     .catch((error) => {
+      console.error(error)
       // const errorCode = error.code;
       // const errorMessage = error.message;
-    });
+    })
 }
 
-export const firebaseSignOut = async () => {
-  await signOut(auth);
+export const firebaseSignOut = async (): Promise<void> => {
+  await signOut(auth)
 }
-
 
 // 情報源urlとタブ情報などを登録する
 export const addUrl = async (urlInfo: UrlInfo): Promise<void> => {
-  const urlData = {...urlInfo};
-  const urlDocRef = doc(db, 'url', urlInfo.id);
-  await setDoc(urlDocRef, urlData);
+  const urlData = { ...urlInfo }
+  const urlDocRef = doc(db, 'url', urlInfo.id)
+  await setDoc(urlDocRef, urlData)
 }
 
 // 情報源urlとタブ情報などを登録する
 export const updateUrl = async (urlInfo: UrlInfo): Promise<void> => {
-  const urlData = {...urlInfo};
-  const urlDocRef = doc(db, 'url', urlInfo.id);
-  await updateDoc(urlDocRef, urlData);
+  const urlData = { ...urlInfo }
+  const urlDocRef = doc(db, 'url', urlInfo.id)
+  await updateDoc(urlDocRef, urlData)
 }
 
 // 情報源urlの削除
 export const deleteUrl = async (urlInfo: UrlInfo): Promise<void> => {
-  const urlDocRef = doc(db, 'url', urlInfo.id);
-  await deleteDoc(urlDocRef);
+  const urlDocRef = doc(db, 'url', urlInfo.id)
+  await deleteDoc(urlDocRef)
 }
 
 // こういうことはOKなのか？
@@ -93,80 +91,80 @@ export const deleteUrl = async (urlInfo: UrlInfo): Promise<void> => {
 export const urlDb = {
   add: addUrl,
   update: updateUrl,
-  delete: deleteUrl,
+  delete: deleteUrl
 }
-
 
 // メインカテゴリ
 export const addCategory = async (categoryData: CategoryInfo): Promise<void> => {
-  const category = {...categoryData};
-  const urlDocRef = doc(db, 'category', categoryData.id);
-  await setDoc(urlDocRef, category);
+  const category = { ...categoryData }
+  const urlDocRef = doc(db, 'category', categoryData.id)
+  await setDoc(urlDocRef, category)
 }
 
 export const updateCategory = async (categoryData: CategoryInfo): Promise<void> => {
-  const category = {...categoryData};
-  const urlDocRef = doc(db, 'category', categoryData.id);
-  await updateDoc(urlDocRef, category);
+  const category = { ...categoryData }
+  console.log(category)
+  const urlDocRef = doc(db, 'category', categoryData.id)
+  await updateDoc(urlDocRef, category)
 }
 
 export const deleteCategory = async (categoryData: CategoryInfo): Promise<void> => {
-  const urlDocRef = doc(db, 'category', categoryData.id);
-  await deleteDoc(urlDocRef);
+  const urlDocRef = doc(db, 'category', categoryData.id)
+  await deleteDoc(urlDocRef)
 }
 
 export const categoryDb = {
   add: addCategory,
   update: updateCategory,
-  delete: deleteCategory,
+  delete: deleteCategory
 }
 
 // 全カテゴリデータ取得
-export const getAllCategories = async () => {
-  const categoryRef = collection(db, 'category');
-  const cateDoc = await getDocs(categoryRef);
-  if(!cateDoc.empty) {
-    return cateDoc.docs.map(value => value.data());
+export const getAllCategories = async (): Promise<CategoryInfo[]> => {
+  const categoryRef = collection(db, 'category')
+  const cateDoc = await getDocs(categoryRef)
+  if (!cateDoc.empty) {
+    return cateDoc.docs.map(value => value.data()) as CategoryInfo[]
   } else {
-    return [];
+    return []
   }
 }
 
 export const checkCategoryName = async (categoryName: string): Promise<boolean> => {
-  const categoryRef = collection(db, 'category');
-  const q = query(categoryRef, where("category", "==", categoryName));
-  const cateDoc = await getDocs(q);
-  return cateDoc.empty;
+  const categoryRef = collection(db, 'category')
+  const q = query(categoryRef, where('category', '==', categoryName))
+  const cateDoc = await getDocs(q)
+  return cateDoc.empty
 }
 
 // 全URLデータ取得
-export const getAllUrls = async () => {
-  const query = collection(db, 'url');
-  const urlDocs = await getDocs(query);
-  if(!urlDocs.empty) {
-    return urlDocs.docs.map(value => value.data());
+export const getAllUrls = async (): Promise<UrlInfo[]> => {
+  const query = collection(db, 'url')
+  const urlDocs = await getDocs(query)
+  if (!urlDocs.empty) {
+    return urlDocs.docs.map(value => value.data()) as UrlInfo[]
   } else {
-    return [];
+    return []
   }
 }
 
 // Firebaseに登録したファンクションを経由してOGPデータを取得する
 export const getOgpData = async (message: string): Promise<Obj> => {
-  const result = await firebaseFunction(message);
-  return result.data as Obj;
+  const result = await firebaseFunction(message)
+  return result.data as Obj
 }
 
 /* storage */
 export const fbStorageUpload = async (file: File): Promise<UploadFileData> => {
-  const fileId = `${createId(8)}_${file.name}`;
-  const storageRef = ref(storage, fileId);
-  await uploadBytes(storageRef, file);
-  const url = await getDownloadURL(storageRef);
+  const fileId = `${createId(8)}_${file.name}`
+  const storageRef = ref(storage, fileId)
+  await uploadBytes(storageRef, file)
+  const url = await getDownloadURL(storageRef)
   return {
     id: fileId,
     name: file.name,
-    url: url
-  };
+    url
+  }
 }
 
 export const fbPdfImageUpload = async (base64Data: string): Promise<UploadFileImageData> => {
@@ -180,23 +178,23 @@ export const fbPdfImageUpload = async (base64Data: string): Promise<UploadFileIm
   }
   const blob = new Blob([buf], { type: mime })
   const imageFile = new File([blob], 'image.png', {
-    lastModified: new Date().getTime(),
+    lastModified: new Date().getTime()
   })
   // アップロードしたのちにURL取得
-  const fileId = `image/${createId(12)}_fileImage.png`;
-  const storageRef = ref(storage, fileId);
+  const fileId = `image/${createId(12)}_fileImage.png`
+  const storageRef = ref(storage, fileId)
   const metadata = {
-    contentType: 'image/png',
-  };
-  await uploadBytes(storageRef, imageFile, metadata);
-  const url = await getDownloadURL(storageRef);
+    contentType: 'image/png'
+  }
+  await uploadBytes(storageRef, imageFile, metadata)
+  const url = await getDownloadURL(storageRef)
   return {
     id: fileId,
-    url: url
-  };
+    url
+  }
 }
 
 export const fbStorageDelete = async (fileId: string): Promise<void> => {
-  const storageRef = ref(storage, fileId);
-  await deleteObject(storageRef);
+  const storageRef = ref(storage, fileId)
+  await deleteObject(storageRef)
 }
