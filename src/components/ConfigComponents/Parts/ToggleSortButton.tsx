@@ -1,13 +1,11 @@
-import React, {useContext, useState} from 'react';
-import { Switch } from '@headlessui/react'
-import {AppContext} from "../../state/ContextProvider";
+import React, { useContext } from 'react';
+import { Switch } from '@headlessui/react';
+import { AppContext } from '../../state/ContextProvider';
 
-function classNames(...classes:string[]) {
-  return classes.filter(Boolean).join(' ')
-}
+const classNames = (...classes: string[]): string => classes.filter(Boolean).join(' ');
 
 export const ToggleSortButton: React.VFC = () => {
-  const {asc, setAsc} = useContext(AppContext);
+  const { asc, setAsc } = useContext(AppContext);
 
   return (
     <Switch
@@ -17,7 +15,7 @@ export const ToggleSortButton: React.VFC = () => {
         'mx-2 relative inline-flex flex-shrink-0 h-4 w-9 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-700'
       )}
       onChange={() => {
-        asc ? localStorage.setItem('asc', ''): localStorage.setItem('asc', 'true');
+        asc ? localStorage.setItem('asc', '') : localStorage.setItem('asc', 'true');
         setAsc(!asc);
       }}
     >
@@ -29,5 +27,5 @@ export const ToggleSortButton: React.VFC = () => {
         )}
       />
     </Switch>
-  )
-}
+  );
+};

@@ -1,8 +1,8 @@
-import {Theme} from "./CategoryComponents/themeList";
+import { Theme } from './CategoryComponents/themeList';
 
-export type UrlInfo = {
+export interface UrlInfo {
   id: string;
-  title: string
+  title: string;
   url: string;
   memo: string;
   tagList: string[];
@@ -17,19 +17,20 @@ export type UrlInfo = {
   fileImageUrl: string;
 }
 
-export type CategoryInfo = {
+export interface CategoryInfo {
   id: string;
   category: string;
   theme: Theme;
+  point?: number[];
 }
 
-export type UploadFileData = {
+export interface UploadFileData {
   id: string;
   name: string;
   url: string;
 }
 
-export type UploadFileImageData = {
+export interface UploadFileImageData {
   id: string;
   url: string;
 }

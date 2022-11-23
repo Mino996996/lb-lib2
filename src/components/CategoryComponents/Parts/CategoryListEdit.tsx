@@ -1,43 +1,52 @@
-import React, {useContext, useState} from 'react';
-import {AppContext} from "../../state/ContextProvider";
-import {CategoryInfo, UrlInfo} from "../../utilTypes";
-import {categoryDb, checkCategoryName, getAllCategories, getAllUrls} from "../../../firebase/firebase";
-import {themeOptions} from "../themeList";
+import React, { useContext, useState } from 'react';
+import { AppContext } from '../../state/ContextProvider';
+import { CategoryInfo } from '../../utilTypes';
+import { categoryDb, checkCategoryName, getAllCategories, getAllUrls } from '../../../firebase/firebase';
+import { themeOptions } from '../themeList';
 
-type Props = {
+interface Props {
   categoryInfo: CategoryInfo;
   isEditMode: boolean;
-  setIsEditMode : React.Dispatch<React.SetStateAction<boolean>>
+  setIsEditMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CategoryListEdit: React.VFC<Props> = ({categoryInfo, isEditMode, setIsEditMode}) => {
-  
-  const {allCategory, setAllCategory, setAllUrl} = useContext(AppContext);
+const CategoryListEdit: React.FC<Props> = ({ categoryInfo, isEditMode, setIsEditMode }) => {
+  const { allCategory, setAllCategory, setAllUrl } = useContext(AppContext);
   const [categoryName, setCategoryName] = useState(categoryInfo.category);
   const [theme, setTheme] = useState(categoryInfo.theme);
-  
-  const updateCategory = async () => {
-    if (categoryInfo.category !== categoryName) {
+  const [points, setPoints] = useState(
+    categoryInfo.point?.length != null ? String(categoryInfo.point) : String([0, 0, 0])
+  );
+
+  const updateCategory = async (): Promise<void> => {
+    // 変化点の有無をチェック
+    if (
+      categoryInfo.category !== categoryName ||
+      categoryInfo.theme !== theme ||
+      String(categoryInfo.point) !== points
+    ) {
       const isUniqueName = await checkCategoryName(categoryName);
-      if(categoryName && isUniqueName && !!theme) {
+      const isUnique = isUniqueName || categoryInfo.theme !== theme || String(categoryInfo.point) !== points;
+      if (categoryName !== '' && isUnique) {
         const categoryData: CategoryInfo = {
           id: categoryInfo.id,
           category: categoryName,
-          theme
-        }
+          theme,
+          point: points.split(',').map((v) => Number(v)),
+        };
         await categoryDb.update(categoryData);
-        const newCategories = allCategory.filter(value => value.category !== categoryInfo.category)
+        const newCategories = allCategory.filter((value) => value.category !== categoryInfo.category);
         newCategories.push(categoryData);
-        setAllCategory([...newCategories.sort((a, b)=>a.category.localeCompare(b.category))]);
+        setAllCategory([...newCategories.sort((a, b) => a.category.localeCompare(b.category))]);
         setIsEditMode(false);
       } else {
-        if(!isUniqueName) {
+        if (!isUniqueName) {
           window.alert('すでにデータベースに登録されています');
-          const newCateData = await getAllCategories() as CategoryInfo[];
-          const newUrlData = await getAllUrls() as UrlInfo[];
+          const newCateData = await getAllCategories();
+          const newUrlData = await getAllUrls();
           setAllCategory(newCateData);
           setAllUrl([...newUrlData]);
-        } else if(!categoryName) {
+        } else if (categoryName === '') {
           window.alert('未記入のため登録できません');
         } else {
           window.alert('分類先を選択してください');
@@ -46,31 +55,50 @@ const CategoryListEdit: React.VFC<Props> = ({categoryInfo, isEditMode, setIsEdit
     } else {
       setIsEditMode(false);
     }
-  }
-  
+  };
+
   return (
     <div className="my-2 ml-2">
       <input
         className="bg-green-50 w-11/12 pl-2 mb-1 border border-gray-500 rounded text-gray-700"
         type="text"
         value={categoryName}
-        onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           setCategoryName(e.target.value);
+        }}
+      />
+      <input
+        className="bg-green-50 w-11/12 pl-2 mb-1 border border-gray-500 rounded text-gray-700"
+        type="text"
+        value={String(points)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          setPoints(e.target.value);
         }}
       />
       <select
         className="w-6/12 bg-green-50 mt-1 mb-2 text-gray-700"
-        onChange={(e:React.ChangeEvent<HTMLSelectElement>)=>{setTheme(Number(e.target.value))}}
+        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+          setTheme(Number(e.target.value));
+        }}
         value={theme}
       >
-        {themeOptions.map(themeOption=>(
-          <option key={themeOption.value} value={themeOption.value}>{themeOption.text}</option>
+        {themeOptions.map((themeOption) => (
+          <option key={themeOption.value} value={themeOption.value}>
+            {themeOption.text}
+          </option>
         ))}
       </select>
-      <button className="ml-4 p-0.5 bg-green-100 rounded border border-gray-600 cursor-pointer text-sm text-gray-700" onClick={async() => updateCategory()}>
+      {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+      <button
+        className="ml-4 p-0.5 bg-green-100 rounded border border-gray-600 cursor-pointer text-sm text-gray-700"
+        onClick={async () => await updateCategory()}
+      >
         更新
       </button>
-      <button className="ml-4 p-0.5 bg-gray-200 rounded border border-gray-600 cursor-pointer text-sm text-gray-700" onClick={() => setIsEditMode(false)}>
+      <button
+        className="ml-4 p-0.5 bg-gray-200 rounded border border-gray-600 cursor-pointer text-sm text-gray-700"
+        onClick={() => setIsEditMode(false)}
+      >
         閉じる
       </button>
     </div>
