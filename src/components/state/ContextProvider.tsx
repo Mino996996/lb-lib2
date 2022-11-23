@@ -1,4 +1,4 @@
-import React, { createContext, Dispatch, ReactNode, useReducer, useState } from 'react';
+import React, { createContext, Dispatch, ReactNode, useContext, useReducer, useState } from 'react';
 import authReducer, { AuthAction } from './authReducer';
 import { CategoryInfo, UrlInfo } from '../utilTypes';
 
@@ -23,14 +23,13 @@ interface AppContextType {
   setIsAnalysisMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-export const AppContext = createContext({} as AppContextType);
+export const AppContext: React.Context<Partial<AppContextType>> = createContext({});
 
 interface Props {
   children: ReactNode;
 }
 
-export const ContextProvider: React.VFC<Props> = (props) => {
+export const ContextProvider: React.FC<Props> = ({ children }) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const savedKeywords =
     localStorage.getItem('keyword') != null ? (JSON.parse(localStorage.getItem('keyword')!) as string[]) : [];
@@ -72,5 +71,7 @@ export const ContextProvider: React.VFC<Props> = (props) => {
     setIsAnalysisMode,
   };
 
-  return <AppContext.Provider value={value}>{props.children}</AppContext.Provider>;
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
+
+export const useConfig = (): Partial<AppContextType> => useContext(AppContext);
