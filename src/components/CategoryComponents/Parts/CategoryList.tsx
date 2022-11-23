@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { CategoryInfo, UrlInfo } from '../../utilTypes';
-import { AppContext } from '../../state/ContextProvider';
+import { AppContext } from '../../state/ConfigProvider';
 import { categoryDb } from '../../../firebase/firebase';
 
 interface Props {

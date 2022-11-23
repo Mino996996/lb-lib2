@@ -7,7 +7,7 @@ import { createId } from '../cardFunctions';
 import { UrlInfo } from '../../utilTypes';
 import { addUrl, fbPdfImageUpload, fbStorageDelete, fbStorageUpload, updateUrl } from '../../../firebase/firebase';
 import { ClosedFormCard } from './ClosedFormCard';
-import { AppContext } from '../../state/ContextProvider';
+import { AppContext } from '../../state/ConfigProvider';
 import FormButtonArea from './Parts/FormButtonArea';
 import FileForm from './Parts/FileForm';
 import DateForm from './Parts/DateForm';

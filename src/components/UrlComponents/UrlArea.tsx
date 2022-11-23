@@ -3,7 +3,7 @@ import { FormCard } from './FormCard/FormCard';
 import { UrlCard } from './UrlCard/UrlCard';
 import { UrlInfo } from '../utilTypes';
 import { urlInfoList } from '../../fixtures/stab/urlStab'; // 表示テスト用デモデータ
-import { AppContext } from '../state/ContextProvider';
+import { AppContext } from '../state/ConfigProvider';
 import UrlKeyword from './UrlCard/UrlKeyword';
 
 const nowTime = new Date();

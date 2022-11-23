@@ -23,13 +23,14 @@ interface AppContextType {
   setIsAnalysisMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const AppContext: React.Context<Partial<AppContextType>> = createContext({});
+// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+export const AppContext = createContext({} as AppContextType);
 
 interface Props {
   children: ReactNode;
 }
 
-export const ContextProvider: React.FC<Props> = ({ children }) => {
+export const ConfigProvider: React.FC<Props> = ({ children }) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const savedKeywords =
     localStorage.getItem('keyword') != null ? (JSON.parse(localStorage.getItem('keyword')!) as string[]) : [];
@@ -74,4 +75,4 @@ export const ContextProvider: React.FC<Props> = ({ children }) => {
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
-export const useConfig = (): Partial<AppContextType> => useContext(AppContext);
+export const useConfigContext = (): AppContextType => useContext(AppContext);

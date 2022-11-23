@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { AppContext } from './state/ContextProvider';
+import { AppContext } from './state/ConfigProvider';
 import { loginType } from './state/authReducer';
 // import { signIn } from '../firebase/firebase'
 

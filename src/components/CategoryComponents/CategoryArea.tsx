@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { AppContext } from '../state/ContextProvider';
+import { AppContext } from '../state/ConfigProvider';
 import CategoryForm from './Parts/CategoryForm';
 import { firebaseSignOut } from '../../firebase/firebase';
 import { logoutType } from '../state/authReducer';

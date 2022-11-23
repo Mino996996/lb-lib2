@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { fbStorageDelete, urlDb } from '../../../../firebase/firebase';
-import { AppContext } from '../../../state/ContextProvider';
+import { AppContext } from '../../../state/ConfigProvider';
 import { UrlInfo } from '../../../utilTypes';
 
 interface Props {

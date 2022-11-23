@@ -1,16 +1,12 @@
 import React, { useContext } from 'react';
-import { AppContext } from '../state/ContextProvider';
+import { AppContext } from '../state/ConfigProvider';
 import { Layout, ViolinData } from 'plotly.js';
 import Plot from 'react-plotly.js';
 import { scores, Tend } from './graphFunctions';
 import { CategoryInfo, UrlInfo } from '../utilTypes';
 import { Theme } from '../CategoryComponents/themeList';
 
-const violinData = (
-  urls: UrlInfo[],
-  categories: CategoryInfo[],
-  tend: Tend
-): Array<Partial<ViolinData>> => {
+const violinData = (urls: UrlInfo[], categories: CategoryInfo[], tend: Tend): Array<Partial<ViolinData>> => {
   const persons = categories.filter((value) => value.theme === Theme.member);
   return persons.map((value) => {
     return {

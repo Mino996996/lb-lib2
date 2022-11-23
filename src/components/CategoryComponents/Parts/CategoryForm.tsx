@@ -1,13 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { CategoryInfo } from '../../utilTypes';
 import { createId } from '../../UrlComponents/cardFunctions';
-import {
-  categoryDb,
-  checkCategoryName,
-  getAllCategories,
-  getAllUrls,
-} from '../../../firebase/firebase';
-import { AppContext } from '../../state/ContextProvider';
+import { categoryDb, checkCategoryName, getAllCategories, getAllUrls } from '../../../firebase/firebase';
+import { AppContext } from '../../state/ConfigProvider';
 import { Theme, themeOptions } from '../themeList';
 
 const CategoryForm: React.FC = () => {
@@ -25,9 +20,7 @@ const CategoryForm: React.FC = () => {
       };
       await categoryDb.add(categoryData);
       allCategory.push(categoryData);
-      setAllCategory([
-        ...allCategory.sort((a, b) => a.category.localeCompare(b.category)),
-      ]);
+      setAllCategory([...allCategory.sort((a, b) => a.category.localeCompare(b.category))]);
       setCategoryName('');
       setTheme(Theme.unselected);
     } else {

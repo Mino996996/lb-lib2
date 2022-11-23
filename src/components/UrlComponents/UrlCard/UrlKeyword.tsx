@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { AppContext } from '../../state/ContextProvider';
+import { AppContext } from '../../state/ConfigProvider';
 
 const UrlKeyword: React.FC = () => {
   const { selectedCategory, setSelectedCategory, keywords, setKeywords } = useContext(AppContext);

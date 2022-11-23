@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { UrlInfo } from '../../utilTypes';
-import { AppContext } from '../../state/ContextProvider';
+import { AppContext } from '../../state/ConfigProvider';
 import { isCategoryTag } from '../cardFunctions';
 import { FormCard } from '../FormCard/FormCard';
 import FileInfo from './FileInfo';

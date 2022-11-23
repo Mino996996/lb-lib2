@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { AppContext } from '../../state/ContextProvider';
+import { AppContext } from '../../state/ConfigProvider';
 import { CategoryInfo } from '../../utilTypes';
 import { categoryDb, checkCategoryName, getAllCategories, getAllUrls } from '../../../firebase/firebase';
 import { themeOptions } from '../themeList';
