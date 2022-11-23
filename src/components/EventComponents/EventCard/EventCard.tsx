@@ -10,7 +10,7 @@ interface Props {
   index: number;
 }
 
-export const UrlCard: React.FC<Props> = ({ urlInfo, index }) => {
+export const EventCard: React.FC<Props> = ({ urlInfo, index }) => {
   const { imageVisible, memoVisible, allCategory, setSelectedCategory, setKeywords, allUrl, setAllUrl } =
     useContext(AppContext);
   const [visible, setVisible] = useState(imageVisible);

@@ -5,7 +5,7 @@ import { firebaseSignOut } from '../../firebase/firebase';
 import { logoutType } from '../state/authReducer';
 import { Theme, themeOptions } from './themeList';
 import { CategoryTheme } from './Parts/CategoryTheme';
-import BaseButton from '../UrlComponents/Buttons/BaseButton';
+import BaseButton from '../EventComponents/Buttons/BaseButton';
 
 const CategoryArea: React.FC = () => {
   const { dispatch, isAnalysisMode, setIsAnalysisMode } = useContext(AppContext);

@@ -8,7 +8,7 @@ interface Props {
   setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const MobileSideBar: React.FC<Props> = ({ sidebarOpen, setSidebarOpen }) => {
+const MobileSideBarCF: React.FC<Props> = ({ sidebarOpen, setSidebarOpen }) => {
   const [categoryTab, setCategoryTab] = useState(true);
   return (
     <Transition.Root show={sidebarOpen} as={Fragment}>
@@ -83,5 +83,7 @@ const MobileSideBar: React.FC<Props> = ({ sidebarOpen, setSidebarOpen }) => {
     </Transition.Root>
   );
 };
+
+const MobileSideBar = React.memo(MobileSideBarCF);
 
 export default MobileSideBar;

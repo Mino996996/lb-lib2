@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { pickRelationalTabs } from '../UrlComponents/cardFunctions';
+import { pickRelationalTabs } from '../EventComponents/cardFunctions';
 // import { urlInfoList } from '../../fixtures/stab/urlStab'
 import { ToggleButton } from './Parts/ToggleButton';
 import { AppContext } from '../state/ConfigProvider';

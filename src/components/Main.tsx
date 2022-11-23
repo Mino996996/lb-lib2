@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import MobileSideBar from './Mobile/MobileSidebar';
 import CategoryArea from './CategoryComponents/CategoryArea';
-import UrlArea from './UrlComponents/UrlArea';
+import UrlArea from './EventComponents/UrlArea';
 import ConfigArea from './ConfigComponents/ConfigArea';
 import { useConfigContext } from './state/ConfigProvider';
 import { getAllCategories, getAllUrls } from '../firebase/firebase';

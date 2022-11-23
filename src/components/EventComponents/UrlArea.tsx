@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { FormCard } from './FormCard/FormCard';
-import { UrlCard } from './UrlCard/UrlCard';
+import { EventCard } from './EventCard/EventCard';
 import { UrlInfo } from '../utilTypes';
 import { urlInfoList } from '../../fixtures/stab/urlStab'; // 表示テスト用デモデータ
 import { AppContext } from '../state/ConfigProvider';
-import UrlKeyword from './UrlCard/UrlKeyword';
+import EventKeyword from './EventCard/EventKeyword';
 
 const nowTime = new Date();
 const blankUrlInfo: UrlInfo = {
@@ -60,10 +60,10 @@ const UrlArea: React.FC = () => {
       {/* URLデータのOutput */}
       <div className="pr-2 lg:pr-6 w-full absolute top-0 left-0 overflow-y-scroll edit-scrollbar url-height">
         {/* 選択中のカテゴリとタグ */}
-        <UrlKeyword />
+        <EventKeyword />
         {/* URL情報一覧 */}
         {urlInfos.map((urlInfo, index) => (
-          <UrlCard key={urlInfo.id} urlInfo={urlInfo} index={index} />
+          <EventCard key={urlInfo.id} urlInfo={urlInfo} index={index} />
         ))}
       </div>
       {/* URLデータのInput */}

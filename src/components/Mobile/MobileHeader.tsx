@@ -1,6 +1,6 @@
 import React from 'react';
 import bars from '../../images/bars_24.svg';
-import BaseButton from '../UrlComponents/Buttons/BaseButton';
+import BaseButton from '../EventComponents/Buttons/BaseButton';
 import { firebaseSignOut } from '../../firebase/firebase';
 import { logoutType } from '../state/authReducer';
 import { useConfigContext } from '../state/ConfigProvider';

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import Plot from 'react-plotly.js';
 import { AppContext } from '../state/ConfigProvider';
-import BaseButton from '../UrlComponents/Buttons/BaseButton';
+import BaseButton from '../EventComponents/Buttons/BaseButton';
 
 const Graph3D: React.FC = () => {
   const { allUrl, allCategory } = useContext(AppContext);

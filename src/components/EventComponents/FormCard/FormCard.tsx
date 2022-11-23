@@ -3,7 +3,6 @@ import TitleForm from './Parts/TitleForm';
 import UrlForm from './Parts/UrlForm';
 import TagForm from './Parts/TagForm';
 import MemoForm from './Parts/MemoForm';
-import { createId } from '../cardFunctions';
 import { UrlInfo } from '../../utilTypes';
 import { addUrl, fbPdfImageUpload, fbStorageDelete, fbStorageUpload, updateUrl } from '../../../firebase/firebase';
 import { ClosedFormCard } from './ClosedFormCard';
@@ -11,6 +10,7 @@ import { AppContext } from '../../state/ConfigProvider';
 import FormButtonArea from './Parts/FormButtonArea';
 import FileForm from './Parts/FileForm';
 import DateForm from './Parts/DateForm';
+import { createId } from '../../../utils/utilFinctions';
 
 interface Props {
   initUrlInfo: UrlInfo;
