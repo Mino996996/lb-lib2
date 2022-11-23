@@ -1,40 +1,28 @@
 import React, { useContext, useState } from 'react';
-import { CategoryInfo } from '../../utilTypes';
-import { createId } from '../../UrlComponents/cardFunctions';
-import { categoryDb, checkCategoryName, getAllCategories, getAllUrls } from '../../../firebase/firebase';
+import { categoryDb, checkCategoryName } from '../../../firebase/firebase';
 import { AppContext } from '../../state/ConfigProvider';
 import { Theme, themeOptions } from '../themeList';
+import { createCategory } from '../../../utils/utilFinctions';
+import { alerts } from '../../../utils/alerts';
+const ID_LENGTH = 12;
 
 const CategoryForm: React.FC = () => {
-  const { allCategory, setAllCategory, setAllUrl } = useContext(AppContext);
+  const { allCategory, setAllCategory } = useContext(AppContext);
   const [categoryName, setCategoryName] = useState<string>('');
   const [theme, setTheme] = useState<Theme>(Theme.unselected);
 
-  const addCategory = async (categoryName: string): Promise<void> => {
+  const addCategory = async (categoryName: string): Promise<string> => {
     const isUniqueName = await checkCategoryName(categoryName);
     if (categoryName !== '' && isUniqueName && !(theme === 0)) {
-      const categoryData: CategoryInfo = {
-        id: createId(12),
-        category: categoryName,
-        theme,
-      };
+      const categoryData = createCategory(ID_LENGTH, categoryName, theme);
       await categoryDb.add(categoryData);
       allCategory.push(categoryData);
       setAllCategory([...allCategory.sort((a, b) => a.category.localeCompare(b.category))]);
       setCategoryName('');
       setTheme(Theme.unselected);
+      return 'Done';
     } else {
-      if (!isUniqueName) {
-        window.alert('すでにデータベースに登録されています');
-        const newCateData = await getAllCategories();
-        const newUrlData = await getAllUrls();
-        setAllCategory(newCateData);
-        setAllUrl([...newUrlData]);
-      } else if (categoryName === '') {
-        window.alert('未記入のため登録できません');
-      } else {
-        window.alert('分類先を選択してください');
-      }
+      return alerts(isUniqueName, categoryName);
     }
   };
 
@@ -65,7 +53,13 @@ const CategoryForm: React.FC = () => {
       {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
       <button
         className="ml-2 p-1 bg-green-200 rounded-lg border border-indigo-400 cursor-pointer text-lg text-gray-700 font-bold"
-        onClick={async () => await addCategory(categoryName)}
+        onClick={() => {
+          addCategory(categoryName)
+            .then((result) => {
+              if (result !== 'Done') alert(result);
+            })
+            .catch((error) => alert(error));
+        }}
       >
         登録
       </button>
