@@ -14,7 +14,7 @@ export const FilePreview: React.FC<Props> = ({ urlInfo, pdfData, pdfPageNumber, 
   const [page, setPage] = useState(1);
   const [imageUrl, setImageUrl] = useState(urlInfo.fileImageUrl);
 
-  const changeImageUrl = async (page: number) => {
+  const changeImageUrl = async (page: number): Promise<void> => {
     pdfData != null && setImageUrl(await pdfPageImage(pdfData, 0.7, page));
     setPage(page);
   };
@@ -32,7 +32,11 @@ export const FilePreview: React.FC<Props> = ({ urlInfo, pdfData, pdfPageNumber, 
           {page - 1 !== 0 ? (
             <span
               className="py-0.5 px-4 mr-4 bg-green-200 rounded border border-green-500 cursor-pointer"
-              onClick={async () => await changeImageUrl(page - 1)}
+              onClick={() => {
+                changeImageUrl(page - 1)
+                  .then()
+                  .catch((e) => alert(e));
+              }}
             >
               戻る
             </span>
@@ -43,7 +47,11 @@ export const FilePreview: React.FC<Props> = ({ urlInfo, pdfData, pdfPageNumber, 
           {page !== pdfPageNumber ? (
             <span
               className="py-0.5 px-4 ml-4 bg-green-200 rounded border border-green-500 cursor-pointer"
-              onClick={async () => await changeImageUrl(page + 1)}
+              onClick={() => {
+                changeImageUrl(page + 1)
+                  .then()
+                  .catch((e) => alert(e));
+              }}
             >
               進む
             </span>

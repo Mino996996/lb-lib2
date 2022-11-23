@@ -18,21 +18,17 @@ const FileForm: React.FC<Props> = (props) => {
         className="w-8/12 whitespace-nowrap overflow-hidden text-xs sm:text-sm"
         id="inputFile"
         type="file"
-        onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
-          if (e.target.files?.length) {
-            if (e.target.files[0].size > 12_000_000) {
-              alert('ファイルサイズの上限は12MBです');
-            } else {
-              props.setInputFile(e.target.files[0]);
-              if (e.target.files[0].name.includes('.pdf')) {
-                try {
-                  props.setBase64Image(await convertPdfToImages(e.target.files[0]));
-                } catch (e) {
-                  console.log(e);
-                }
-              }
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          if (e.target.files?.length == null) return;
+          if (e.target.files[0].size < 12_000_000) {
+            props.setInputFile(e.target.files[0]);
+            if (e.target.files[0].name.includes('.pdf')) {
+              convertPdfToImages(e.target.files[0])
+                .then((resultStr) => props.setBase64Image(resultStr))
+                .catch((e) => alert(e));
             }
           }
+          alert('ファイルサイズの上限は12MBです');
         }}
       />
       <img src={props.base64Image} alt="" />

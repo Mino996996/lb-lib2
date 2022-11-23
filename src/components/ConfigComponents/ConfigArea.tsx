@@ -10,15 +10,13 @@ const ConfigArea: React.FC = () => {
   const { keywords, setKeywords, selectedCategory, allUrl, setAllUrl, setAllCategory } = useContext(AppContext);
   const [itemList, setItemList] = useState<string[]>([]);
 
-  const reload = async (): Promise<void> => {
-    try {
-      const allInfoList = await getAllUrls();
-      const allCategoryList = await getAllCategories();
-      setAllUrl([...allInfoList]);
-      setAllCategory([...allCategoryList.sort((a, b) => a.category.localeCompare(b.category))]);
-    } catch (e) {
-      alert(e);
-    }
+  const reload = (): void => {
+    Promise.all([getAllUrls(), getAllCategories()])
+      .then((value) => {
+        setAllUrl(value[0]);
+        setAllCategory(value[1].sort((a, b) => a.category.localeCompare(b.category)));
+      })
+      .catch((e) => alert(e));
   };
 
   useEffect(() => {

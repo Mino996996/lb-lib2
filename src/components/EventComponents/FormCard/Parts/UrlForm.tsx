@@ -26,23 +26,24 @@ const UrlForm: React.FC<Props> = (props) => {
         placeholder="https://example.com"
         pattern="http(s)?://.*"
         value={props.inputUrl}
-        onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
-          if (e.target.value) {
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          if (e.target.value !== '') {
             props.setInputUrl(e.target.value);
             if (urlPattern.test(e.target.value)) {
               setIsFetching(true);
-              try {
-                const result = await getOgpData(e.target.value);
-                props.setInputPageImage(result.pageImage);
-                props.setInputPageTitle(result.pageTitle);
-                props.setInputPageDescription(result.pageDescription);
-              } catch (e) {
-                props.setInputUrl('');
-                props.setInputPageImage('');
-                props.setInputPageTitle('');
-                props.setInputPageDescription('');
-              }
-              await setIsFetching(false);
+              getOgpData(e.target.value)
+                .then((result) => {
+                  props.setInputPageImage(result.pageImage);
+                  props.setInputPageTitle(result.pageTitle);
+                  props.setInputPageDescription(result.pageDescription);
+                })
+                .catch((e) => {
+                  props.setInputUrl('');
+                  props.setInputPageImage('');
+                  props.setInputPageTitle('');
+                  props.setInputPageDescription('');
+                });
+              setIsFetching(false);
             }
           } else {
             props.setInputUrl('');

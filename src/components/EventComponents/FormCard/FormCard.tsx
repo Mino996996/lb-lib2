@@ -19,28 +19,28 @@ interface Props {
 }
 
 // createとupdateを兼ねるコンポーネント。編集時は両立性に注意
-export const FormCard: React.FC<Props> = (prop) => {
+export const FormCard: React.FC<Props> = ({ initUrlInfo, mode, setIsEdit }) => {
   const { asc, allUrl, setAllUrl } = useContext(AppContext);
-  const [inputTitle, setInputTitle] = useState(prop.initUrlInfo.title);
-  const [inputUrl, setInputUrl] = useState(prop.initUrlInfo.url);
-  const [inputMemo, setInputMemo] = useState(prop.initUrlInfo.memo);
+  const [inputTitle, setInputTitle] = useState(initUrlInfo.title);
+  const [inputUrl, setInputUrl] = useState(initUrlInfo.url);
+  const [inputMemo, setInputMemo] = useState(initUrlInfo.memo);
   const [inputTagStr, setInputTagStr] = useState('');
-  const [inputTagList, setInputTagList] = useState<string[]>(prop.initUrlInfo.tagList);
-  const [inputPageTitle, setInputPageTitle] = useState(prop.initUrlInfo.pageTitle);
-  const [inputPageImage, setInputPageImage] = useState(prop.initUrlInfo.pageImage);
-  const [inputPageDescription, setInputPageDescription] = useState(prop.initUrlInfo.pageDescription);
-  const [inputAddTime, setInputAddTime] = useState(prop.initUrlInfo.addTime);
+  const [inputTagList, setInputTagList] = useState<string[]>(initUrlInfo.tagList);
+  const [inputPageTitle, setInputPageTitle] = useState(initUrlInfo.pageTitle);
+  const [inputPageImage, setInputPageImage] = useState(initUrlInfo.pageImage);
+  const [inputPageDescription, setInputPageDescription] = useState(initUrlInfo.pageDescription);
+  const [inputAddTime, setInputAddTime] = useState(initUrlInfo.addTime);
   const [isInputFieldOpen, setIsInputFieldOpen] = useState(false);
   const [inputFile, setInputFile] = useState<File | null>(null);
-  const [inputFileId, setInputFileId] = useState(prop.initUrlInfo.fileId);
-  const [inputFileUrl, setInputFileUrl] = useState(prop.initUrlInfo.fileUrl);
-  const [inputFileName, setInputFileName] = useState(prop.initUrlInfo.fileName);
+  const [inputFileId, setInputFileId] = useState(initUrlInfo.fileId);
+  const [inputFileUrl, setInputFileUrl] = useState(initUrlInfo.fileUrl);
+  const [inputFileName, setInputFileName] = useState(initUrlInfo.fileName);
   const [base64Image, setBase64Image] = useState('');
-  const [fileImageId, setFileImageId] = useState(prop.initUrlInfo.fileImageId);
-  const [fileImageUrl, setFileImageUrl] = useState(prop.initUrlInfo.fileImageUrl);
+  const [fileImageId, setFileImageId] = useState(initUrlInfo.fileImageId);
+  const [fileImageUrl, setFileImageUrl] = useState(initUrlInfo.fileImageUrl);
   const [status, setStatus] = useState(false);
 
-  const clearInputData = () => {
+  const clearInputData = (): void => {
     const nowDate = new Date();
     setInputPageTitle('');
     setInputPageImage('');
@@ -60,28 +60,28 @@ export const FormCard: React.FC<Props> = (prop) => {
     setFileImageUrl('');
   };
 
-  const post = async () => {
-    const id = prop.initUrlInfo.id ? prop.initUrlInfo.id : createId(12);
+  const post = async (): Promise<void> => {
+    const id = initUrlInfo.id !== '' ? initUrlInfo.id : createId(12);
     const date = new Date();
     const urlInfo: UrlInfo = {
       id,
       title: inputTitle,
-      url: inputUrl || '',
-      memo: inputMemo || '',
-      tagList: inputTagList || [],
-      pageTitle: inputPageTitle || '',
-      pageImage: inputPageImage || '',
-      pageDescription: inputPageDescription || '',
-      addTime: inputAddTime || Math.floor(date.getTime() / 1000),
-      fileUrl: inputFileUrl || '',
-      fileName: inputFileName || '',
-      fileId: inputFileId ? inputFileName : '',
-      fileImageId: fileImageId || '',
-      fileImageUrl: fileImageUrl || '',
+      url: inputUrl,
+      memo: inputMemo,
+      tagList: inputTagList,
+      pageTitle: inputPageTitle,
+      pageImage: inputPageImage,
+      pageDescription: inputPageDescription,
+      addTime: inputAddTime !== 0 ? inputAddTime : Math.floor(date.getTime() / 1000),
+      fileUrl: inputFileUrl,
+      fileName: inputFileName,
+      fileId: inputFileId,
+      fileImageId,
+      fileImageUrl,
     };
     try {
       setStatus(true);
-      if (prop.mode === 'update') {
+      if (mode === 'update') {
         // 更新時の処理
         if (inputFileId !== '' && inputFile != null && inputFile.name.includes('.pdf')) {
           await fbStorageDelete(inputFileId);
@@ -120,7 +120,7 @@ export const FormCard: React.FC<Props> = (prop) => {
         const indexNum = allUrl.findIndex((urlInfo) => urlInfo.id === id);
         allUrl[indexNum] = urlInfo;
         setAllUrl([...allUrl]);
-        prop.setIsEdit!(false);
+        setIsEdit?.(false);
         setIsInputFieldOpen(false);
       } else {
         // 新規投稿時の処理
@@ -155,7 +155,7 @@ export const FormCard: React.FC<Props> = (prop) => {
 
   return (
     <>
-      {isInputFieldOpen || !(prop.setIsEdit == null) ? (
+      {isInputFieldOpen || !(setIsEdit == null) ? (
         <div className="pt-4 pb-2 px-1.5 bg-white overflow-hidden shadow rounded-lg">
           {status && <h2 className="text-green-500 text-sm p-2">Now Uploading...</h2>}
           <TitleForm inputTitle={inputTitle} setInputTitle={setInputTitle} />
@@ -183,13 +183,13 @@ export const FormCard: React.FC<Props> = (prop) => {
           />
           <MemoForm inputMemo={inputMemo} setInputMemo={setInputMemo} />
           <FormButtonArea
-            mode={prop.mode}
-            initUrlInfo={prop.initUrlInfo}
+            mode={mode}
+            initUrlInfo={initUrlInfo}
             post={post}
             inputTitle={inputTitle}
             isInputFieldOpen={isInputFieldOpen}
             setIsInputFieldOpen={setIsInputFieldOpen}
-            setIsEdit={prop.setIsEdit!}
+            setIsEdit={setIsEdit!}
           />
         </div>
       ) : (

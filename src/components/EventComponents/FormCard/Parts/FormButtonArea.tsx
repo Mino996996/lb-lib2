@@ -13,17 +13,30 @@ interface Props {
   setIsEdit: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const FormButtonArea: React.FC<Props> = (prop) => {
+const FormButtonArea: React.FC<Props> = ({
+  mode,
+  initUrlInfo,
+  inputTitle,
+  post,
+  isInputFieldOpen,
+  setIsInputFieldOpen,
+  setIsEdit,
+}) => {
   const { allUrl, setAllUrl } = useContext(AppContext);
 
-  const deleteUrlInfo = async () => {
+  const deleteUrlInfo = (): void => {
     if (window.confirm('この情報を削除しますか？')) {
       try {
-        if (prop.initUrlInfo.fileId !== '') {
-          await fbStorageDelete(prop.initUrlInfo.fileId);
+        if (initUrlInfo.fileId !== '') {
+          fbStorageDelete(initUrlInfo.fileId)
+            .then()
+            .catch((e) => alert(e));
         }
-        await urlDb.delete(prop.initUrlInfo);
-        const newList = allUrl.filter((urlInfo) => urlInfo.id !== prop.initUrlInfo.id);
+        urlDb
+          .delete(initUrlInfo)
+          .then()
+          .catch((e) => alert(e));
+        const newList = allUrl.filter((urlInfo) => urlInfo.id !== initUrlInfo.id);
         setAllUrl([...newList]);
       } catch (e) {
         alert(e);
@@ -33,7 +46,7 @@ const FormButtonArea: React.FC<Props> = (prop) => {
 
   return (
     <div className="ml-2 text-center">
-      {prop.mode === 'update' && (
+      {mode === 'update' && (
         <button className={'px-4 py-1 mr-16 bg-black font-bold text-white rounded '} onClick={deleteUrlInfo}>
           削除
         </button>
@@ -41,20 +54,25 @@ const FormButtonArea: React.FC<Props> = (prop) => {
       <button
         className={
           'px-4 py-1 bg-purple-600 font-bold text-white rounded ' +
-          (prop.inputTitle !== '' ? '' : 'bg-gray-300 text-gray-600')
+          (inputTitle !== '' ? '' : 'bg-gray-300 text-gray-600')
         }
-        onClick={prop.post}
-        disabled={prop.inputTitle === ''}
+        onClick={() => {
+          post()
+            .then()
+            .catch((e) => alert(e));
+        }}
+        disabled={inputTitle === ''}
       >
-        {prop.mode === 'create' ? '送信' : '更新'}
+        {mode === 'create' ? '送信' : '更新'}
       </button>
       <button
         className="ml-16 px-2 py-1 bg-gray-600 font-bold text-white rounded "
         onClick={() => {
-          if (!prop.setIsEdit) {
-            prop.setIsInputFieldOpen(!prop.isInputFieldOpen);
+          // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+          if (setIsEdit) {
+            setIsEdit(false);
           } else {
-            prop.setIsEdit(false);
+            setIsInputFieldOpen(!isInputFieldOpen);
           }
         }}
       >
