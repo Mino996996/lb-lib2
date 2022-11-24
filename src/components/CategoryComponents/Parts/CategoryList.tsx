@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { CategoryInfo, UrlInfo } from '../../utilTypes';
+import { CategoryInfo, EventLog } from '../../utilTypes';
 import { AppContext } from '../../state/ConfigProvider';
 import { categoryDb } from '../../../firebase/firebase';
 
@@ -9,12 +9,12 @@ interface Props {
   setIsEditMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const containNum = (urlInfos: UrlInfo[], categoryInfo: CategoryInfo): number => {
+const containNum = (urlInfos: EventLog[], categoryInfo: CategoryInfo): number => {
   return urlInfos.filter((value) => value.tagList.includes(categoryInfo.category)).length;
 };
 
 const CategoryList: React.FC<Props> = ({ categoryInfo, isEditMode, setIsEditMode }) => {
-  const { selectedCategory, setSelectedCategory, allCategory, setAllCategory, setKeywords, allUrl } =
+  const { selectedCategory, setSelectedCategory, allCategory, setAllCategory, setKeywords, allEventLogs } =
     useContext(AppContext);
 
   const selectCategory = (category: string): void => {
@@ -48,7 +48,7 @@ const CategoryList: React.FC<Props> = ({ categoryInfo, isEditMode, setIsEditMode
         className="ml-2 font-bold text-sm cursor-pointer w-40 overflow-hidden"
         onClick={() => selectCategory(categoryInfo.category)}
       >
-        # {categoryInfo.category} ({containNum(allUrl, categoryInfo)})
+        # {categoryInfo.category} ({containNum(allEventLogs, categoryInfo)})
       </span>
       <span className="ml-auto pt-0.5 mr-2.5 text-sm text-gray-400 cursor-pointer" onClick={() => setIsEditMode(true)}>
         [編集]

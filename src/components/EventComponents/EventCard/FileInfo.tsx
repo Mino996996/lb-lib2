@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UrlInfo } from '../../utilTypes';
+import { EventLog } from '../../utilTypes';
 import { FilePreview } from './FileInfoParts/FilePreview';
 import { FileThumbnail } from './FileInfoParts/FileThumbnail';
 import { PDFDocumentProxy } from 'pdfjs-dist';
@@ -7,7 +7,7 @@ import { createPdfPars } from '../cardFunctions';
 import { alerts } from '../../../utils/alerts';
 
 interface Props {
-  urlInfo: UrlInfo;
+  urlInfo: EventLog;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

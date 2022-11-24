@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { PDFDocumentProxy } from 'pdfjs-dist';
 import { pdfPageImage } from '../../cardFunctions';
-import { UrlInfo } from '../../../utilTypes';
+import { EventLog } from '../../../utilTypes';
 
 interface Props {
-  urlInfo: UrlInfo;
+  urlInfo: EventLog;
   pdfData: PDFDocumentProxy | undefined;
   pdfPageNumber: number | null;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;

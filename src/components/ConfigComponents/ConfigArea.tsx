@@ -7,22 +7,23 @@ import { ToggleSortButton } from './Parts/ToggleSortButton';
 import { getAllCategories, getAllUrls } from '../../firebase/firebase';
 
 const ConfigArea: React.FC = () => {
-  const { keywords, setKeywords, selectedCategory, allUrl, setAllUrl, setAllCategory } = useContext(AppContext);
+  const { keywords, setKeywords, selectedCategory, allEventLogs, setAllEventLogs, setAllCategory } =
+    useContext(AppContext);
   const [itemList, setItemList] = useState<string[]>([]);
 
   const reload = (): void => {
     Promise.all([getAllUrls(), getAllCategories()])
       .then((value) => {
-        setAllUrl(value[0]);
+        setAllEventLogs(value[0]);
         setAllCategory(value[1].sort((a, b) => a.category.localeCompare(b.category)));
       })
       .catch((e) => alert(e));
   };
 
   useEffect(() => {
-    const items = pickRelationalTabs(allUrl, selectedCategory);
+    const items = pickRelationalTabs(allEventLogs, selectedCategory);
     setItemList([...items]);
-  }, [selectedCategory, allUrl]);
+  }, [selectedCategory, allEventLogs]);
 
   return (
     <>

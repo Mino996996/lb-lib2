@@ -1,4 +1,4 @@
-import { CategoryInfo, UrlInfo } from '../utilTypes';
+import { CategoryInfo, EventLog } from '../utilTypes';
 import * as pdfjs from 'pdfjs-dist/legacy/build/pdf';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -49,7 +49,7 @@ export const createOgpData = async (urlStr: string): Promise<Obj> => {
 };
 
 // カテゴリタグと一緒に含まれているタグリストを作成
-export const pickRelationalTabs = (ulrInfos: UrlInfo[], selectedCategory: string): string[] => {
+export const pickRelationalTabs = (ulrInfos: EventLog[], selectedCategory: string): string[] => {
   const hitUrls =
     selectedCategory !== '' ? ulrInfos.filter((value) => value.tagList.includes(selectedCategory)) : ulrInfos;
 

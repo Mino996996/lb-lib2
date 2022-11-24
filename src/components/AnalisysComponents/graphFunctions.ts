@@ -1,5 +1,5 @@
 import { Color, PlotData } from 'plotly.js';
-import { CategoryInfo, UrlInfo } from '../utilTypes';
+import { CategoryInfo, EventLog } from '../utilTypes';
 
 export enum Tend {
   social,
@@ -9,7 +9,7 @@ export enum Tend {
 
 // 傾向値の計算用
 export const scores = (
-  allUrl: UrlInfo[],
+  allUrl: EventLog[],
   allCategory: CategoryInfo[],
   person: string | 'all',
   year: string | 'all',
@@ -38,7 +38,7 @@ export const scores = (
 
 // 各タイトルの抽出用
 const titles = (
-  allUrl: UrlInfo[],
+  allUrl: EventLog[],
   allCategory: CategoryInfo[],
   person: string | 'all',
   year: string | 'all'
@@ -54,14 +54,12 @@ const titles = (
 };
 
 export const colorHex = (r: number, g: number, b: number): string => {
-  return `#${(r % 255).toString(16)}${(g % 255).toString(16)}${(
-    b % 255
-  ).toString(16)}`;
+  return `#${(r % 255).toString(16)}${(g % 255).toString(16)}${(b % 255).toString(16)}`;
 };
 
 // ３次元グラフの必要データオブジェクトを作る
 export const threeScatterData = (
-  allUrl: UrlInfo[],
+  allUrl: EventLog[],
   allCategory: CategoryInfo[],
   person: string | 'all',
   year: string | 'all',

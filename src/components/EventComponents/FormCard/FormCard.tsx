@@ -3,7 +3,7 @@ import TitleForm from './Parts/TitleForm';
 import UrlForm from './Parts/UrlForm';
 import TagForm from './Parts/TagForm';
 import MemoForm from './Parts/MemoForm';
-import { UrlInfo } from '../../utilTypes';
+import { EventLog } from '../../utilTypes';
 import { addUrl, fbPdfImageUpload, fbStorageDelete, fbStorageUpload, updateUrl } from '../../../firebase/firebase';
 import { ClosedFormCard } from './ClosedFormCard';
 import { AppContext } from '../../state/ConfigProvider';
@@ -13,14 +13,14 @@ import DateForm from './Parts/DateForm';
 import { createId } from '../../../utils/utilFinctions';
 
 interface Props {
-  initUrlInfo: UrlInfo;
+  initUrlInfo: EventLog;
   mode: 'update' | 'create';
   setIsEdit?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // createとupdateを兼ねるコンポーネント。編集時は両立性に注意
 export const FormCard: React.FC<Props> = ({ initUrlInfo, mode, setIsEdit }) => {
-  const { asc, allUrl, setAllUrl } = useContext(AppContext);
+  const { asc, allEventLogs, setAllEventLogs } = useContext(AppContext);
   const [inputTitle, setInputTitle] = useState(initUrlInfo.title);
   const [inputUrl, setInputUrl] = useState(initUrlInfo.url);
   const [inputMemo, setInputMemo] = useState(initUrlInfo.memo);
@@ -63,7 +63,7 @@ export const FormCard: React.FC<Props> = ({ initUrlInfo, mode, setIsEdit }) => {
   const post = async (): Promise<void> => {
     const id = initUrlInfo.id !== '' ? initUrlInfo.id : createId(12);
     const date = new Date();
-    const urlInfo: UrlInfo = {
+    const urlInfo: EventLog = {
       id,
       title: inputTitle,
       url: inputUrl,
@@ -117,9 +117,9 @@ export const FormCard: React.FC<Props> = ({ initUrlInfo, mode, setIsEdit }) => {
           urlInfo.fileUrl = result.url;
         }
         await updateUrl(urlInfo);
-        const indexNum = allUrl.findIndex((urlInfo) => urlInfo.id === id);
-        allUrl[indexNum] = urlInfo;
-        setAllUrl([...allUrl]);
+        const indexNum = allEventLogs.findIndex((urlInfo) => urlInfo.id === id);
+        allEventLogs[indexNum] = urlInfo;
+        setAllEventLogs([...allEventLogs]);
         setIsEdit?.(false);
         setIsInputFieldOpen(false);
       } else {
@@ -138,11 +138,11 @@ export const FormCard: React.FC<Props> = ({ initUrlInfo, mode, setIsEdit }) => {
           urlInfo.fileUrl = result.url;
         }
         await addUrl(urlInfo);
-        allUrl.push(urlInfo);
+        allEventLogs.push(urlInfo);
         const newList = asc
-          ? allUrl.sort((a, b) => b.addTime - a.addTime)
-          : allUrl.sort((a, b) => a.addTime - b.addTime);
-        setAllUrl([...newList]);
+          ? allEventLogs.sort((a, b) => b.addTime - a.addTime)
+          : allEventLogs.sort((a, b) => a.addTime - b.addTime);
+        setAllEventLogs([...newList]);
         clearInputData();
         setIsInputFieldOpen(false);
       }

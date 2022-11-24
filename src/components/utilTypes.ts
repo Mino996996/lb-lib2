@@ -1,6 +1,6 @@
 import { Theme } from './CategoryComponents/themeList';
 
-export interface UrlInfo {
+export interface EventLog {
   id: string;
   title: string;
   url: string;

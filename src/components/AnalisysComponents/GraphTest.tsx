@@ -5,11 +5,23 @@ import { Layout, PlotData } from 'plotly.js';
 import { colorHex, threeScatterData } from './graphFunctions';
 
 const GraphTest: React.FC = () => {
-  const { allUrl, allCategory } = useContext(AppContext);
+  const { allEventLogs, allCategory } = useContext(AppContext);
 
-  const data1: Partial<PlotData> = threeScatterData(allUrl, allCategory, '赤堀さん', '2022年', colorHex(250, 86, 44));
+  const data1: Partial<PlotData> = threeScatterData(
+    allEventLogs,
+    allCategory,
+    '赤堀さん',
+    '2022年',
+    colorHex(250, 86, 44)
+  );
 
-  const data2: Partial<PlotData> = threeScatterData(allUrl, allCategory, '内山さん', '2022年', colorHex(100, 86, 254));
+  const data2: Partial<PlotData> = threeScatterData(
+    allEventLogs,
+    allCategory,
+    '内山さん',
+    '2022年',
+    colorHex(100, 86, 254)
+  );
 
   const lineX: Partial<PlotData> = {
     type: 'scatter3d',

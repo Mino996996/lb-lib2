@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import { fbStorageDelete, urlDb } from '../../../../firebase/firebase';
 import { AppContext } from '../../../state/ConfigProvider';
-import { UrlInfo } from '../../../utilTypes';
+import { EventLog } from '../../../utilTypes';
 
 interface Props {
   mode: string;
-  initUrlInfo: UrlInfo;
+  initUrlInfo: EventLog;
   post: () => Promise<void>;
   inputTitle: string;
   isInputFieldOpen: boolean;
@@ -22,7 +22,7 @@ const FormButtonArea: React.FC<Props> = ({
   setIsInputFieldOpen,
   setIsEdit,
 }) => {
-  const { allUrl, setAllUrl } = useContext(AppContext);
+  const { allEventLogs, setAllEventLogs } = useContext(AppContext);
 
   const deleteUrlInfo = (): void => {
     if (window.confirm('この情報を削除しますか？')) {
@@ -36,8 +36,8 @@ const FormButtonArea: React.FC<Props> = ({
           .delete(initUrlInfo)
           .then()
           .catch((e) => alert(e));
-        const newList = allUrl.filter((urlInfo) => urlInfo.id !== initUrlInfo.id);
-        setAllUrl([...newList]);
+        const newList = allEventLogs.filter((urlInfo) => urlInfo.id !== initUrlInfo.id);
+        setAllEventLogs([...newList]);
       } catch (e) {
         alert(e);
       }

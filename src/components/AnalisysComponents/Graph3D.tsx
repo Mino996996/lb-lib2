@@ -4,7 +4,7 @@ import { AppContext } from '../state/ConfigProvider';
 import BaseButton from '../EventComponents/Buttons/BaseButton';
 
 const Graph3D: React.FC = () => {
-  const { allUrl, allCategory } = useContext(AppContext);
+  const { allEventLogs, allCategory } = useContext(AppContext);
   const [count, setCount] = useState(0);
   const countChange = (): void => {
     setCount((count + 1) % 3);
@@ -12,7 +12,7 @@ const Graph3D: React.FC = () => {
 
   const data1 = [
     {
-      x: allUrl.map((v) => {
+      x: allEventLogs.map((v) => {
         let score = 0;
         for (const tag of v.tagList) {
           if (!tag.includes('さん') && !tag.includes('年')) {
@@ -24,7 +24,7 @@ const Graph3D: React.FC = () => {
         }
         return score;
       }),
-      y: allUrl.map((v) => {
+      y: allEventLogs.map((v) => {
         let score = 0;
         for (const tag of v.tagList) {
           if (!tag.includes('さん') && !tag.includes('年')) {
@@ -37,14 +37,14 @@ const Graph3D: React.FC = () => {
         return score;
       }),
       mode: 'markers',
-      text: allUrl.map((v) => v.title),
+      text: allEventLogs.map((v) => v.title),
       xaxis: '個性的-社会的',
       yaxis: '教養-実用',
     },
   ];
   const data2 = [
     {
-      x: allUrl.map((v) => {
+      x: allEventLogs.map((v) => {
         let score = 0;
         for (const tag of v.tagList) {
           if (!tag.includes('さん') && !tag.includes('年')) {
@@ -56,7 +56,7 @@ const Graph3D: React.FC = () => {
         }
         return score;
       }),
-      y: allUrl.map((v) => {
+      y: allEventLogs.map((v) => {
         let score = 0;
         for (const tag of v.tagList) {
           if (!tag.includes('さん') && !tag.includes('年')) {
@@ -69,14 +69,14 @@ const Graph3D: React.FC = () => {
         return score;
       }),
       mode: 'markers',
-      text: allUrl.map((v) => v.title),
+      text: allEventLogs.map((v) => v.title),
       xaxis: '個性的-社会的',
       yaxis: '教養-実用',
     },
   ];
   const data3 = [
     {
-      x: allUrl.map((v) => {
+      x: allEventLogs.map((v) => {
         let score = 0;
         for (const tag of v.tagList) {
           if (!tag.includes('さん') && !tag.includes('年')) {
@@ -88,7 +88,7 @@ const Graph3D: React.FC = () => {
         }
         return score;
       }),
-      y: allUrl.map((v) => {
+      y: allEventLogs.map((v) => {
         let score = 0;
         for (const tag of v.tagList) {
           if (!tag.includes('さん') && !tag.includes('年')) {
@@ -101,7 +101,7 @@ const Graph3D: React.FC = () => {
         return score;
       }),
       mode: 'markers',
-      text: allUrl.map((v) => v.title),
+      text: allEventLogs.map((v) => v.title),
       xaxis: '個性的-社会的',
       yaxis: '教養-実用',
     },

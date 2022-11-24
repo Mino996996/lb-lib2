@@ -1,9 +1,9 @@
 import React, { createContext, Dispatch, ReactNode, useContext, useReducer, useState } from 'react';
 import authReducer, { AuthAction } from './authReducer';
-import { CategoryInfo, UrlInfo } from '../utilTypes';
+import { CategoryInfo, EventLog } from '../utilTypes';
 import { checkHasBoolean, checkSelectedCategory, checkSelectedKeywords } from '../../utils/utilFinctions';
 
-interface AppContextType {
+interface ConfigContextType {
   login: boolean;
   dispatch: Dispatch<AuthAction>;
   imageVisible: boolean;
@@ -16,8 +16,8 @@ interface AppContextType {
   setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
   allCategory: CategoryInfo[];
   setAllCategory: React.Dispatch<React.SetStateAction<CategoryInfo[]>>;
-  allUrl: UrlInfo[];
-  setAllUrl: React.Dispatch<React.SetStateAction<UrlInfo[]>>;
+  allEventLogs: EventLog[];
+  setAllEventLogs: React.Dispatch<React.SetStateAction<EventLog[]>>;
   asc: boolean;
   setAsc: React.Dispatch<React.SetStateAction<boolean>>;
   isAnalysisMode: boolean;
@@ -25,7 +25,7 @@ interface AppContextType {
 }
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-export const AppContext = createContext({} as AppContextType);
+export const AppContext = createContext({} as ConfigContextType);
 
 interface Props {
   children: ReactNode;
@@ -46,10 +46,10 @@ export const ConfigProvider: React.FC<Props> = ({ children }) => {
   const [keywords, setKeywords] = useState<string[]>(savedKeywords);
   const [selectedCategory, setSelectedCategory] = useState(checkSelectedCategory(_selectedCategory));
   const [allCategory, setAllCategory] = useState<CategoryInfo[]>([]);
-  const [allUrl, setAllUrl] = useState<UrlInfo[]>([]);
+  const [allEventLogs, setAllEventLogs] = useState<EventLog[]>([]);
   const [isAnalysisMode, setIsAnalysisMode] = useState(false);
 
-  const value: AppContextType = {
+  const value: ConfigContextType = {
     login: authState.isLogin,
     dispatch,
     imageVisible,
@@ -62,8 +62,8 @@ export const ConfigProvider: React.FC<Props> = ({ children }) => {
     setSelectedCategory,
     allCategory,
     setAllCategory,
-    allUrl,
-    setAllUrl,
+    allEventLogs,
+    setAllEventLogs,
     asc,
     setAsc,
     isAnalysisMode,
@@ -73,4 +73,4 @@ export const ConfigProvider: React.FC<Props> = ({ children }) => {
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
-export const useConfigContext = (): AppContextType => useContext(AppContext);
+export const useConfigContext = (): ConfigContextType => useContext(AppContext);

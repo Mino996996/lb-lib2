@@ -36,7 +36,7 @@ const Articles: React.FC = () => {
 };
 
 const Main: React.FC = () => {
-  const { login, setAllCategory, setAllUrl, isAnalysisMode } = useConfigContext();
+  const { login, setAllCategory, setAllEventLogs, isAnalysisMode } = useConfigContext();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // 各データの取得/消去管理
@@ -44,7 +44,7 @@ const Main: React.FC = () => {
     const getAllData = (): void => {
       Promise.all([getAllUrls(), getAllCategories()])
         .then((value) => {
-          setAllUrl(value[0]);
+          setAllEventLogs(value[0]);
           setAllCategory(value[1].sort((a, b) => a.category.localeCompare(b.category)));
         })
         .catch((e) => alert(e));
@@ -53,7 +53,7 @@ const Main: React.FC = () => {
 
     return () => {
       // ログアウト時に画面が消えるのでその際にデータを消去
-      setAllUrl([]);
+      setAllEventLogs([]);
       setAllCategory([]);
     };
   }, []);
