@@ -5,19 +5,20 @@ import { isCategoryTag } from '../cardFunctions';
 import { FormCard } from '../FormCard/FormCard';
 import FileInfo from './FileInfo';
 import { useEventContext } from '../../state/EventProvider';
+import EventTitleMemo from './EventParts/EventTitle';
+import EventDay from './EventParts/EventDay';
 
 interface Props {
   urlInfo: EventLog;
   index: number;
 }
 
-export const EventCard: React.FC<Props> = ({ urlInfo, index }) => {
+const EventCard: React.FC<Props> = ({ urlInfo, index }) => {
   const { imageVisible, memoVisible, setSelectedCategory, setKeywords } = useContext(ConfigContext);
   const { allCategory } = useEventContext();
   const [visible, setVisible] = useState(imageVisible);
   const [allMemo, setAllMemo] = useState(memoVisible);
   const [isEdit, setIsEdit] = useState(false);
-  const dateStr = new Date(urlInfo.addTime * 1000);
 
   useEffect(() => {
     setVisible(imageVisible);
@@ -33,23 +34,8 @@ export const EventCard: React.FC<Props> = ({ urlInfo, index }) => {
         <FormCard initUrlInfo={urlInfo} mode={'update'} setIsEdit={setIsEdit} />
       ) : (
         <div className={'border-l-8 ' + (index % 2 === 0 ? 'border-red-500' : 'border-green-500')}>
-          {/* タイトル */}
-          <div className="flex justify-between px-4 font-bold py-1 text-base sm:text-lg border-b border-gray-300 overflow-hidden whitespace-nowrap sm:h-9">
-            <span className="w-5/6 overflow-hidden">{urlInfo.title}</span>
-            <button
-              className="ml-2 px-1 text-sm cursor-pointer"
-              onClick={() => {
-                setIsEdit(true);
-              }}
-            >
-              [編集]
-            </button>
-          </div>
-
-          {/* 日付 */}
-          <div className="px-4 pt-1 border-b border-gray-300">
-            <p className="inline-block w-full text-gray-700">{dateStr.toLocaleDateString()} 発表</p>
-          </div>
+          <EventTitleMemo title={urlInfo.title} setIsEdit={setIsEdit} />
+          <EventDay addTime={urlInfo.addTime} />
 
           {/* File */}
           {urlInfo.fileUrl !== '' && (
@@ -133,3 +119,5 @@ export const EventCard: React.FC<Props> = ({ urlInfo, index }) => {
     </div>
   );
 };
+
+export default EventCard;
