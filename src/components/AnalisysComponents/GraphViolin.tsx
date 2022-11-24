@@ -1,12 +1,12 @@
-import React, { useContext } from 'react';
-import { AppContext } from '../state/ConfigProvider';
+import React from 'react';
 import { Layout, ViolinData } from 'plotly.js';
 import Plot from 'react-plotly.js';
 import { scores, Tend } from './graphFunctions';
-import { CategoryInfo, UrlInfo } from '../utilTypes';
+import { CategoryInfo, EventLog } from '../utilTypes';
 import { Theme } from '../CategoryComponents/themeList';
+import { useEventContext } from '../state/EventProvider';
 
-const violinData = (urls: UrlInfo[], categories: CategoryInfo[], tend: Tend): Array<Partial<ViolinData>> => {
+const violinData = (urls: EventLog[], categories: CategoryInfo[], tend: Tend): Array<Partial<ViolinData>> => {
   const persons = categories.filter((value) => value.theme === Theme.member);
   return persons.map((value) => {
     return {
@@ -21,7 +21,7 @@ const violinData = (urls: UrlInfo[], categories: CategoryInfo[], tend: Tend): Ar
 };
 
 const GraphViolin: React.FC = () => {
-  const { allUrl, allCategory } = useContext(AppContext);
+  const { allEventLogs, allCategory } = useEventContext();
 
   const layout1: Partial<Layout> = {
     title: '発表傾向：個人-社会的',
@@ -29,7 +29,7 @@ const GraphViolin: React.FC = () => {
     autosize: true,
     width: 1200,
   };
-  const allData = violinData(allUrl, allCategory, Tend.social);
+  const allData = violinData(allEventLogs, allCategory, Tend.social);
   return <Plot data={allData} layout={layout1} />;
 };
 

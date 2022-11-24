@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
-import { AppContext } from '../../state/ConfigProvider';
+import { ConfigContext } from '../../state/ConfigProvider';
 
 const EventKeyword: React.FC = () => {
-  const { selectedCategory, setSelectedCategory, keywords, setKeywords } = useContext(AppContext);
+  const { selectedCategory, setSelectedCategory, keywords, setKeywords } = useContext(ConfigContext);
 
   const deleteKeyword = (word: string): void => {
     const newKeywords = keywords.filter((value) => value !== word);

@@ -4,12 +4,15 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ConfigProvider } from './components/state/ConfigProvider';
+import EventProvider from './components/state/EventProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
     <ConfigProvider>
-      <App />
+      <EventProvider>
+        <App />
+      </EventProvider>
     </ConfigProvider>
   </React.StrictMode>
 );

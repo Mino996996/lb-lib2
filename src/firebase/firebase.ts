@@ -4,7 +4,7 @@ import { collection, deleteDoc, doc, getDocs, getFirestore, query, setDoc, updat
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { getStorage, ref, uploadBytes, deleteObject, getDownloadURL } from 'firebase/storage';
 
-import { CategoryInfo, UploadFileData, UploadFileImageData, UrlInfo } from '../components/utilTypes';
+import { CategoryInfo, UploadFileData, UploadFileImageData, EventLog } from '../components/utilTypes';
 // import {urlInfoList} from "../fixtures/stab/urlStab";
 import { Obj } from '../components/EventComponents/cardFunctions';
 import { createId } from '../utils/utilFinctions';
@@ -57,21 +57,21 @@ export const firebaseSignOut = async (): Promise<void> => {
 };
 
 // 情報源urlとタブ情報などを登録する
-export const addUrl = async (urlInfo: UrlInfo): Promise<void> => {
+export const addUrl = async (urlInfo: EventLog): Promise<void> => {
   const urlData = { ...urlInfo };
   const urlDocRef = doc(db, 'url', urlInfo.id);
   await setDoc(urlDocRef, urlData);
 };
 
 // 情報源urlとタブ情報などを登録する
-export const updateUrl = async (urlInfo: UrlInfo): Promise<void> => {
+export const updateUrl = async (urlInfo: EventLog): Promise<void> => {
   const urlData = { ...urlInfo };
   const urlDocRef = doc(db, 'url', urlInfo.id);
   await updateDoc(urlDocRef, urlData);
 };
 
 // 情報源urlの削除
-export const deleteUrl = async (urlInfo: UrlInfo): Promise<void> => {
+export const deleteUrl = async (urlInfo: EventLog): Promise<void> => {
   const urlDocRef = doc(db, 'url', urlInfo.id);
   await deleteDoc(urlDocRef);
 };
@@ -129,11 +129,11 @@ export const checkCategoryName = async (categoryName: string): Promise<boolean> 
 };
 
 // 全URLデータ取得
-export const getAllUrls = async (): Promise<UrlInfo[]> => {
+export const getAllUrls = async (): Promise<EventLog[]> => {
   const query = collection(db, 'url');
   const urlDocs = await getDocs(query);
   if (!urlDocs.empty) {
-    return urlDocs.docs.map((value) => value.data()) as UrlInfo[];
+    return urlDocs.docs.map((value) => value.data()) as EventLog[];
   } else {
     return [];
   }

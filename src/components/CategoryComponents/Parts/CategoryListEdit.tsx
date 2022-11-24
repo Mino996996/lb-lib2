@@ -1,8 +1,8 @@
-import React, { useContext, useState } from 'react';
-import { AppContext } from '../../state/ConfigProvider';
+import React, { useState } from 'react';
 import { CategoryInfo } from '../../utilTypes';
 import { categoryDb, checkCategoryName, getAllCategories, getAllUrls } from '../../../firebase/firebase';
 import { themeOptions } from '../themeList';
+import { useEventContext } from '../../state/EventProvider';
 
 interface Props {
   categoryInfo: CategoryInfo;
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const CategoryListEdit: React.FC<Props> = ({ categoryInfo, isEditMode, setIsEditMode }) => {
-  const { allCategory, setAllCategory, setAllUrl } = useContext(AppContext);
+  const { allCategory, setAllCategory, setAllEventLogs } = useEventContext();
   const [categoryName, setCategoryName] = useState(categoryInfo.category);
   const [theme, setTheme] = useState(categoryInfo.theme);
   const [points, setPoints] = useState(
@@ -45,7 +45,7 @@ const CategoryListEdit: React.FC<Props> = ({ categoryInfo, isEditMode, setIsEdit
           const newCateData = await getAllCategories();
           const newUrlData = await getAllUrls();
           setAllCategory(newCateData);
-          setAllUrl([...newUrlData]);
+          setAllEventLogs([...newUrlData]);
         } else if (categoryName === '') {
           window.alert('未記入のため登録できません');
         } else {
@@ -91,7 +91,11 @@ const CategoryListEdit: React.FC<Props> = ({ categoryInfo, isEditMode, setIsEdit
       {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
       <button
         className="ml-4 p-0.5 bg-green-100 rounded border border-gray-600 cursor-pointer text-sm text-gray-700"
-        onClick={async () => await updateCategory()}
+        onClick={() => {
+          updateCategory()
+            .then()
+            .catch((e) => alert(e));
+        }}
       >
         更新
       </button>

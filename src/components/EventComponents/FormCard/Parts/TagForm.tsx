@@ -13,8 +13,8 @@ const TagForm: React.FC<Props> = ({ inputTagStr, setInputTagStr, inputTagList, s
   return (
     <div
       className="px-2 pb-1 text-sm"
-      onCompositionStart={(e) => setIsJapaneseTagInput(true)}
-      onCompositionEnd={(e) => setIsJapaneseTagInput(false)}
+      onCompositionStart={() => setIsJapaneseTagInput(true)}
+      onCompositionEnd={() => setIsJapaneseTagInput(false)}
       onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
         if (!isJapaneseTagInput && e.key === 'Enter') {
           if (inputTagStr !== '' && !inputTagList.includes(inputTagStr)) {

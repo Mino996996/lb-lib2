@@ -1,8 +1,8 @@
 import React from 'react';
-import { UrlInfo } from '../../../utilTypes';
+import { EventLog } from '../../../utilTypes';
 
 interface Props {
-  urlInfo: UrlInfo;
+  urlInfo: EventLog;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

@@ -1,47 +1,42 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { pickRelationalTabs } from '../EventComponents/cardFunctions';
-// import { urlInfoList } from '../../fixtures/stab/urlStab'
 import { ToggleButton } from './Parts/ToggleButton';
-import { AppContext } from '../state/ConfigProvider';
+import { useConfigContext } from '../state/ConfigProvider';
 import { ToggleSortButton } from './Parts/ToggleSortButton';
 import { getAllCategories, getAllUrls } from '../../firebase/firebase';
+import { useEventContext } from '../state/EventProvider';
 
 const ConfigArea: React.FC = () => {
-  const { keywords, setKeywords, selectedCategory, allUrl, setAllUrl, setAllCategory } = useContext(AppContext);
+  const { keywords, setKeywords, selectedCategory } = useConfigContext();
+  const { allEventLogs, setAllEventLogs, setAllCategory } = useEventContext();
   const [itemList, setItemList] = useState<string[]>([]);
 
   const reload = (): void => {
     Promise.all([getAllUrls(), getAllCategories()])
       .then((value) => {
-        setAllUrl(value[0]);
+        setAllEventLogs(value[0]);
         setAllCategory(value[1].sort((a, b) => a.category.localeCompare(b.category)));
       })
       .catch((e) => alert(e));
   };
 
   useEffect(() => {
-    const items = pickRelationalTabs(allUrl, selectedCategory);
+    const items = pickRelationalTabs(allEventLogs, selectedCategory);
     setItemList([...items]);
-  }, [selectedCategory, allUrl]);
+  }, [selectedCategory, allEventLogs]);
 
   return (
     <>
       <div className="pt-2 sm:pt-6 text-gray-200 text-lg font-bold text-center">
         <h2 className="text-center mb-2 text-red-300">= 表示設定 =</h2>
         <p>
-          イメージ画像：OFF
-          <ToggleButton kind={'image'} />
-          ON
+          イメージ画像：OFF <ToggleButton kind={'image'} /> ON
         </p>
         <p>
-          コメント：省略
-          <ToggleButton kind={'memo'} />
-          全文
+          コメント：省略 <ToggleButton kind={'memo'} /> 全文
         </p>
         <p>
-          表示順：OLD
-          <ToggleSortButton />
-          NEW
+          表示順：OLD <ToggleSortButton /> NEW
         </p>
       </div>
       <div className="pt-2 sm:pt-6 text-lg font-bold text-center">

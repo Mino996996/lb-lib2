@@ -1,18 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { UrlInfo } from '../../utilTypes';
-import { AppContext } from '../../state/ConfigProvider';
+import { EventLog } from '../../utilTypes';
+import { ConfigContext } from '../../state/ConfigProvider';
 import { isCategoryTag } from '../cardFunctions';
 import { FormCard } from '../FormCard/FormCard';
 import FileInfo from './FileInfo';
+import { useEventContext } from '../../state/EventProvider';
 
 interface Props {
-  urlInfo: UrlInfo;
+  urlInfo: EventLog;
   index: number;
 }
 
 export const EventCard: React.FC<Props> = ({ urlInfo, index }) => {
-  const { imageVisible, memoVisible, allCategory, setSelectedCategory, setKeywords, allUrl, setAllUrl } =
-    useContext(AppContext);
+  const { imageVisible, memoVisible, setSelectedCategory, setKeywords } = useContext(ConfigContext);
+  const { allCategory } = useEventContext();
   const [visible, setVisible] = useState(imageVisible);
   const [allMemo, setAllMemo] = useState(memoVisible);
   const [isEdit, setIsEdit] = useState(false);

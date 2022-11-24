@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormCard } from './FormCard/FormCard';
 import { EventCard } from './EventCard/EventCard';
-import { UrlInfo } from '../utilTypes';
-import { urlInfoList } from '../../fixtures/stab/urlStab'; // 表示テスト用デモデータ
-import { AppContext } from '../state/ConfigProvider';
+import { EventLog } from '../utilTypes';
+import { useConfigContext } from '../state/ConfigProvider';
 import EventKeyword from './EventCard/EventKeyword';
+import { useEventContext } from '../state/EventProvider';
 
 const nowTime = new Date();
-const blankUrlInfo: UrlInfo = {
+const blankUrlInfo: EventLog = {
   id: '',
   title: '',
   url: '',
@@ -25,13 +25,14 @@ const blankUrlInfo: UrlInfo = {
 };
 
 const UrlArea: React.FC = () => {
-  const { keywords, selectedCategory, allUrl, asc } = useContext(AppContext);
-  const [urlInfos, setUrlInfos] = useState<UrlInfo[]>([]);
+  const { keywords, selectedCategory, asc } = useConfigContext();
+  const { allEventLogs } = useEventContext();
+  const [urlInfos, setUrlInfos] = useState<EventLog[]>([]);
 
   // カテゴリまたは選択タグ変更時の表示URLデータをフィルタリング
   useEffect(() => {
     /* 表示をDBとテストスタブで切り替え */
-    let filteredList: UrlInfo[] = [...allUrl]; // データ複製 FromDB
+    let filteredList: EventLog[] = [...allEventLogs]; // データ複製 FromDB
     // let filteredList: UrlInfo[] = [...urlInfoList]; // データ複製 FromStub
 
     if (!(keywords.length === 0) && !(selectedCategory === '')) {
@@ -53,7 +54,7 @@ const UrlArea: React.FC = () => {
       ? (filteredList = filteredList.sort((a, b) => b.addTime - a.addTime))
       : (filteredList = filteredList.sort((a, b) => a.addTime - b.addTime));
     setUrlInfos([...filteredList]);
-  }, [keywords, selectedCategory, allUrl, asc]);
+  }, [keywords, selectedCategory, allEventLogs, asc]);
 
   return (
     <div className="relative" style={{ height: '96vh' }}>

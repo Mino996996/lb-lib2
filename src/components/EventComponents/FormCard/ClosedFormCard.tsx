@@ -5,7 +5,7 @@ interface Props {
   setIsInputFieldOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const ClosedFormCard: React.VFC<Props> = ({ isInputFieldOpen, setIsInputFieldOpen }) => {
+export const ClosedFormCard: React.FC<Props> = ({ isInputFieldOpen, setIsInputFieldOpen }) => {
   return (
     <div className="p-1.5 bg-gray-50 overflow-hidden shadow rounded-lg">
       <div className="px-2 py-1 text-sm">

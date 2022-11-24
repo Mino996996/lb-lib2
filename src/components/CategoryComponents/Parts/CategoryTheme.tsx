@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import CategoryItem from './CategoryItem';
 import { Theme, ThemeOption } from '../themeList';
-import { AppContext } from '../../state/ConfigProvider';
+import { useEventContext } from '../../state/EventProvider';
 
 interface Props {
   themeOption: ThemeOption;
@@ -34,7 +34,7 @@ const initSetting = (theme: Theme): boolean => {
 };
 
 export const CategoryTheme: React.FC<Props> = ({ themeOption }) => {
-  const { allCategory } = useContext(AppContext);
+  const { allCategory } = useEventContext();
   const [isOpen, setIsOpen] = useState<boolean>(initSetting(themeOption.value));
 
   return (

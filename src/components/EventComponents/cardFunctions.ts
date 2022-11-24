@@ -1,4 +1,4 @@
-import { CategoryInfo, UrlInfo } from '../utilTypes';
+import { CategoryInfo, EventLog } from '../utilTypes';
 import * as pdfjs from 'pdfjs-dist/legacy/build/pdf';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -20,36 +20,8 @@ export const testABC = (): number => {
 
 export const urlPattern = /(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})[/\w .-]*\/?/;
 
-export const createOgpData = async (urlStr: string): Promise<Obj> => {
-  const obj: Obj = {
-    pageTitle: '',
-    pageImage: '',
-    pageDescription: '',
-  };
-  try {
-    const res = await fetch(urlStr, { mode: 'cors' });
-    const data = await res.text();
-    const el = new DOMParser().parseFromString(data, 'text/html');
-    const headEls = el.head.children;
-    const list = Array.from(headEls);
-    for (const v of list) {
-      if (v.getAttribute('property') === 'og:title') {
-        obj.pageTitle = v.getAttribute('content') != null ? v.getAttribute('content')! : '';
-      } else if (v.getAttribute('property') === 'og:image') {
-        obj.pageImage = v.getAttribute('content') != null ? v.getAttribute('content')! : '';
-      } else if (v.getAttribute('property') === 'og:description') {
-        obj.pageDescription = v.getAttribute('content') != null ? v.getAttribute('content')! : '';
-      }
-    }
-    return obj;
-  } catch (e) {
-    // データが取れなかったパターン。ブランクデータを返す
-    return obj;
-  }
-};
-
 // カテゴリタグと一緒に含まれているタグリストを作成
-export const pickRelationalTabs = (ulrInfos: UrlInfo[], selectedCategory: string): string[] => {
+export const pickRelationalTabs = (ulrInfos: EventLog[], selectedCategory: string): string[] => {
   const hitUrls =
     selectedCategory !== '' ? ulrInfos.filter((value) => value.tagList.includes(selectedCategory)) : ulrInfos;
 

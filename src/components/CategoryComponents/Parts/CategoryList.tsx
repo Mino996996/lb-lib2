@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
-import { CategoryInfo, UrlInfo } from '../../utilTypes';
-import { AppContext } from '../../state/ConfigProvider';
+import React from 'react';
+import { CategoryInfo, EventLog } from '../../utilTypes';
 import { categoryDb } from '../../../firebase/firebase';
+import { useConfigContext } from '../../state/ConfigProvider';
+import { useEventContext } from '../../state/EventProvider';
 
 interface Props {
   categoryInfo: CategoryInfo;
@@ -9,13 +10,13 @@ interface Props {
   setIsEditMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const containNum = (urlInfos: UrlInfo[], categoryInfo: CategoryInfo): number => {
+const containNum = (urlInfos: EventLog[], categoryInfo: CategoryInfo): number => {
   return urlInfos.filter((value) => value.tagList.includes(categoryInfo.category)).length;
 };
 
 const CategoryList: React.FC<Props> = ({ categoryInfo, isEditMode, setIsEditMode }) => {
-  const { selectedCategory, setSelectedCategory, allCategory, setAllCategory, setKeywords, allUrl } =
-    useContext(AppContext);
+  const { selectedCategory, setSelectedCategory, setKeywords } = useConfigContext();
+  const { allCategory, setAllCategory, allEventLogs } = useEventContext();
 
   const selectCategory = (category: string): void => {
     if (selectedCategory !== category) {
@@ -48,7 +49,7 @@ const CategoryList: React.FC<Props> = ({ categoryInfo, isEditMode, setIsEditMode
         className="ml-2 font-bold text-sm cursor-pointer w-40 overflow-hidden"
         onClick={() => selectCategory(categoryInfo.category)}
       >
-        # {categoryInfo.category} ({containNum(allUrl, categoryInfo)})
+        # {categoryInfo.category} ({containNum(allEventLogs, categoryInfo)})
       </span>
       <span className="ml-auto pt-0.5 mr-2.5 text-sm text-gray-400 cursor-pointer" onClick={() => setIsEditMode(true)}>
         [編集]

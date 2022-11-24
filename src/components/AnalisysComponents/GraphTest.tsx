@@ -1,15 +1,27 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Plot from 'react-plotly.js';
-import { AppContext } from '../state/ConfigProvider';
 import { Layout, PlotData } from 'plotly.js';
 import { colorHex, threeScatterData } from './graphFunctions';
+import { useEventContext } from '../state/EventProvider';
 
 const GraphTest: React.FC = () => {
-  const { allUrl, allCategory } = useContext(AppContext);
+  const { allEventLogs, allCategory } = useEventContext();
 
-  const data1: Partial<PlotData> = threeScatterData(allUrl, allCategory, '赤堀さん', '2022年', colorHex(250, 86, 44));
+  const data1: Partial<PlotData> = threeScatterData(
+    allEventLogs,
+    allCategory,
+    '赤堀さん',
+    '2022年',
+    colorHex(250, 86, 44)
+  );
 
-  const data2: Partial<PlotData> = threeScatterData(allUrl, allCategory, '内山さん', '2022年', colorHex(100, 86, 254));
+  const data2: Partial<PlotData> = threeScatterData(
+    allEventLogs,
+    allCategory,
+    '内山さん',
+    '2022年',
+    colorHex(100, 86, 254)
+  );
 
   const lineX: Partial<PlotData> = {
     type: 'scatter3d',

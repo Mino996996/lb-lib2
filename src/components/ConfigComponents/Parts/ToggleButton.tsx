@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Switch } from '@headlessui/react';
-import { AppContext } from '../../state/ConfigProvider';
+import { ConfigContext } from '../../state/ConfigProvider';
 
 const classNames = (...classes: string[]): string => classes.filter(Boolean).join(' ');
 
@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const ToggleButton: React.FC<Props> = ({ kind }) => {
-  const { imageVisible, setImageVisible, memoVisible, setMemoVisible } = useContext(AppContext);
+  const { imageVisible, setImageVisible, memoVisible, setMemoVisible } = useContext(ConfigContext);
   const visible = kind === 'image' ? imageVisible : memoVisible;
   const setVisible = kind === 'image' ? setImageVisible : setMemoVisible;
 

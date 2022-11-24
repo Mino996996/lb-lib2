@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import { Switch } from '@headlessui/react';
-import { AppContext } from '../../state/ConfigProvider';
+import { ConfigContext } from '../../state/ConfigProvider';
 
 const classNames = (...classes: string[]): string => classes.filter(Boolean).join(' ');
 
 export const ToggleSortButton: React.VFC = () => {
-  const { asc, setAsc } = useContext(AppContext);
+  const { asc, setAsc } = useContext(ConfigContext);
 
   return (
     <Switch
