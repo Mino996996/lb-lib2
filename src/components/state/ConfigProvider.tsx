@@ -14,10 +14,6 @@ interface ConfigContextType {
   setKeywords: React.Dispatch<React.SetStateAction<string[]>>;
   selectedCategory: string;
   setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
-  allCategory: CategoryInfo[];
-  setAllCategory: React.Dispatch<React.SetStateAction<CategoryInfo[]>>;
-  allEventLogs: EventLog[];
-  setAllEventLogs: React.Dispatch<React.SetStateAction<EventLog[]>>;
   asc: boolean;
   setAsc: React.Dispatch<React.SetStateAction<boolean>>;
   isAnalysisMode: boolean;
@@ -25,7 +21,7 @@ interface ConfigContextType {
 }
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-export const AppContext = createContext({} as ConfigContextType);
+export const ConfigContext = createContext({} as ConfigContextType);
 
 interface Props {
   children: ReactNode;
@@ -38,15 +34,12 @@ export const ConfigProvider: React.FC<Props> = ({ children }) => {
   const _selectedCategory = localStorage.getItem('category');
   const _asc = localStorage.getItem('asc');
 
-  const savedKeywords = checkSelectedKeywords(_keywords);
   const [authState, dispatch] = useReducer(authReducer.reducer, authReducer.initialState);
   const [imageVisible, setImageVisible] = useState(checkHasBoolean(_imageVisible));
   const [memoVisible, setMemoVisible] = useState(checkHasBoolean(_memoVisible));
   const [asc, setAsc] = useState(checkHasBoolean(_asc));
-  const [keywords, setKeywords] = useState<string[]>(savedKeywords);
+  const [keywords, setKeywords] = useState<string[]>(checkSelectedKeywords(_keywords));
   const [selectedCategory, setSelectedCategory] = useState(checkSelectedCategory(_selectedCategory));
-  const [allCategory, setAllCategory] = useState<CategoryInfo[]>([]);
-  const [allEventLogs, setAllEventLogs] = useState<EventLog[]>([]);
   const [isAnalysisMode, setIsAnalysisMode] = useState(false);
 
   const value: ConfigContextType = {
@@ -60,17 +53,13 @@ export const ConfigProvider: React.FC<Props> = ({ children }) => {
     setKeywords,
     selectedCategory,
     setSelectedCategory,
-    allCategory,
-    setAllCategory,
-    allEventLogs,
-    setAllEventLogs,
     asc,
     setAsc,
     isAnalysisMode,
     setIsAnalysisMode,
   };
 
-  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+  return <ConfigContext.Provider value={value}>{children}</ConfigContext.Provider>;
 };
 
-export const useConfigContext = (): ConfigContextType => useContext(AppContext);
+export const useConfigContext = (): ConfigContextType => useContext(ConfigContext);
