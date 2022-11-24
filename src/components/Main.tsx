@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import MobileSideBar from './Mobile/MobileSidebar';
 import CategoryArea from './CategoryComponents/CategoryArea';
-import UrlArea from './EventComponents/UrlArea';
+import EventArea from './EventComponents/EventArea';
 import ConfigArea from './ConfigComponents/ConfigArea';
 import { useConfigContext } from './state/ConfigProvider';
 import { getAllCategories, getAllUrls } from '../firebase/firebase';
@@ -27,7 +27,7 @@ const Articles: React.FC = () => {
   return (
     <>
       <div className="w-full py-2 sm:w-3/5 lg:w-2/5 sm:py-1 sm:pl-6 sm:mr-6 lg:border-l border-gray-500 ">
-        <UrlArea />
+        <EventArea />
       </div>
       <div className="hidden sm:block w-80 pl-4 border-l border-gray-500 ">
         <ConfigArea />

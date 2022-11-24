@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Plot from 'react-plotly.js';
-import BaseButton from '../EventComponents/Buttons/BaseButton';
+import BaseButton from '../UtilComponents/BaseButton';
 import { useEventContext } from '../state/EventProvider';
 
 const Graph3D: React.FC = () => {

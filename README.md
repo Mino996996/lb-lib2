@@ -30,5 +30,5 @@ Firebase: 10.2.0
       - URLCard: 登録データの表示コンポーネント置き場
       - cardFunction.spec.ts: ファンクション用の単体テスト
       - cardFunction.ts: ファンクション用TSファイル
-      - UrlArea.tsx
+      - EventArea.tsx
 - .env: Firebaseのkeyと簡易なログインパスワード

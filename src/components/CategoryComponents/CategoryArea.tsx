@@ -5,9 +5,9 @@ import { firebaseSignOut } from '../../firebase/firebase';
 import { logoutType } from '../state/authReducer';
 import { Theme, themeOptions } from './themeList';
 import { CategoryTheme } from './Parts/CategoryTheme';
-import BaseButton from '../EventComponents/Buttons/BaseButton';
+import BaseButton from '../UtilComponents/BaseButton';
 
-const CategoryArea: React.FC = () => {
+const CategoryAreaFC: React.FC = () => {
   const { dispatch, isAnalysisMode, setIsAnalysisMode } = useContext(ConfigContext);
   const logoutOnClick = async (): Promise<void> => {
     await firebaseSignOut();
@@ -46,4 +46,5 @@ const CategoryArea: React.FC = () => {
   );
 };
 
+const CategoryArea = React.memo(CategoryAreaFC);
 export default CategoryArea;
