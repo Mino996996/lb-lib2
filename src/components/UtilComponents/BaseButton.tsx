@@ -7,7 +7,10 @@ interface Props {
 
 const BaseButton: React.FC<Props> = ({ onClickCallback, name }) => {
   return (
-    <button className="px-2 bg-green-50 rounded border border-gray-400 text-sm text-gray-700" onClick={onClickCallback}>
+    <button
+      className="px-2 mx-1 bg-green-50 rounded border border-gray-400 text-sm text-gray-700"
+      onClick={onClickCallback}
+    >
       {name}
     </button>
   );

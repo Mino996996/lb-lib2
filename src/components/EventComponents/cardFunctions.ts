@@ -22,8 +22,7 @@ export const urlPattern = /(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})[/\w .-]*\/?
 
 // カテゴリタグと一緒に含まれているタグリストを作成
 export const pickRelationalTabs = (ulrInfos: EventLog[], selectedCategory: string): string[] => {
-  const hitUrls =
-    selectedCategory !== '' ? ulrInfos.filter((value) => value.tagList.includes(selectedCategory)) : ulrInfos;
+  const hitUrls = selectedCategory !== '' ? ulrInfos.filter((value) => value.tagList.includes(selectedCategory)) : ulrInfos;
 
   const pickedTags: string[] = [];
   for (const urlInfo of hitUrls) {
@@ -111,4 +110,29 @@ export const pdfPageImage = async (pdfData: PDFDocumentProxy, scale: number, pag
   const pngImage = canvas.toDataURL(); // 指定がなければPNGのBase64データ
   canvas.remove();
   return pngImage;
+};
+
+// イベントを条件でフィルタリング
+export const filterEvent = (allEventLogs: EventLog[], keywords: string[], selectedCategory: string, asc: boolean): EventLog[] => {
+  let filteredList: EventLog[] = allEventLogs;
+  if (!(keywords.length === 0) && !(selectedCategory === '')) {
+    // 両方データあり
+    const keywordList = keywords.concat(selectedCategory);
+    for (const keyword of keywordList) {
+      filteredList = filteredList.filter((value) => value.tagList.includes(keyword));
+    }
+  } else if (!(keywords.length === 0) && selectedCategory === '') {
+    // keywordsのみ
+    for (const keyword of keywords) {
+      filteredList = filteredList.filter((value) => value.tagList.includes(keyword));
+    }
+  } else if (keywords.length === 0 && !(selectedCategory === '')) {
+    // selectedCategoryのみ
+    filteredList = filteredList.filter((value) => value.tagList.includes(selectedCategory));
+  }
+  // ソート
+  asc
+    ? (filteredList = filteredList.sort((a, b) => b.addTime - a.addTime))
+    : (filteredList = filteredList.sort((a, b) => a.addTime - b.addTime));
+  return filteredList;
 };
