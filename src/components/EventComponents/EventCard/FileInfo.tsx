@@ -4,6 +4,7 @@ import { FilePreview } from './FileInfoParts/FilePreview';
 import { FileThumbnail } from './FileInfoParts/FileThumbnail';
 import { PDFDocumentProxy } from 'pdfjs-dist';
 import { createPdfPars } from '../cardFunctions';
+import { alerts } from '../../../utils/alerts';
 
 interface Props {
   urlInfo: UrlInfo;
@@ -53,7 +54,11 @@ const FileInfo: React.FC<Props> = ({ urlInfo, setVisible }) => {
               urlInfo.fileName.includes('.pdf') && (
                 <button
                   className="rounded-md bg-gray-200 border border-gray-600 px-2 cursor-pointer mr-4"
-                  onClick={readPdfData}
+                  onClick={() => {
+                    readPdfData()
+                      .then()
+                      .catch((error) => alert(error));
+                  }}
                 >
                   資料閲覧
                 </button>

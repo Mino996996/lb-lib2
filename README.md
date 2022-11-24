@@ -24,7 +24,7 @@ Firebase: 10.2.0
       - MobileSidebar.tsx
     - state: 認証系のreducerとuseProviderファイル
       - authReducer.ts
-      - ContextProvider.tsx
+      - ConfigProvider.tsx
     - UrlComponents: 中央/メインのURL情報
       - FormCard: 入力フォームコンポーネント置き場
       - URLCard: 登録データの表示コンポーネント置き場

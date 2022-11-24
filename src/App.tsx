@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import './App.css';
-import { AppContext } from './components/state/ContextProvider';
+import { AppContext } from './components/state/ConfigProvider';
 import { Auth } from './components/Auth';
 import Main from './components/Main';
 // import { signIn } from './firebase/firebase'

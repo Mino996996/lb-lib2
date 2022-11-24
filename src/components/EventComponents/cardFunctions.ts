@@ -5,6 +5,7 @@ import * as pdfjs from 'pdfjs-dist/legacy/build/pdf';
 // @ts-expect-error
 import PDFJSWorker from 'pdfjs-dist/legacy/build/pdf.worker.entry';
 import { PDFDocumentProxy } from 'pdfjs-dist';
+
 pdfjs.GlobalWorkerOptions.workerSrc = PDFJSWorker;
 
 export interface Obj {
@@ -45,14 +46,6 @@ export const createOgpData = async (urlStr: string): Promise<Obj> => {
     // データが取れなかったパターン。ブランクデータを返す
     return obj;
   }
-};
-
-// オリジナルIDを作成
-export const createId = (digit: number): string => {
-  const S = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  return Array.from(crypto.getRandomValues(new Uint32Array(digit)))
-    .map((n) => S[n % S.length])
-    .join('');
 };
 
 // カテゴリタグと一緒に含まれているタグリストを作成

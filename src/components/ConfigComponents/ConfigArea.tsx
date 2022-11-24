@@ -1,33 +1,22 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { pickRelationalTabs } from '../UrlComponents/cardFunctions';
+import { pickRelationalTabs } from '../EventComponents/cardFunctions';
 // import { urlInfoList } from '../../fixtures/stab/urlStab'
 import { ToggleButton } from './Parts/ToggleButton';
-import { AppContext } from '../state/ContextProvider';
+import { AppContext } from '../state/ConfigProvider';
 import { ToggleSortButton } from './Parts/ToggleSortButton';
 import { getAllCategories, getAllUrls } from '../../firebase/firebase';
 
 const ConfigArea: React.FC = () => {
-  const {
-    keywords,
-    setKeywords,
-    selectedCategory,
-    allUrl,
-    setAllUrl,
-    setAllCategory,
-  } = useContext(AppContext);
+  const { keywords, setKeywords, selectedCategory, allUrl, setAllUrl, setAllCategory } = useContext(AppContext);
   const [itemList, setItemList] = useState<string[]>([]);
 
-  const reload = async (): Promise<void> => {
-    try {
-      const allInfoList = await getAllUrls();
-      const allCategoryList = await getAllCategories();
-      setAllUrl([...allInfoList]);
-      setAllCategory([
-        ...allCategoryList.sort((a, b) => a.category.localeCompare(b.category)),
-      ]);
-    } catch (e) {
-      alert(e);
-    }
+  const reload = (): void => {
+    Promise.all([getAllUrls(), getAllCategories()])
+      .then((value) => {
+        setAllUrl(value[0]);
+        setAllCategory(value[1].sort((a, b) => a.category.localeCompare(b.category)));
+      })
+      .catch((e) => alert(e));
   };
 
   useEffect(() => {
@@ -69,10 +58,7 @@ const ConfigArea: React.FC = () => {
         <h2 className="text-center mb-2 font-bold text-red-300">
           = {selectedCategory !== '' && selectedCategory + ' 関連'}タグ一覧 =
         </h2>
-        <div
-          className="overflow-y-scroll edit-scrollbar"
-          style={{ height: '52vh' }}
-        >
+        <div className="overflow-y-scroll edit-scrollbar" style={{ height: '52vh' }}>
           {itemList
             .filter((value) => value !== selectedCategory)
             .map((item) => (
@@ -85,26 +71,15 @@ const ConfigArea: React.FC = () => {
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     if (e.target.checked) {
                       setKeywords([...keywords, item]);
-                      localStorage.setItem(
-                        'keyword',
-                        JSON.stringify([...keywords, item])
-                      );
+                      localStorage.setItem('keyword', JSON.stringify([...keywords, item]));
                     } else {
-                      const newList = keywords.filter(
-                        (value) => value !== item
-                      );
+                      const newList = keywords.filter((value) => value !== item);
                       setKeywords([...newList]);
-                      localStorage.setItem(
-                        'keyword',
-                        JSON.stringify([...newList])
-                      );
+                      localStorage.setItem('keyword', JSON.stringify([...newList]));
                     }
                   }}
                 />
-                <label
-                  htmlFor={item}
-                  className="pl-2 mr-6 text-base cursor-pointer text-gray-200"
-                >
+                <label htmlFor={item} className="pl-2 mr-6 text-base cursor-pointer text-gray-200">
                   {item}
                 </label>
               </div>

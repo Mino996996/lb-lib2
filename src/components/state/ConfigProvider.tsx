@@ -1,6 +1,7 @@
 import React, { createContext, Dispatch, ReactNode, useContext, useReducer, useState } from 'react';
 import authReducer, { AuthAction } from './authReducer';
 import { CategoryInfo, UrlInfo } from '../utilTypes';
+import { checkHasBoolean, checkSelectedCategory, checkSelectedKeywords } from '../../utils/utilFinctions';
 
 interface AppContextType {
   login: boolean;
@@ -23,29 +24,27 @@ interface AppContextType {
   setIsAnalysisMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const AppContext: React.Context<Partial<AppContextType>> = createContext({});
+// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+export const AppContext = createContext({} as AppContextType);
 
 interface Props {
   children: ReactNode;
 }
 
-export const ContextProvider: React.FC<Props> = ({ children }) => {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const savedKeywords =
-    localStorage.getItem('keyword') != null ? (JSON.parse(localStorage.getItem('keyword')!) as string[]) : [];
+export const ConfigProvider: React.FC<Props> = ({ children }) => {
+  const _keywords = localStorage.getItem('keyword');
+  const _imageVisible = localStorage.getItem('image');
+  const _memoVisible = localStorage.getItem('memo');
+  const _selectedCategory = localStorage.getItem('category');
+  const _asc = localStorage.getItem('asc');
+
+  const savedKeywords = checkSelectedKeywords(_keywords);
   const [authState, dispatch] = useReducer(authReducer.reducer, authReducer.initialState);
-  const [imageVisible, setImageVisible] = useState(
-    localStorage.getItem('image') === null ? true : !(localStorage.getItem('image') == null)
-  );
-  const [memoVisible, setMemoVisible] = useState(
-    localStorage.getItem('memo') === null ? true : !(localStorage.getItem('memo') == null)
-  );
-  const [asc, setAsc] = useState(!(localStorage.getItem('asc') == null));
+  const [imageVisible, setImageVisible] = useState(checkHasBoolean(_imageVisible));
+  const [memoVisible, setMemoVisible] = useState(checkHasBoolean(_memoVisible));
+  const [asc, setAsc] = useState(checkHasBoolean(_asc));
   const [keywords, setKeywords] = useState<string[]>(savedKeywords);
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const [selectedCategory, setSelectedCategory] = useState(
-    localStorage.getItem('category') != null ? localStorage.getItem('category')! : ''
-  );
+  const [selectedCategory, setSelectedCategory] = useState(checkSelectedCategory(_selectedCategory));
   const [allCategory, setAllCategory] = useState<CategoryInfo[]>([]);
   const [allUrl, setAllUrl] = useState<UrlInfo[]>([]);
   const [isAnalysisMode, setIsAnalysisMode] = useState(false);
@@ -74,4 +73,4 @@ export const ContextProvider: React.FC<Props> = ({ children }) => {
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
-export const useConfig = (): Partial<AppContextType> => useContext(AppContext);
+export const useConfigContext = (): AppContextType => useContext(AppContext);

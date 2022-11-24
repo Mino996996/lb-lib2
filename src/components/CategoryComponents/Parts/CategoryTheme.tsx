@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import CategoryItem from './CategoryItem';
 import { Theme, ThemeOption } from '../themeList';
-import { AppContext } from '../../state/ContextProvider';
+import { AppContext } from '../../state/ConfigProvider';
 
 interface Props {
   themeOption: ThemeOption;

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Switch } from '@headlessui/react';
-import { AppContext } from '../../state/ContextProvider';
+import { AppContext } from '../../state/ConfigProvider';
 
 const classNames = (...classes: string[]): string => classes.filter(Boolean).join(' ');
 

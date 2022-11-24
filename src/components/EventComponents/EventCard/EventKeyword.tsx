@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
-import { AppContext } from '../../state/ContextProvider';
+import { AppContext } from '../../state/ConfigProvider';
 
-const UrlKeyword: React.FC = () => {
+const EventKeyword: React.FC = () => {
   const { selectedCategory, setSelectedCategory, keywords, setKeywords } = useContext(AppContext);
 
   const deleteKeyword = (word: string): void => {
@@ -53,4 +53,4 @@ const UrlKeyword: React.FC = () => {
   );
 };
 
-export default UrlKeyword;
+export default EventKeyword;

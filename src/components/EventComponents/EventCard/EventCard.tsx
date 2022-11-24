@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { UrlInfo } from '../../utilTypes';
-import { AppContext } from '../../state/ContextProvider';
+import { AppContext } from '../../state/ConfigProvider';
 import { isCategoryTag } from '../cardFunctions';
 import { FormCard } from '../FormCard/FormCard';
 import FileInfo from './FileInfo';
@@ -10,7 +10,7 @@ interface Props {
   index: number;
 }
 
-export const UrlCard: React.FC<Props> = ({ urlInfo, index }) => {
+export const EventCard: React.FC<Props> = ({ urlInfo, index }) => {
   const { imageVisible, memoVisible, allCategory, setSelectedCategory, setKeywords, allUrl, setAllUrl } =
     useContext(AppContext);
   const [visible, setVisible] = useState(imageVisible);
