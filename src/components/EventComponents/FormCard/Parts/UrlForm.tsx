@@ -38,6 +38,7 @@ const UrlForm: React.FC<Props> = (props) => {
                   props.setInputPageDescription(result.pageDescription);
                 })
                 .catch((e) => {
+                  alert(e);
                   props.setInputUrl('');
                   props.setInputPageImage('');
                   props.setInputPageTitle('');

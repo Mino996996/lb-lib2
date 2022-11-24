@@ -11,11 +11,6 @@ const changeToDateStr = (unix: number): string => {
   return `${dateList[0]}-${('00' + dateList[1]).slice(-2)}-${('00' + dateList[2]).slice(-2)}`;
 };
 
-export const changeDateStyle = (dateStr: string): string => {
-  const dateList = dateStr.split('/');
-  return `${dateList[0]}-${('00' + dateList[1]).slice(-2)}-${('00' + dateList[2]).slice(-2)}`;
-};
-
 const DateForm: React.FC<Props> = (props) => {
   return (
     <div className="px-2 pb-1 text-sm">

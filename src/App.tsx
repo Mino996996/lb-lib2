@@ -1,13 +1,13 @@
 import React, { useContext, useEffect } from 'react';
 import './App.css';
-import { AppContext } from './components/state/ConfigProvider';
+import { ConfigContext } from './components/state/ConfigProvider';
 import { Auth } from './components/Auth';
 import Main from './components/Main';
 // import { signIn } from './firebase/firebase'
 import { loginType } from './components/state/authReducer';
 
 const App: React.FC = () => {
-  const { login, dispatch } = useContext(AppContext);
+  const { login, dispatch } = useContext(ConfigContext);
 
   useEffect(() => {
     // const login = async () => {
@@ -20,9 +20,7 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="bg-gray-800 w-full max-h-screen min-h-screen overflow-hidden">
-      {login ? <Main /> : <Auth />}
-    </div>
+    <div className="bg-gray-800 w-full max-h-screen min-h-screen overflow-hidden">{login ? <Main /> : <Auth />}</div>
   );
 };
 

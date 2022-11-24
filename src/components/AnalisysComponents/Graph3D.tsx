@@ -1,10 +1,10 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import Plot from 'react-plotly.js';
-import { AppContext } from '../state/ConfigProvider';
 import BaseButton from '../EventComponents/Buttons/BaseButton';
+import { useEventContext } from '../state/EventProvider';
 
 const Graph3D: React.FC = () => {
-  const { allEventLogs, allCategory } = useContext(AppContext);
+  const { allEventLogs, allCategory } = useEventContext();
   const [count, setCount] = useState(0);
   const countChange = (): void => {
     setCount((count + 1) % 3);

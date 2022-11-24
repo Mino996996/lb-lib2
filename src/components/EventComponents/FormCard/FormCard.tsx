@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import TitleForm from './Parts/TitleForm';
 import UrlForm from './Parts/UrlForm';
 import TagForm from './Parts/TagForm';
@@ -6,11 +6,12 @@ import MemoForm from './Parts/MemoForm';
 import { EventLog } from '../../utilTypes';
 import { addUrl, fbPdfImageUpload, fbStorageDelete, fbStorageUpload, updateUrl } from '../../../firebase/firebase';
 import { ClosedFormCard } from './ClosedFormCard';
-import { AppContext } from '../../state/ConfigProvider';
+import { useConfigContext } from '../../state/ConfigProvider';
 import FormButtonArea from './Parts/FormButtonArea';
 import FileForm from './Parts/FileForm';
 import DateForm from './Parts/DateForm';
 import { createId } from '../../../utils/utilFinctions';
+import { useEventContext } from '../../state/EventProvider';
 
 interface Props {
   initUrlInfo: EventLog;
@@ -20,7 +21,8 @@ interface Props {
 
 // createとupdateを兼ねるコンポーネント。編集時は両立性に注意
 export const FormCard: React.FC<Props> = ({ initUrlInfo, mode, setIsEdit }) => {
-  const { asc, allEventLogs, setAllEventLogs } = useContext(AppContext);
+  const { asc } = useConfigContext();
+  const { allEventLogs, setAllEventLogs } = useEventContext();
   const [inputTitle, setInputTitle] = useState(initUrlInfo.title);
   const [inputUrl, setInputUrl] = useState(initUrlInfo.url);
   const [inputMemo, setInputMemo] = useState(initUrlInfo.memo);

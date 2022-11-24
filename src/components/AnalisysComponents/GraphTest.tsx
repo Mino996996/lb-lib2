@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Plot from 'react-plotly.js';
-import { AppContext } from '../state/ConfigProvider';
 import { Layout, PlotData } from 'plotly.js';
 import { colorHex, threeScatterData } from './graphFunctions';
+import { useEventContext } from '../state/EventProvider';
 
 const GraphTest: React.FC = () => {
-  const { allEventLogs, allCategory } = useContext(AppContext);
+  const { allEventLogs, allCategory } = useEventContext();
 
   const data1: Partial<PlotData> = threeScatterData(
     allEventLogs,

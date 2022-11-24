@@ -1,13 +1,13 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { categoryDb, checkCategoryName } from '../../../firebase/firebase';
-import { AppContext } from '../../state/ConfigProvider';
 import { Theme, themeOptions } from '../themeList';
 import { createCategory } from '../../../utils/utilFinctions';
 import { alerts } from '../../../utils/alerts';
+import { useEventContext } from '../../state/EventProvider';
 const ID_LENGTH = 12;
 
 const CategoryForm: React.FC = () => {
-  const { allCategory, setAllCategory } = useContext(AppContext);
+  const { allCategory, setAllCategory } = useEventContext();
   const [categoryName, setCategoryName] = useState<string>('');
   const [theme, setTheme] = useState<Theme>(Theme.unselected);
 

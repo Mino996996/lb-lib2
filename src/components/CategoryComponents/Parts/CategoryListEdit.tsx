@@ -1,8 +1,8 @@
-import React, { useContext, useState } from 'react';
-import { AppContext } from '../../state/ConfigProvider';
+import React, { useState } from 'react';
 import { CategoryInfo } from '../../utilTypes';
 import { categoryDb, checkCategoryName, getAllCategories, getAllUrls } from '../../../firebase/firebase';
 import { themeOptions } from '../themeList';
+import { useEventContext } from '../../state/EventProvider';
 
 interface Props {
   categoryInfo: CategoryInfo;
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const CategoryListEdit: React.FC<Props> = ({ categoryInfo, isEditMode, setIsEditMode }) => {
-  const { allCategory, setAllCategory, setAllEventLogs } = useContext(AppContext);
+  const { allCategory, setAllCategory, setAllEventLogs } = useEventContext();
   const [categoryName, setCategoryName] = useState(categoryInfo.category);
   const [theme, setTheme] = useState(categoryInfo.theme);
   const [points, setPoints] = useState(

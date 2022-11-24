@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { AppContext } from '../state/ConfigProvider';
+import { ConfigContext } from '../state/ConfigProvider';
 import CategoryForm from './Parts/CategoryForm';
 import { firebaseSignOut } from '../../firebase/firebase';
 import { logoutType } from '../state/authReducer';
@@ -8,8 +8,8 @@ import { CategoryTheme } from './Parts/CategoryTheme';
 import BaseButton from '../EventComponents/Buttons/BaseButton';
 
 const CategoryArea: React.FC = () => {
-  const { dispatch, isAnalysisMode, setIsAnalysisMode } = useContext(AppContext);
-  const logoutOnclick = async (): Promise<void> => {
+  const { dispatch, isAnalysisMode, setIsAnalysisMode } = useContext(ConfigContext);
+  const logoutOnClick = async (): Promise<void> => {
     await firebaseSignOut();
     localStorage.setItem('loginState', '');
     dispatch({ type: logoutType });
@@ -21,7 +21,7 @@ const CategoryArea: React.FC = () => {
       <div className="pt-2 pb-4 text-center hidden lg:block">
         <h2 className="m-1 pt-2 text-3xl font-bold text-green-400">LBの図書館</h2>
         {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-        <BaseButton onClickCallback={logoutOnclick} name={'ログアウト'} />
+        <BaseButton onClickCallback={logoutOnClick} name={'ログアウト'} />
         <BaseButton
           onClickCallback={() => setIsAnalysisMode(!isAnalysisMode)}
           name={isAnalysisMode ? '蔵書室へ' : '分析室へ'}

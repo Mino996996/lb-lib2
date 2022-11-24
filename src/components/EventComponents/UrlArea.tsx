@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormCard } from './FormCard/FormCard';
 import { EventCard } from './EventCard/EventCard';
 import { EventLog } from '../utilTypes';
-import { urlInfoList } from '../../fixtures/stab/urlStab'; // 表示テスト用デモデータ
-import { AppContext } from '../state/ConfigProvider';
+import { useConfigContext } from '../state/ConfigProvider';
 import EventKeyword from './EventCard/EventKeyword';
+import { useEventContext } from '../state/EventProvider';
 
 const nowTime = new Date();
 const blankUrlInfo: EventLog = {
@@ -25,7 +25,8 @@ const blankUrlInfo: EventLog = {
 };
 
 const UrlArea: React.FC = () => {
-  const { keywords, selectedCategory, allEventLogs, asc } = useContext(AppContext);
+  const { keywords, selectedCategory, asc } = useConfigContext();
+  const { allEventLogs } = useEventContext();
   const [urlInfos, setUrlInfos] = useState<EventLog[]>([]);
 
   // カテゴリまたは選択タグ変更時の表示URLデータをフィルタリング

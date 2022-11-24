@@ -4,7 +4,6 @@ import { FilePreview } from './FileInfoParts/FilePreview';
 import { FileThumbnail } from './FileInfoParts/FileThumbnail';
 import { PDFDocumentProxy } from 'pdfjs-dist';
 import { createPdfPars } from '../cardFunctions';
-import { alerts } from '../../../utils/alerts';
 
 interface Props {
   urlInfo: EventLog;

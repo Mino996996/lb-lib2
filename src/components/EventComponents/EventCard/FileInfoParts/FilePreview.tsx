@@ -30,31 +30,13 @@ export const FilePreview: React.FC<Props> = ({ urlInfo, pdfData, pdfPageNumber, 
         </p>
         <p className="mt-2 text-center font-bold">
           {page - 1 !== 0 ? (
-            <span
-              className="py-0.5 px-4 mr-4 bg-green-200 rounded border border-green-500 cursor-pointer"
-              onClick={() => {
-                changeImageUrl(page - 1)
-                  .then()
-                  .catch((e) => alert(e));
-              }}
-            >
-              戻る
-            </span>
+            <PageButtonMemo changeImageUrl={changeImageUrl} page={page - 1} labelName={'戻る'} />
           ) : (
             <span className="py-0.5 px-4 mr-4 bg-gray-200 rounded border border-gray-500">---</span>
-          )}{' '}
-          /
+          )}
+          <span> /</span>
           {page !== pdfPageNumber ? (
-            <span
-              className="py-0.5 px-4 ml-4 bg-green-200 rounded border border-green-500 cursor-pointer"
-              onClick={() => {
-                changeImageUrl(page + 1)
-                  .then()
-                  .catch((e) => alert(e));
-              }}
-            >
-              進む
-            </span>
+            <PageButtonMemo changeImageUrl={changeImageUrl} page={page + 1} labelName={'進む'} />
           ) : (
             <span className="py-0.5 px-4 ml-4 bg-gray-200 rounded border border-gray-500">---</span>
           )}
@@ -71,3 +53,25 @@ export const FilePreview: React.FC<Props> = ({ urlInfo, pdfData, pdfPageNumber, 
     </div>
   );
 };
+
+interface PageButtonPron {
+  changeImageUrl: (num: number) => Promise<void>;
+  page: number;
+  labelName: string;
+}
+const PageButton: React.FC<PageButtonPron> = ({ changeImageUrl, page, labelName }) => {
+  return (
+    <span
+      className="py-0.5 px-4 mr-4 bg-green-200 rounded border border-green-500 cursor-pointer"
+      onClick={() => {
+        changeImageUrl(page)
+          .then()
+          .catch((e) => alert(e));
+      }}
+    >
+      {labelName}
+    </span>
+  );
+};
+
+const PageButtonMemo = React.memo(PageButton);

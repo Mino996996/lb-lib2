@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { AppContext } from './state/ConfigProvider';
+import { ConfigContext } from './state/ConfigProvider';
 import { loginType } from './state/authReducer';
 // import { signIn } from '../firebase/firebase'
 
 export const Auth: React.FC = () => {
-  const { dispatch } = useContext(AppContext);
+  const { dispatch } = useContext(ConfigContext);
   const [isJapaneseInput, setIsJapaneseInput] = useState(false);
   const [password, setPassword] = useState('');
 

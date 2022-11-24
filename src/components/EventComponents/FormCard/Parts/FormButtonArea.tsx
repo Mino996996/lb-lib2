@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { fbStorageDelete, urlDb } from '../../../../firebase/firebase';
-import { AppContext } from '../../../state/ConfigProvider';
 import { EventLog } from '../../../utilTypes';
+import { useEventContext } from '../../../state/EventProvider';
 
 interface Props {
   mode: string;
@@ -22,7 +22,7 @@ const FormButtonArea: React.FC<Props> = ({
   setIsInputFieldOpen,
   setIsEdit,
 }) => {
-  const { allEventLogs, setAllEventLogs } = useContext(AppContext);
+  const { allEventLogs, setAllEventLogs } = useEventContext();
 
   const deleteUrlInfo = (): void => {
     if (window.confirm('この情報を削除しますか？')) {

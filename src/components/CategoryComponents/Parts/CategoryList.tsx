@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { CategoryInfo, EventLog } from '../../utilTypes';
-import { AppContext } from '../../state/ConfigProvider';
 import { categoryDb } from '../../../firebase/firebase';
+import { useConfigContext } from '../../state/ConfigProvider';
+import { useEventContext } from '../../state/EventProvider';
 
 interface Props {
   categoryInfo: CategoryInfo;
@@ -14,8 +15,8 @@ const containNum = (urlInfos: EventLog[], categoryInfo: CategoryInfo): number =>
 };
 
 const CategoryList: React.FC<Props> = ({ categoryInfo, isEditMode, setIsEditMode }) => {
-  const { selectedCategory, setSelectedCategory, allCategory, setAllCategory, setKeywords, allEventLogs } =
-    useContext(AppContext);
+  const { selectedCategory, setSelectedCategory, setKeywords } = useConfigContext();
+  const { allCategory, setAllCategory, allEventLogs } = useEventContext();
 
   const selectCategory = (category: string): void => {
     if (selectedCategory !== category) {
