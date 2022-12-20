@@ -1,5 +1,5 @@
 import { Color, PlotData } from 'plotly.js';
-import { CategoryInfo, EventLog } from '../utilTypes';
+import { CategoryInfo, EventLog } from '../../utilTypes';
 
 export enum Tend {
   social,
@@ -37,12 +37,7 @@ export const scores = (
 };
 
 // 各タイトルの抽出用
-const titles = (
-  allUrl: EventLog[],
-  allCategory: CategoryInfo[],
-  person: string | 'all',
-  year: string | 'all'
-): string[] => {
+const titles = (allUrl: EventLog[], allCategory: CategoryInfo[], person: string | 'all', year: string | 'all'): string[] => {
   let urls = allUrl;
   if (person !== 'all') {
     urls = urls.filter((value) => value.tagList.includes(person));

@@ -5,9 +5,6 @@ import EventArea from './EventComponents/EventArea';
 import ConfigArea from './ConfigComponents/ConfigArea';
 import { useConfigContext } from './state/ConfigProvider';
 import { getAllCategories, getAllUrls } from '../firebase/firebase';
-// import Graph3D from './AnalisysComponents/Graph3D'
-// import GraphTest from './AnalisysComponents/GraphTest'
-import GraphViolin from './AnalisysComponents/GraphViolin';
 import MobileHeader from './Mobile/MobileHeader';
 import { useEventContext } from './state/EventProvider';
 import AnalysisRoom from './AnalisysComponents/AnalysisRoom';
