@@ -5,16 +5,9 @@ import { useEventContext } from '../state/EventProvider';
 import { Theme } from '../CategoryComponents/themeList';
 import { EventLog } from '../utilTypes';
 
-const dateStyle = (ms: number): string => {
+const dateYMD = (ms: number): string[] => {
   const date = new Date(ms * 1000);
-  const dateYMD = date.toLocaleDateString().split('/');
-  return `${dateYMD[1]}月 ${dateYMD[2]}日`;
-};
-
-const getYear = (ms: number): string => {
-  const date = new Date(ms * 1000);
-  const dateYMD = date.toLocaleDateString().split('/');
-  return `${dateYMD[0]}年`;
+  return date.toLocaleDateString().split('/');
 };
 
 const tagFilter = (tags: string[]): string[] => {
@@ -114,8 +107,9 @@ const AnalysisRoom: React.FC = (props) => {
                   <p className="w-72 truncate">{event.title}</p>
                 </td>
                 <td className="px-1.5 text-center">{event.tagList.filter((tag) => tag.includes('さん'))}</td>
-                <td className="px-1.5 text-right">{getYear(event.addTime)}</td>
-                <td className="px-1.5 text-right">{dateStyle(event.addTime)}</td>
+                <td className="px-1.5 text-right">{dateYMD(event.addTime)[0]}年</td>
+                <td className="px-1.5 text-right">{dateYMD(event.addTime)[1]}月</td>
+                <td className="px-1.5 text-right">{dateYMD(event.addTime)[2]}日</td>
                 <td className="px-1.5">
                   <p className="">
                     {tagFilter(event.tagList).map((tag, index) => (
