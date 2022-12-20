@@ -40,12 +40,12 @@ const AnalysisRoom: React.FC = (props) => {
     if (selectTag !== 'なし') {
       eventLogs = eventLogs.filter((eventLogs) => eventLogs.tagList.includes(selectTag));
     }
-    setPresentations(eventLogs);
+    setPresentations(eventLogs.sort((a, b) => b.addTime - a.addTime));
   }, [year, person, selectTag]);
 
   return (
     <>
-      <header className="p-4" style={{ height: '8vh' }}>
+      <header className="p-4" style={{ height: '5vh' }}>
         <BaseButton onClickCallback={() => setIsAnalysisMode(false)} name={'蔵書室へ'} />
         <label className="text-white" htmlFor="">
           発表年：
@@ -88,47 +88,58 @@ const AnalysisRoom: React.FC = (props) => {
             ))}
         </select>
       </header>
-      <div className="p-4 bg-white w-full overflow-y-scroll" style={{ height: '92vh' }}>
-        <table className="text-sm">
-          <tr>
-            <th>№</th>
-            <th>タイトル</th>
-            <th>発表者</th>
-            <th>年</th>
-            <th>発表日</th>
-            <th>タグ</th>
-            <th>発表傾向</th>
-            <th>リンク</th>
-          </tr>
-          {presentations.map((event, index) => (
-            <tr key={index} className={index % 2 === 0 ? 'bg-gray-100' : ''}>
-              <td className="px-1.5 py-1">{presentations.length - index}</td>
-              <td className="px-1.5">
-                <p className="w-72 truncate">{event.title}</p>
-              </td>
-              <td className="px-1.5 text-center">{event.tagList.filter((tag) => tag.includes('さん'))}</td>
-              <td className="px-1.5 text-right">{getYear(event.addTime)}</td>
-              <td className="px-1.5 text-right">{dateStyle(event.addTime)}</td>
-              <td className="px-1.5">
-                <p className="">
-                  {tagFilter(event.tagList).map((tag, index) => (
-                    <span key={index}>{tag}, </span>
-                  ))}
-                </p>
-              </td>
-              <td className="px-1.5"></td>
-              <td className="px-1.5 text-center">
-                {event.fileUrl !== '' ? (
-                  <a className="cursor-pointer text-blue-600" href={event.fileUrl} rel="noreferrer" target="_blank">
-                    資料
-                  </a>
-                ) : (
-                  ''
-                )}
-              </td>
+      <div className="bg-white p-4 flex" style={{ height: '55vh' }}>
+        <div className="w-2/6">graphArea</div>
+        <div className="w-2/6">てｓｔ</div>
+        <div className="w-2/6">該当情報リストエリア</div>
+      </div>
+      <div className="p-4 bg-gray-200 w-full border-t border-gray-500 box-border flex justify-center" style={{ height: '40vh' }}>
+        <div className="overflow-y-scroll">
+          <table className="text-sm bg-white">
+            <tr>
+              <th>№</th>
+              <th>タイトル</th>
+              <th>発表者</th>
+              <th>年</th>
+              <th>月</th>
+              <th>日</th>
+              <th>タグ</th>
+              <th>発表傾向</th>
+              <th>リンク</th>
             </tr>
-          ))}
-        </table>
+            {presentations.map((event, index) => (
+              <tr key={index} className={index % 2 === 0 ? 'bg-gray-100' : ''}>
+                <td className="px-1.5 py-1">{presentations.length - index}</td>
+                <td className="px-1.5">
+                  <p className="w-72 truncate">{event.title}</p>
+                </td>
+                <td className="px-1.5 text-center">{event.tagList.filter((tag) => tag.includes('さん'))}</td>
+                <td className="px-1.5 text-right">{getYear(event.addTime)}</td>
+                <td className="px-1.5 text-right">{dateStyle(event.addTime)}</td>
+                <td className="px-1.5">
+                  <p className="">
+                    {tagFilter(event.tagList).map((tag, index) => (
+                      <span key={index}>{tag}, </span>
+                    ))}
+                  </p>
+                </td>
+                <td className="px-1.5"></td>
+                <td className="px-1.5 text-center">
+                  {event.fileUrl !== '' ? (
+                    <a className="cursor-pointer text-blue-600" href={event.fileUrl} rel="noreferrer" target="_blank">
+                      資料
+                    </a>
+                  ) : (
+                    ''
+                  )}
+                </td>
+              </tr>
+            ))}
+          </table>
+        </div>
+        <div className="ml-4 w-4/12">
+          <div className="bg-white w-full h-full">test</div>
+        </div>
       </div>
     </>
   );
