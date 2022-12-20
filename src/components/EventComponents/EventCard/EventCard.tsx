@@ -40,12 +40,7 @@ const EventCard: React.FC<Props> = ({ urlInfo, index }) => {
           {/* File */}
           {urlInfo.fileUrl !== '' && (
             <div className="px-4 pt-1 border-b border-gray-300">
-              <a
-                href={urlInfo.fileUrl}
-                target="_blank"
-                className="inline-block w-full text-blue-600 overflow-hidden"
-                rel="noreferrer"
-              >
+              <a href={urlInfo.fileUrl} target="_blank" className="inline-block w-full text-blue-600 overflow-hidden" rel="noreferrer">
                 {urlInfo.fileName}
               </a>
             </div>
@@ -53,12 +48,7 @@ const EventCard: React.FC<Props> = ({ urlInfo, index }) => {
 
           {/* URL */}
           <div className="px-4 pt-1 border-b border-gray-300">
-            <a
-              href={urlInfo.url}
-              target="_blank"
-              className="inline-block w-full text-blue-600 overflow-hidden"
-              rel="noreferrer"
-            >
+            <a href={urlInfo.url} target="_blank" className="inline-block w-full text-blue-600 overflow-hidden" rel="noreferrer">
               {urlInfo.url}
             </a>
           </div>
@@ -84,8 +74,7 @@ const EventCard: React.FC<Props> = ({ urlInfo, index }) => {
             <div className="flex w-full">
               <p
                 className={
-                  'inline-block w-10/12 mr-2 sm:mr-0 sm:w-11/12 whitespace-pre-wrap truncate overflow-hidden ' +
-                  (allMemo ? '' : 'h-5')
+                  'inline-block w-10/12 mr-2 sm:mr-0 sm:w-11/12 whitespace-pre-wrap truncate overflow-hidden ' + (allMemo ? '' : 'h-5')
                 }
               >
                 {urlInfo.memo}
@@ -102,8 +91,8 @@ const EventCard: React.FC<Props> = ({ urlInfo, index }) => {
               <span
                 key={index}
                 className={
-                  'inline-block px-2 py-0.5 border border-gray-500 rounded-2xl bg-blue-100 font-bold mr-1 mt-1 shadow-md cursor-pointer ' +
-                  (isCategoryTag(allCategory, tag) ? 'bg-orange-100' : '')
+                  'inline-block px-2 py-0.5 border border-gray-500 rounded-2xl font-bold mr-1 mt-1 shadow-md cursor-pointer ' +
+                  (isCategoryTag(allCategory, tag) ? 'bg-orange-100' : 'bg-blue-100')
                 }
                 onClick={() => {
                   setKeywords([]);
