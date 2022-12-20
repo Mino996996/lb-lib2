@@ -10,6 +10,7 @@ import { getAllCategories, getAllUrls } from '../firebase/firebase';
 import GraphViolin from './AnalisysComponents/GraphViolin';
 import MobileHeader from './Mobile/MobileHeader';
 import { useEventContext } from './state/EventProvider';
+import AnalysisRoom from './AnalisysComponents/AnalysisRoom';
 
 // const saveAsJson = (data: any, fileName: string) => {
 //   const name = `${fileName}.json`;
@@ -62,14 +63,20 @@ const Main: React.FC = () => {
 
   return (
     <>
-      <MobileSideBar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      <MobileHeader sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      <div className="p-2 sm:py-0 flex justify-center">
-        <div className="hidden lg:block w-72 mr-3 ">
-          <CategoryArea />
-        </div>
-        {isAnalysisMode ? <GraphViolin /> : <Articles />}
-      </div>
+      {isAnalysisMode ? (
+        <AnalysisRoom />
+      ) : (
+        <>
+          <MobileSideBar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+          <MobileHeader sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+          <div className="p-2 sm:py-0 flex justify-center">
+            <div className="hidden lg:block w-72 mr-3 ">
+              <CategoryArea />
+            </div>
+            <Articles />
+          </div>
+        </>
+      )}
     </>
   );
 };
