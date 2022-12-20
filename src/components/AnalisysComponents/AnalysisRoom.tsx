@@ -3,7 +3,12 @@ import { useConfigContext } from '../state/ConfigProvider';
 import BaseButton from '../UtilComponents/BaseButton';
 import { useEventContext } from '../state/EventProvider';
 import { Theme } from '../CategoryComponents/themeList';
-import { EventLog } from '../utilTypes';
+import { CategoryInfo, EventLog } from '../utilTypes';
+
+interface relation {
+  name: string;
+  times: number;
+}
 
 const dateYMD = (ms: number): string[] => {
   const date = new Date(ms * 1000);
@@ -12,6 +17,20 @@ const dateYMD = (ms: number): string[] => {
 
 const tagFilter = (tags: string[]): string[] => {
   return tags.filter((tag) => tag.slice(-1) !== '年' && !tag.includes('さん'));
+};
+
+const relations = (presentations: EventLog[], allCategory: CategoryInfo[], filter: 'person' | 'tag'): relation[] => {
+  const theme = filter === 'person' ? Theme.member : Theme.genre;
+  return allCategory
+    .filter((category) => category.theme === theme)
+    .map((relation) => {
+      return {
+        name: relation.category,
+        times: presentations.filter((eventLog) => eventLog.tagList.includes(relation.category)).length,
+      };
+    })
+    .filter((presenter) => presenter.times !== 0)
+    .sort((a, b) => b.times - a.times);
 };
 
 const AnalysisRoom: React.FC = (props) => {
@@ -81,10 +100,31 @@ const AnalysisRoom: React.FC = (props) => {
             ))}
         </select>
       </header>
-      <div className="bg-white p-4 flex" style={{ height: '55vh' }}>
-        <div className="w-2/6">graphArea</div>
-        <div className="w-2/6">てｓｔ</div>
-        <div className="w-2/6">該当情報リストエリア</div>
+      <div className="bg-gray-200 p-4 flex" style={{ height: '55vh' }}>
+        <div className="bg-white w-4/12">graphArea</div>
+        <div className="bg-white w-4/12 mx-1.5">てｓｔ</div>
+        <div className="bg-white w-1/12 mx-1.5">
+          <h2 className="bg-orange-100">発表回数</h2>
+          <ul className="overflow-y-scroll" style={{ height: '49vh' }}>
+            {relations(presentations, allCategory, 'person').map((relation) => (
+              <li key={relation.name}>
+                <span>{relation.name}:</span>
+                <span>{relation.times}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="bg-white w-1/12 mx-1.5">
+          <h2 className="bg-orange-100">発表タグ数</h2>
+          <ul className="overflow-y-scroll" style={{ height: '49vh' }}>
+            {relations(presentations, allCategory, 'tag').map((relation) => (
+              <li key={relation.name}>
+                <span>{relation.name}:</span>
+                <span>{relation.times}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
       <div className="p-4 bg-gray-200 w-full border-t border-gray-500 box-border flex justify-center" style={{ height: '40vh' }}>
         <div className="overflow-y-scroll">
