@@ -191,7 +191,7 @@ const AnalysisRoom: React.FC = (props) => {
                 発表年:<span className="font-bold text-2xl">{year}</span>, 発表者:<span className="font-bold text-2xl">{person}</span>,
               </p>
               <p className="pl-4 pr-4">
-                指定タグ:<span className="font-bold text-2xl">{selectTag}</span> における傾向としては、
+                指定タグ:<span className="font-bold text-2xl">{selectTag}</span> の傾向として、
               </p>
               <p className="pl-4 pr-4 pt-2">
                 <span className={'font-bold text-2xl ' + (socialScore > 0 ? 'text-emerald-500' : 'text-orange-500')}>
@@ -201,12 +201,12 @@ const AnalysisRoom: React.FC = (props) => {
               </p>
               <p className="pl-4 pr-4">
                 <span className={'font-bold text-2xl ' + (educateScore > 0 ? 'text-emerald-500' : 'text-orange-500')}>
-                  {educateScore > 0 ? '教養に富んだ' : '実生活に活かしやすい'}
+                  {educateScore > 0 ? '教養に富んだ ' : '実生活に活かしやすい '}
                 </span>
               </p>
               <p className="pl-4 pr-4">
                 <span className={'font-bold text-2xl ' + (lectureScore > 0 ? 'text-emerald-500' : 'text-orange-500')}>
-                  {lectureScore > 0 ? '参加型' : '講義型'}
+                  {lectureScore > 0 ? ' 参加型' : ' 講義型'}
                 </span>
                 の発表が多いです。
               </p>
