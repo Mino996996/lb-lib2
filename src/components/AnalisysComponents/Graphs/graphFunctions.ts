@@ -1,34 +1,26 @@
 import { Color, PlotData } from 'plotly.js';
 import { CategoryInfo, EventLog } from '../../utilTypes';
+import { Score } from './Score';
+import { Theme } from '../../CategoryComponents/themeList';
 
-export enum Tend {
-  social,
-  education,
-  join,
+interface relation {
+  name: string;
+  times: number;
 }
 
-// 傾向値の計算用
-export const scores = (
-  allUrl: EventLog[],
-  allCategory: CategoryInfo[],
-  person: string | 'all',
-  year: string | 'all',
-  tend: Tend
-): number[] => {
-  let urls = allUrl;
-  if (person !== 'all') {
-    urls = urls.filter((value) => value.tagList.includes(person));
-  }
-  if (year !== 'all') {
-    urls = urls.filter((value) => value.tagList.includes(year));
-  }
-  return urls.map((v) => {
+export const colorHex = (r: number, g: number, b: number): string => {
+  return `#${(r % 255).toString(16)}${(g % 255).toString(16)}${(b % 255).toString(16)}`;
+};
+
+// 発表の数値化 => グラフのXかY座標リスト。傾向分析用にも使用中
+export const totalScores = (eventLogs: EventLog[], allCategories: CategoryInfo[], type: Score): number[] => {
+  return eventLogs.map((v) => {
     let score = 0;
     for (const tag of v.tagList) {
-      if (!tag.includes('さん') && !tag.includes('年')) {
-        const mainTag = allCategory.find((value) => value.category === tag);
+      if (!tag.includes('さん') && tag.slice(-1) !== '年') {
+        const mainTag = allCategories.find((value) => value.category === tag);
         if (mainTag?.point?.length != null) {
-          score += mainTag.point[tend];
+          score += mainTag.point[type];
         }
       }
     }
@@ -36,38 +28,17 @@ export const scores = (
   });
 };
 
-// 各タイトルの抽出用
-const titles = (allUrl: EventLog[], allCategory: CategoryInfo[], person: string | 'all', year: string | 'all'): string[] => {
-  let urls = allUrl;
-  if (person !== 'all') {
-    urls = urls.filter((value) => value.tagList.includes(person));
-  }
-  if (year !== 'all') {
-    urls = urls.filter((value) => value.tagList.includes(year));
-  }
-  return urls.map((v) => v.title);
-};
-
-export const colorHex = (r: number, g: number, b: number): string => {
-  return `#${(r % 255).toString(16)}${(g % 255).toString(16)}${(b % 255).toString(16)}`;
-};
-
-// ３次元グラフの必要データオブジェクトを作る
-export const threeScatterData = (
-  allUrl: EventLog[],
-  allCategory: CategoryInfo[],
-  person: string | 'all',
-  year: string | 'all',
-  color: Color
-): Partial<PlotData> => {
-  return {
-    type: 'scatter3d',
-    x: scores(allUrl, allCategory, person, year, Tend.social),
-    y: scores(allUrl, allCategory, person, year, Tend.education),
-    z: scores(allUrl, allCategory, person, year, Tend.join),
-    marker: { symbol: 'circle', opacity: 1, size: 3, color },
-    mode: 'markers',
-    text: titles(allUrl, allCategory, person, year),
-    name: person,
-  };
+// 発表者またはタグの名前と登場回数のオブジェクトを返す
+export const relations = (presentations: EventLog[], allCategory: CategoryInfo[], filter: 'person' | 'tag'): relation[] => {
+  const theme = filter === 'person' ? Theme.member : Theme.genre;
+  return allCategory
+    .filter((category) => category.theme === theme)
+    .map((relation) => {
+      return {
+        name: relation.category,
+        times: presentations.filter((eventLog) => eventLog.tagList.includes(relation.category)).length,
+      };
+    })
+    .filter((presenter) => presenter.times !== 0)
+    .sort((a, b) => b.times - a.times);
 };
