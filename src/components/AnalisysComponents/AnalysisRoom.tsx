@@ -10,9 +10,8 @@ interface relation {
   times: number;
 }
 
-const dateYMD = (ms: number): string[] => {
-  const date = new Date(ms * 1000);
-  return date.toLocaleDateString().split('/');
+const dateYMD = (ms: number): Date => {
+  return new Date(ms * 1000);
 };
 
 const tagFilter = (tags: string[]): string[] => {
@@ -57,7 +56,7 @@ const AnalysisRoom: React.FC = (props) => {
 
   return (
     <>
-      <header className="p-4" style={{ height: '5vh' }}>
+      <header className="p-4" style={{ height: '7vh' }}>
         <BaseButton onClickCallback={() => setIsAnalysisMode(false)} name={'蔵書室へ'} />
         <label className="text-white" htmlFor="">
           発表年：
@@ -100,12 +99,12 @@ const AnalysisRoom: React.FC = (props) => {
             ))}
         </select>
       </header>
-      <div className="bg-gray-200 p-4 flex" style={{ height: '55vh' }}>
+      <div className="bg-gray-200 p-4 flex" style={{ height: '53vh' }}>
         <div className="bg-white w-4/12">graphArea</div>
         <div className="bg-white w-4/12 mx-1.5">てｓｔ</div>
         <div className="bg-white w-1/12 mx-1.5">
           <h2 className="bg-orange-100">発表回数</h2>
-          <ul className="overflow-y-scroll" style={{ height: '49vh' }}>
+          <ul className="overflow-y-scroll" style={{ height: '46vh' }}>
             {relations(presentations, allCategory, 'person').map((relation) => (
               <li key={relation.name}>
                 <span>{relation.name}:</span>
@@ -114,9 +113,9 @@ const AnalysisRoom: React.FC = (props) => {
             ))}
           </ul>
         </div>
-        <div className="bg-white w-1/12 mx-1.5">
+        <div className="bg-white mx-1.5" style={{ minWidth: 200 }}>
           <h2 className="bg-orange-100">発表タグ数</h2>
-          <ul className="overflow-y-scroll" style={{ height: '49vh' }}>
+          <ul className="overflow-y-scroll" style={{ height: '46vh' }}>
             {relations(presentations, allCategory, 'tag').map((relation) => (
               <li key={relation.name}>
                 <span>{relation.name}:</span>
@@ -137,19 +136,18 @@ const AnalysisRoom: React.FC = (props) => {
               <th>月</th>
               <th>日</th>
               <th>タグ</th>
-              <th>発表傾向</th>
-              <th>リンク</th>
+              <th>資料</th>
             </tr>
             {presentations.map((event, index) => (
               <tr key={index} className={index % 2 === 0 ? 'bg-gray-100' : ''}>
                 <td className="px-1.5 py-1">{presentations.length - index}</td>
                 <td className="px-1.5">
-                  <p className="w-72 truncate">{event.title}</p>
+                  <p className="w-60 truncate">{event.title}</p>
                 </td>
                 <td className="px-1.5 text-center">{event.tagList.filter((tag) => tag.includes('さん'))}</td>
-                <td className="px-1.5 text-right">{dateYMD(event.addTime)[0]}年</td>
-                <td className="px-1.5 text-right">{dateYMD(event.addTime)[1]}月</td>
-                <td className="px-1.5 text-right">{dateYMD(event.addTime)[2]}日</td>
+                <td className="px-1.5 text-right">{dateYMD(event.addTime).getFullYear()}</td>
+                <td className="px-1.5 text-right">{dateYMD(event.addTime).getMonth() + 1}</td>
+                <td className="px-1.5 text-right">{dateYMD(event.addTime).getDate()}</td>
                 <td className="px-1.5">
                   <p className="">
                     {tagFilter(event.tagList).map((tag, index) => (
@@ -157,11 +155,10 @@ const AnalysisRoom: React.FC = (props) => {
                     ))}
                   </p>
                 </td>
-                <td className="px-1.5"></td>
                 <td className="px-1.5 text-center">
                   {event.fileUrl !== '' ? (
                     <a className="cursor-pointer text-blue-600" href={event.fileUrl} rel="noreferrer" target="_blank">
-                      資料
+                      DL
                     </a>
                   ) : (
                     ''
