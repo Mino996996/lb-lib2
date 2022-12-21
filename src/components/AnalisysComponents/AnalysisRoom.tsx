@@ -3,7 +3,7 @@ import { useConfigContext } from '../state/ConfigProvider';
 import BaseButton from '../UtilComponents/BaseButton';
 import { useEventContext } from '../state/EventProvider';
 import { Theme } from '../CategoryComponents/themeList';
-import { CategoryInfo, EventLog } from '../utilTypes';
+import { EventLog } from '../utilTypes';
 import Scatter2D from './Graphs/Scatter2D';
 import { Score } from './Graphs/Score';
 import { relations, totalScores } from './Graphs/graphFunctions';
@@ -21,7 +21,7 @@ const AnalysisRoom: React.FC = (props) => {
   const { allEventLogs, allCategory } = useEventContext();
   const [year, setYear] = useState('すべて');
   const [person, setPerson] = useState('すべて');
-  const [selectTag, setSelectTag] = useState('なし');
+  const [selectTag, setSelectTag] = useState('すべて');
   const [presentations, setPresentations] = useState<EventLog[]>([]);
   const [socialScore, setSocialScore] = useState(0);
   const [educateScore, setEducateScore] = useState(0);
@@ -35,13 +35,26 @@ const AnalysisRoom: React.FC = (props) => {
     if (person !== 'すべて') {
       eventLogs = eventLogs.filter((eventLog) => eventLog.tagList.includes(person));
     }
-    if (selectTag !== 'なし') {
+    if (selectTag !== 'すべて') {
       eventLogs = eventLogs.filter((eventLogs) => eventLogs.tagList.includes(selectTag));
     }
-    setPresentations(eventLogs.sort((a, b) => b.addTime - a.addTime));
-    setSocialScore(totalScores(eventLogs, allCategory, Score.Socially).reduce((pre, cur) => pre + cur) / eventLogs.length);
-    setEducateScore(totalScores(eventLogs, allCategory, Score.Educated).reduce((pre, cur) => pre + cur) / eventLogs.length);
-    setLectureScore(totalScores(eventLogs, allCategory, Score.Lecture).reduce((pre, cur) => pre + cur) / eventLogs.length);
+    if (eventLogs.length === 0) {
+      alert('該当する発表がありません');
+      setYear('すべて');
+      setPerson('すべて');
+      setSelectTag('すべて');
+    } else {
+      setPresentations(eventLogs.sort((a, b) => b.addTime - a.addTime));
+      setSocialScore(
+        totalScores(eventLogs, allCategory, Score.Socially).reduce((pre: number, cur: number) => pre + cur) / eventLogs.length
+      );
+      setEducateScore(
+        totalScores(eventLogs, allCategory, Score.Educated).reduce((pre: number, cur: number) => pre + cur) / eventLogs.length
+      );
+      setLectureScore(
+        totalScores(eventLogs, allCategory, Score.Lecture).reduce((pre: number, cur: number) => pre + cur) / eventLogs.length
+      );
+    }
   }, [year, person, selectTag]);
 
   return (
@@ -51,7 +64,7 @@ const AnalysisRoom: React.FC = (props) => {
         <label className="text-white ml-3" htmlFor="">
           発表年：
         </label>
-        <select onChange={(e) => setYear(e.target.value)}>
+        <select onChange={(e) => setYear(e.target.value)} value={year}>
           <option value="すべて">すべて</option>
           {allCategory
             .filter((value) => value.theme === Theme.year)
@@ -65,7 +78,7 @@ const AnalysisRoom: React.FC = (props) => {
         <label className="text-white ml-3" htmlFor="">
           発表者：
         </label>
-        <select onChange={(e) => setPerson(e.target.value)}>
+        <select onChange={(e) => setPerson(e.target.value)} value={person}>
           <option value="すべて">すべて</option>
           {allCategory
             .filter((value) => value.theme === Theme.member)
@@ -78,92 +91,101 @@ const AnalysisRoom: React.FC = (props) => {
         <label className="text-white ml-3" htmlFor="">
           メインタグ：
         </label>
-        <select onChange={(e) => setSelectTag(e.target.value)}>
-          <option value="なし">すべて</option>
+        <select onChange={(e) => setSelectTag(e.target.value)} value={selectTag}>
+          <option value="すべて">すべて</option>
           {allCategory
             .filter((value) => value.theme === Theme.genre)
-            .map((year, index) => (
-              <option key={index} value={year.category}>
-                {year.category}
+            .map((v, index) => (
+              <option key={index} value={v.category}>
+                {v.category}
               </option>
             ))}
         </select>
       </header>
-      <div className="bg-gray-200 p-4 flex" style={{ height: '53vh' }}>
-        <div className="bg-white w-3/12 mx-1.5">
+      <div className="bg-gray-200 p-4 flex justify-around" style={{ height: '53vh' }}>
+        <div className="bg-white w-3/12">
           <Scatter2D eventLogs={presentations} categories={allCategory} type={1} />
         </div>
-        <div className="bg-white w-3/12 mx-1.5">
+        <div className="bg-white w-3/12">
           <Scatter2D eventLogs={presentations} categories={allCategory} type={2} />
         </div>
-        <div className="bg-white w-3/12 mx-1.5">
+        <div className="bg-white w-3/12">
           <Scatter2D eventLogs={presentations} categories={allCategory} type={3} />
         </div>
-        <div className="bg-white w-1/12 mx-1.5">
-          <h2 className="bg-blue-200">発表回数</h2>
-          <ul className="overflow-y-scroll" style={{ height: '46vh' }}>
-            {relations(presentations, allCategory, 'person').map((relation) => (
-              <li key={relation.name}>
-                <span>{relation.name}:</span>
-                <span>{relation.times}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="bg-white mx-1.5" style={{ minWidth: 180 }}>
-          <h2 className="bg-blue-200">発表タグ数</h2>
-          <ul className="overflow-y-scroll" style={{ height: '46vh' }}>
-            {relations(presentations, allCategory, 'tag').map((relation) => (
-              <li key={relation.name}>
-                <span>{relation.name}:</span>
-                <span>{relation.times}</span>
-              </li>
-            ))}
-          </ul>
+        <div className="w-2/12 flex flex-col">
+          <div className="bg-white mb-auto">
+            <h2 className="bg-orange-200">発表タグ数</h2>
+            <ul className="overflow-y-scroll edit-scrollbar" style={{ height: '21vh' }}>
+              {relations(presentations, allCategory, 'tag').map((relation) => (
+                <li key={relation.name}>
+                  <span>{relation.name}:</span>
+                  <span>{relation.times}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="bg-white">
+            <h2 className="bg-orange-200">発表回数</h2>
+            <ul className="overflow-y-scroll edit-scrollbar" style={{ height: '21vh' }}>
+              {relations(presentations, allCategory, 'person').map((relation) => (
+                <li key={relation.name}>
+                  <span>{relation.name}:</span>
+                  <span>{relation.times}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
       <div className="p-4 bg-gray-200 w-full border-t border-gray-500 box-border flex justify-center" style={{ height: '40vh' }}>
-        <div className="overflow-y-scroll">
-          <table className="text-sm bg-white">
-            <tr>
-              <th>№</th>
-              <th>タイトル</th>
-              <th>発表者</th>
-              <th>年</th>
-              <th>月</th>
-              <th>日</th>
-              <th>タグ</th>
-              <th>資料</th>
-            </tr>
-            {presentations.map((event, index) => (
-              <tr key={index} className={index % 2 === 0 ? 'bg-gray-100' : ''}>
-                <td className="px-1.5 py-1">{presentations.length - index}</td>
-                <td className="px-1.5">
-                  <p className="w-60 truncate">{event.title}</p>
-                </td>
-                <td className="px-1.5 text-center">{event.tagList.filter((tag) => tag.includes('さん'))}</td>
-                <td className="px-1.5 text-right">{dateYMD(event.addTime).getFullYear()}</td>
-                <td className="px-1.5 text-right">{dateYMD(event.addTime).getMonth() + 1}</td>
-                <td className="px-1.5 text-right">{dateYMD(event.addTime).getDate()}</td>
-                <td className="px-1.5">
-                  <p className="">
-                    {tagFilter(event.tagList).map((tag, index) => (
-                      <span key={index}>{tag}, </span>
-                    ))}
-                  </p>
-                </td>
-                <td className="px-1.5 text-center">
-                  {event.fileUrl !== '' ? (
-                    <a className="cursor-pointer text-blue-600" href={event.fileUrl} rel="noreferrer" target="_blank">
-                      DL
-                    </a>
-                  ) : (
-                    ''
-                  )}
-                </td>
-              </tr>
-            ))}
-          </table>
+        <div className="bg-white">
+          <h2 className="bg-blue-200 pl-4 pr-4">該当した発表リスト</h2>
+          <div className="overflow-y-scroll edit-scrollbar" style={{ height: '34vh' }}>
+            <table className="text-sm bg-white">
+              <tbody>
+                <tr>
+                  <th>№</th>
+                  <th>タイトル</th>
+                  <th>発表者</th>
+                  <th>年</th>
+                  <th>月</th>
+                  <th>日</th>
+                  <th>タグ</th>
+                  <th>資料</th>
+                </tr>
+              </tbody>
+              <tbody>
+                {presentations.map((event, index) => (
+                  <tr key={index} className={index % 2 === 0 ? 'bg-gray-100' : ''}>
+                    <td className="px-1.5 py-1">{presentations.length - index}</td>
+                    <td className="px-1.5">
+                      <p className="w-60 truncate">{event.title}</p>
+                    </td>
+                    <td className="px-1.5 text-center">{event.tagList.filter((tag) => tag.includes('さん'))}</td>
+                    <td className="px-1.5 text-right">{dateYMD(event.addTime).getFullYear()}</td>
+                    <td className="px-1.5 text-right">{dateYMD(event.addTime).getMonth() + 1}</td>
+                    <td className="px-1.5 text-right">{dateYMD(event.addTime).getDate()}</td>
+                    <td className="px-1.5">
+                      <p className="">
+                        {tagFilter(event.tagList).map((tag, index) => (
+                          <span key={index}>{tag}, </span>
+                        ))}
+                      </p>
+                    </td>
+                    <td className="px-1.5 text-center">
+                      {event.fileUrl !== '' ? (
+                        <a className="cursor-pointer text-blue-600" href={event.fileUrl} rel="noreferrer" target="_blank">
+                          DL
+                        </a>
+                      ) : (
+                        ''
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
         <div className="ml-4 w-4/12">
           <div className="bg-white w-full h-full">
@@ -191,7 +213,7 @@ const AnalysisRoom: React.FC = (props) => {
                 発表年:<span className="font-bold text-2xl">{year}</span>, 発表者:<span className="font-bold text-2xl">{person}</span>,
               </p>
               <p className="pl-4 pr-4">
-                指定タグ:<span className="font-bold text-2xl">{selectTag}</span> の傾向として、
+                指定タグ:<span className="font-bold text-2xl">{selectTag}</span> における傾向としては、
               </p>
               <p className="pl-4 pr-4 pt-2">
                 <span className={'font-bold text-2xl ' + (socialScore > 0 ? 'text-emerald-500' : 'text-orange-500')}>
@@ -201,12 +223,12 @@ const AnalysisRoom: React.FC = (props) => {
               </p>
               <p className="pl-4 pr-4">
                 <span className={'font-bold text-2xl ' + (educateScore > 0 ? 'text-emerald-500' : 'text-orange-500')}>
-                  {educateScore > 0 ? '教養に富んだ ' : '実生活に活かしやすい '}
+                  {educateScore > 0 ? '教養に富んだ' : '実生活に活かしやすい'}
                 </span>
               </p>
               <p className="pl-4 pr-4">
                 <span className={'font-bold text-2xl ' + (lectureScore > 0 ? 'text-emerald-500' : 'text-orange-500')}>
-                  {lectureScore > 0 ? ' 参加型' : ' 講義型'}
+                  {lectureScore > 0 ? '参加型' : '講義型'}
                 </span>
                 の発表が多いです。
               </p>
