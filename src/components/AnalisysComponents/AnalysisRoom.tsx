@@ -26,11 +26,36 @@ const AnalysisRoom: React.FC = (props) => {
   const [socialScore, setSocialScore] = useState(0);
   const [educateScore, setEducateScore] = useState(0);
   const [lectureScore, setLectureScore] = useState(0);
+  const [yearConfig, setYearConfig] = useState('単年');
+  const [startYear, setStartYear] = useState('2013年');
+  const [lastYear, setLastYear] = useState('2022年');
+  const fromYears = allCategory.filter(category => category.theme === Theme.year).map(value => value.category);
+  const sinceYears = allCategory.filter(category => category.theme === Theme.year).map(value => value.category);
+  const [yearRange, setYearRange] = useState(allCategory.filter(category => category.theme === Theme.year).map(value => value.category));
 
   useEffect(() => {
+    const start = Number(startYear.replace('年',''));
+    const last = Number(lastYear.replace('年',''));
+    const range:string[] = []
+    for (let year = start; year <= last; year++) {
+      range.push(String(year) + '年');
+    }
+    setYearRange(range);
+  }, [startYear, lastYear])
+  
+  useEffect(() => {
     let eventLogs = allEventLogs;
-    if (year !== 'すべて') {
-      eventLogs = eventLogs.filter((eventLog) => eventLog.tagList.includes(year));
+    if (yearConfig === "単年") {
+      if (year !== 'すべて') {
+        eventLogs = eventLogs.filter((eventLog) => eventLog.tagList.includes(year));
+      }
+    } else {
+      const list:EventLog[] = []
+      for (const targetYear of yearRange) {
+        const categories = allEventLogs.filter(eventLog => eventLog.tagList.includes(targetYear))
+        list.push(...categories)
+      }
+      eventLogs = list
     }
     if (person !== 'すべて') {
       eventLogs = eventLogs.filter((eventLog) => eventLog.tagList.includes(person));
@@ -55,27 +80,96 @@ const AnalysisRoom: React.FC = (props) => {
         totalScores(eventLogs, allCategory, Score.Lecture).reduce((pre: number, cur: number) => pre + cur) / eventLogs.length
       );
     }
-  }, [year, person, selectTag]);
+  }, [year, person, selectTag, yearRange, yearConfig]);
 
   return (
     <>
       <header className="p-4" style={{ height: '7vh' }}>
         <BaseButton onClickCallback={() => setIsAnalysisMode(false)} name={'蔵書室へ'} />
-        <label className="text-white ml-3" htmlFor="">
-          発表年：
-        </label>
-        <select onChange={(e) => setYear(e.target.value)} value={year}>
-          <option value="すべて">すべて</option>
-          {allCategory
-            .filter((value) => value.theme === Theme.year)
-            .reverse()
-            .map((v, index) => (
-              <option key={index} value={v.category}>
-                {v.category}
-              </option>
-            ))}
-        </select>
-        <label className="text-white ml-3" htmlFor="">
+        <input
+          className="ml-6"
+          type='radio'
+          id="single"
+          value={"単年"}
+          onChange={(e)=>{
+            setYearConfig(e.target.value);
+            setYear("すべて");
+          }}
+          checked={yearConfig === "単年"}
+        />
+        <label htmlFor='single' className="text-white">単年</label>
+        <input
+          className="m-1.5"
+          type='radio'
+          id="multi"
+          value={"期間指定"}
+          onChange={(e)=>setYearConfig(e.target.value)}
+          checked={yearConfig === "期間指定"}
+        />
+        <label htmlFor='multi' className="text-white">期間指定</label>
+  
+        {yearConfig === '単年' ? (
+          <>
+            <label className="text-white ml-3" htmlFor="">
+              発表年：
+            </label>
+            <select onChange={(e) => setYear(e.target.value)} value={year}>
+              <option value="すべて">すべて</option>
+              {allCategory
+                .filter((value) => value.theme === Theme.year)
+                .reverse()
+                .map((v, index) => (
+                  <option key={index} value={v.category}>
+                    {v.category}
+                  </option>
+                ))}
+            </select>
+          </>
+        ):(
+          <>
+            <select
+              onChange={(e) => {
+                if(Number(e.target.value.replace('年','')) >= Number(lastYear.replace('年',''))) {
+                  alert('正しい範囲ではありません');
+                } else {
+                  setStartYear(e.target.value)}
+                }
+              }
+              value={startYear}
+            >
+              {fromYears
+                .map((v, index) => (
+                  <option key={index} value={v}>
+                    {v}
+                  </option>
+                ))
+              }
+            </select>
+            <label className="text-white mx-2" htmlFor="">
+              〜
+            </label>
+            <select
+              onChange={(e) => {
+                if (Number(e.target.value.replace('年', '')) <= Number(startYear.replace('年', ''))) {
+                  alert('正しい範囲ではありません');
+                } else {
+                  setLastYear(e.target.value)
+                }
+              }}
+              value={lastYear}
+            >
+              {sinceYears
+                .map((v, index) => (
+                  <option key={index} value={v}>
+                    {v}
+                  </option>
+                ))
+              }
+            </select>
+          </>
+          )
+        }
+        <label className="text-white ml-8" htmlFor="">
           発表者：
         </label>
         <select onChange={(e) => setPerson(e.target.value)} value={person}>
@@ -210,7 +304,12 @@ const AnalysisRoom: React.FC = (props) => {
             </div>
             <div className="p-1.5 text-xl">
               <p className="pl-4 pr-4">
-                発表年:<span className="font-bold text-2xl">{year}</span>, 発表者:<span className="font-bold text-2xl">{person}</span>,
+                発表年:
+                {yearConfig === "単年"
+                  ? <span className="font-bold text-2xl">{year}</span>
+                  : <span className="font-bold text-2xl">{startYear}〜{lastYear}</span>
+                }
+                , 発表者:<span className="font-bold text-2xl">{person}</span>,
               </p>
               <p className="pl-4 pr-4">
                 指定タグ:<span className="font-bold text-2xl">{selectTag}</span> における傾向としては、
