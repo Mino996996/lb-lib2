@@ -16,11 +16,11 @@ import { useEventContext } from '../../state/EventProvider';
 interface Props {
   initUrlInfo: EventLog;
   mode: 'update' | 'create';
-  setIsEdit: React.Dispatch<React.SetStateAction<boolean>> | null;
+  setIsEdit?: React.Dispatch<React.SetStateAction<boolean>> | null;
 }
 
 // createとupdateを兼ねるコンポーネント。編集時は両立性に注意
-export const FormCard: React.FC<Props> = ({ initUrlInfo, mode, setIsEdit }) => {
+export const FormCard: React.FC<Props> = ({ initUrlInfo, mode, setIsEdit = null }) => {
   const { asc } = useConfigContext();
   const { allEventLogs, setAllEventLogs } = useEventContext();
   const [inputTitle, setInputTitle] = useState(initUrlInfo.title);
