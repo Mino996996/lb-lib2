@@ -1,6 +1,5 @@
 import React, { createContext, Dispatch, ReactNode, useContext, useReducer, useState } from 'react';
 import authReducer, { AuthAction } from './authReducer';
-import { CategoryInfo, EventLog } from '../utilTypes';
 import { checkHasBoolean, checkSelectedCategory, checkSelectedKeywords } from '../../utils/utilFinctions';
 
 interface ConfigContextType {

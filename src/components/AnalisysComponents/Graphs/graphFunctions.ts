@@ -1,4 +1,3 @@
-import { Color, PlotData } from 'plotly.js';
 import { CategoryInfo, EventLog } from '../../utilTypes';
 import { Score } from './Score';
 import { Theme } from '../../CategoryComponents/themeList';

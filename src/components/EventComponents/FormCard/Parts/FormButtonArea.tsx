@@ -10,7 +10,7 @@ interface Props {
   inputTitle: string;
   isInputFieldOpen: boolean;
   setIsInputFieldOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsEdit: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsEdit: React.Dispatch<React.SetStateAction<boolean>> | null;
 }
 
 const FormButtonArea: React.FC<Props> = ({
@@ -20,7 +20,7 @@ const FormButtonArea: React.FC<Props> = ({
   post,
   isInputFieldOpen,
   setIsInputFieldOpen,
-  setIsEdit,
+  setIsEdit = null,
 }) => {
   const { allEventLogs, setAllEventLogs } = useEventContext();
 
@@ -52,10 +52,7 @@ const FormButtonArea: React.FC<Props> = ({
         </button>
       )}
       <button
-        className={
-          'px-4 py-1 bg-purple-600 font-bold text-white rounded ' +
-          (inputTitle !== '' ? '' : 'bg-gray-300 text-gray-600')
-        }
+        className={'px-4 py-1 bg-purple-600 font-bold text-white rounded ' + (inputTitle !== '' ? '' : 'bg-gray-300 text-gray-600')}
         onClick={() => {
           post()
             .then()
@@ -68,8 +65,7 @@ const FormButtonArea: React.FC<Props> = ({
       <button
         className="ml-16 px-2 py-1 bg-gray-600 font-bold text-white rounded "
         onClick={() => {
-          // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-          if (setIsEdit) {
+          if (setIsEdit != null) {
             setIsEdit(false);
           } else {
             setIsInputFieldOpen(!isInputFieldOpen);

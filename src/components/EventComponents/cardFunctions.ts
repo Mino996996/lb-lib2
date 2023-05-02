@@ -57,45 +57,54 @@ export const createInitTagList = (tagList: string[], selectedTag: string): strin
 };
 
 // inputフォームから選択されたファイルのArrayBufferを読み込んで返却
-const readFileData = async (file: File): Promise<any> => {
+const readFileData = async (file: File): Promise<ArrayBuffer> => {
   return await new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = () => {
-      resolve(reader.result);
-    };
-    reader.onerror = (err) => {
-      reject(err);
-    };
+    // 先に読み込み結果ごとの動作を設定すること
+    reader.onload = () => resolve(reader.result as ArrayBuffer);
+    reader.onerror = (err) => reject(err);
     // Blobデータを読み込む
     reader.readAsArrayBuffer(file);
   });
 };
 
 // PDFファイルのパース
-export const createPdfPars = async (data: any): Promise<any> => {
+export const parsePdfData = async (data: Uint8Array): Promise<PDFDocumentProxy> => {
   return await pdfjs.getDocument({
-    data: data as string,
+    data,
     cMapUrl: '/cmaps/',
     cMapPacked: true,
   }).promise;
+  // 補足コメント
+  // getDocument()はPDFDocumentLoadingTaskクラスを返す。このメンバのpromiseプロパティを呼び出している
+  // class PDFDocumentProxy{
+  //   promise: PdfDocumentProxy
+  //   constructor(){}
+  // }
 };
 
-const pdfCanvasData = async (pdfData: any, scale: number, pageNum: number): Promise<HTMLCanvasElement> => {
+const pdfCanvasData = async (pdfData: PDFDocumentProxy, scale: number, pageNum: number): Promise<HTMLCanvasElement> => {
   const canvas = document.createElement('canvas');
   const page = await pdfData.getPage(pageNum);
   const viewport = page.getViewport({ scale });
   const context = canvas.getContext('2d');
+
+  // contextがnullの時は例外を出して以降の処理を止める
+  if (context == null) {
+    throw new Error('Failed to get canvas 2D context');
+  }
+
   canvas.height = viewport.height;
   canvas.width = viewport.width;
-  const imageRef = { canvasContext: context!, viewport };
+  const imageRef = { canvasContext: context, viewport };
   await page.render(imageRef).promise;
   return canvas;
 };
 
 // pdfファイルの1ページ目をBase64データで取得
 export const convertPdfToImages = async (file: File): Promise<string> => {
-  const data = await readFileData(file); // ファイルのArrayBufferデータ取得
-  const pdf = await createPdfPars(data); // PDFファイルのパース
+  const arrayBuffData = await readFileData(file); // ファイルのバイナリデータ取得
+  const pdf = await parsePdfData(new Uint8Array(arrayBuffData)); // Uint8Arrayに変換
   const canvas = await pdfCanvasData(pdf, 0.5, 1); // 1ページ目をcanvasにレンダリング
   // canvasにレンダリングされた画像をファイル化
   const pngImage = canvas.toDataURL(); // 指定がなければPNGのBase64データ

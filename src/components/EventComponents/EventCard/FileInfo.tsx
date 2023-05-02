@@ -3,7 +3,7 @@ import { EventLog } from '../../utilTypes';
 import { FilePreview } from './FileInfoParts/FilePreview';
 import { FileThumbnail } from './FileInfoParts/FileThumbnail';
 import { PDFDocumentProxy } from 'pdfjs-dist';
-import { createPdfPars } from '../cardFunctions';
+import { parsePdfData } from '../cardFunctions';
 
 interface Props {
   urlInfo: EventLog;
@@ -15,15 +15,16 @@ const FileInfo: React.FC<Props> = ({ urlInfo, setVisible }) => {
   const [pdfData, setPdfData] = useState<PDFDocumentProxy | undefined>();
   const [pdfPageNumber, setPdfPageNumber] = useState<number | null>(null);
 
-  // pdfファイルのurlからデータを取得してメモリに保存
+  // pdfファイルのurlからデータを取得→バイナリ化してuint8ビット配列に変換。メモリに保存
   const readPdfData = async (): Promise<void> => {
     if (pdfData == null) {
       const response = await fetch(urlInfo.fileUrl);
-      const pdf = await createPdfPars(await response.arrayBuffer());
-      setPdfData(pdf);
-      setPdfPageNumber(pdf.numPages);
+      const arrayBufferData = await response.arrayBuffer();
+      const parsedPdf = await parsePdfData(new Uint8Array(arrayBufferData));
+      setPdfData(parsedPdf);
+      setPdfPageNumber(parsedPdf.numPages);
     }
-    await setPreview(true);
+    setPreview(true);
   };
 
   // 添付ファイルがあれば資料表示を優先。
@@ -77,9 +78,7 @@ const FileInfo: React.FC<Props> = ({ urlInfo, setVisible }) => {
                 <div className="p-2 w-full h-40 sm:h-auto overflow-hidden border-b border-gray-600 ">
                   <img className="h-full" src={urlInfo.pageImage} alt="" />
                 </div>
-                <p className="p-1.5 sm:p-1 h-14 sm:h-16 overflow-hidden text-xs sm:text-sm">
-                  {urlInfo.pageDescription}
-                </p>
+                <p className="p-1.5 sm:p-1 h-14 sm:h-16 overflow-hidden text-xs sm:text-sm">{urlInfo.pageDescription}</p>
               </a>
             </div>
             <span
