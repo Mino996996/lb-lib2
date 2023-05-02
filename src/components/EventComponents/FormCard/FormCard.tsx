@@ -16,7 +16,7 @@ import { useEventContext } from '../../state/EventProvider';
 interface Props {
   initUrlInfo: EventLog;
   mode: 'update' | 'create';
-  setIsEdit?: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsEdit: React.Dispatch<React.SetStateAction<boolean>> | null;
 }
 
 // createとupdateを兼ねるコンポーネント。編集時は両立性に注意
@@ -141,9 +141,7 @@ export const FormCard: React.FC<Props> = ({ initUrlInfo, mode, setIsEdit }) => {
         }
         await addUrl(urlInfo);
         allEventLogs.push(urlInfo);
-        const newList = asc
-          ? allEventLogs.sort((a, b) => b.addTime - a.addTime)
-          : allEventLogs.sort((a, b) => a.addTime - b.addTime);
+        const newList = asc ? allEventLogs.sort((a, b) => b.addTime - a.addTime) : allEventLogs.sort((a, b) => a.addTime - b.addTime);
         setAllEventLogs([...newList]);
         clearInputData();
         setIsInputFieldOpen(false);
@@ -157,7 +155,7 @@ export const FormCard: React.FC<Props> = ({ initUrlInfo, mode, setIsEdit }) => {
 
   return (
     <>
-      {isInputFieldOpen || !(setIsEdit == null) ? (
+      {isInputFieldOpen || setIsEdit != null ? (
         <div className="pt-4 pb-2 px-1.5 bg-white overflow-hidden shadow rounded-lg">
           {status && <h2 className="text-green-500 text-sm p-2">Now Uploading...</h2>}
           <TitleForm inputTitle={inputTitle} setInputTitle={setInputTitle} />
@@ -191,7 +189,7 @@ export const FormCard: React.FC<Props> = ({ initUrlInfo, mode, setIsEdit }) => {
             inputTitle={inputTitle}
             isInputFieldOpen={isInputFieldOpen}
             setIsInputFieldOpen={setIsInputFieldOpen}
-            setIsEdit={setIsEdit!}
+            setIsEdit={setIsEdit}
           />
         </div>
       ) : (
