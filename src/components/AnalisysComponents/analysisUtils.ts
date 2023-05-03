@@ -13,21 +13,26 @@ export const tagFilter = (tags: string[]): string[] => {
 };
 
 // 発表資料を年でフィルタリング
-export const filterEventLogsByYear = (allEventLogs: EventLog[], yearConfig: string, year: string, yearRange: string[]): EventLog[] => {
-  let eventLogs = allEventLogs;
-  if (yearConfig === '単年') {
-    if (year !== 'すべて') {
-      eventLogs = eventLogs.filter((eventLog) => eventLog.tagList.includes(year));
+export const filterEventLogsByYear = (
+  allEventLogs: EventLog[],
+  isSingleYear: boolean,
+  selectedYear: string,
+  yearRange: string[]
+): EventLog[] => {
+  // 単年指定時
+  if (isSingleYear) {
+    if (selectedYear !== 'すべて') {
+      return allEventLogs.filter((eventLog) => eventLog.tagList.includes(selectedYear));
     }
-  } else {
-    const list = [];
-    for (const targetYear of yearRange) {
-      const categories = allEventLogs.filter((eventLog) => eventLog.tagList.includes(targetYear));
-      list.push(...categories);
-    }
-    eventLogs = list;
+    return allEventLogs;
   }
-  return eventLogs;
+  // 範囲指定時
+  const list = [];
+  for (const targetYear of yearRange) {
+    const categories = allEventLogs.filter((eventLog) => eventLog.tagList.includes(targetYear));
+    list.push(...categories);
+  }
+  return list;
 };
 
 // 発表資料をタグでフィルタフィング

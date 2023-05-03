@@ -1,4 +1,4 @@
-import { dateYMD, filterEventLogsByYear } from './analysisUtils';
+import { dateYMD, filterEventLogsByTags, filterEventLogsByYear } from './analysisUtils';
 import { EVENT_SAMPLES } from '../../fixtures/samples/samples';
 import { EventLog } from '../utilTypes';
 
@@ -24,31 +24,31 @@ describe('analysisUtils', () => {
 
   describe('filterEventLogsByYear', () => {
     // 前提：EventLogリストは昇順にソートされたものがやってくる。EVENT_SAMPLEも対応済み
-    it('year==すべて, yearConfig==単年で、素のEventLogリストが返ってくる', () => {
+    it('year=すべて, isSingleYear=trueで、素のEventLogリストが返ってくる', () => {
       const expectedResult: EventLog[] = EVENT_SAMPLES;
-      const yearConfig = '単年';
+      const isSingleYear = true;
       const year = 'すべて';
       const yearRange = ['この条件のとき、ここに何が入っててもエラーにならない'];
 
-      expect(filterEventLogsByYear(EVENT_SAMPLES, yearConfig, year, yearRange)).toEqual(expectedResult);
+      expect(filterEventLogsByYear(EVENT_SAMPLES, isSingleYear, year, yearRange)).toEqual(expectedResult);
     });
 
-    it('year==任意の年, yearConfig==単年で、該当年でフィルターされたEventLogリストが返ってくる', () => {
+    it('year=任意の年, isSingleYear=trueで、該当年でフィルターされたEventLogリストが返ってくる', () => {
       const expectedResult: EventLog[] = [EVENT_SAMPLES[0]];
-      const yearConfig = '単年';
+      const isSingleYear = true;
       const year = '2013年';
       const yearRange = ['この条件のとき、ここに何が入っててもエラーにならない'];
 
-      expect(filterEventLogsByYear(EVENT_SAMPLES, yearConfig, year, yearRange)).toEqual(expectedResult);
+      expect(filterEventLogsByYear(EVENT_SAMPLES, isSingleYear, year, yearRange)).toEqual(expectedResult);
     });
 
-    it('year=なんでも, yearConfig!=単年、yearRange=[はじめ、おわり]で該当範囲年でフィルターされたEventLogリストが返ってくる', () => {
+    it('year=なんでも, isSingleYear=false、yearRange=[はじめ~おわり]で該当範囲年でフィルターされたEventLogリストが返ってくる', () => {
       const expectedResult: EventLog[] = [EVENT_SAMPLES[1], EVENT_SAMPLES[2]];
-      const yearConfig = '期間指定';
+      const isSingleYear = false;
       const year = 'この条件のとき、ここに何が入っててもエラーにならない';
       const yearRange = ['2016年', '2017年', '2018年', '2019年'];
 
-      expect(filterEventLogsByYear(EVENT_SAMPLES, yearConfig, year, yearRange)).toEqual(expectedResult);
+      expect(filterEventLogsByYear(EVENT_SAMPLES, isSingleYear, year, yearRange)).toEqual(expectedResult);
     });
   });
 });
