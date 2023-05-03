@@ -1,4 +1,4 @@
-export enum Score {
+export enum TendScore {
   Socially,
   Educated,
   Lecture,

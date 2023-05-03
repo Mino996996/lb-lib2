@@ -1,15 +1,14 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
-import { CategoryInfo, EventLog } from '../../utilTypes';
+import { CategoryInfo, EventLog } from '../utilTypes';
 import * as Plotly from 'plotly.js';
-import { Score } from './Score';
-import { totalScores } from './graphFunctions';
+import { TendScore } from './TendScore';
+import { totalScores } from './analysisUtils';
 
 const scatterScores = (eventLogs: EventLog[], allCategories: CategoryInfo[], type: 1 | 2 | 3): Plotly.Data[] => {
   // X軸は社会的/教養的の2種類。Y軸は教養的/講義型の2種で組み合わせているのでこの書き方でOK
-  const xScores =
-    type === 2 ? totalScores(eventLogs, allCategories, Score.Educated) : totalScores(eventLogs, allCategories, Score.Socially);
-  const yScores = type === 1 ? totalScores(eventLogs, allCategories, Score.Educated) : totalScores(eventLogs, allCategories, Score.Lecture);
+  const xScores = type === 2 ? totalScores(eventLogs, allCategories, TendScore.Educated) : totalScores(eventLogs, allCategories, TendScore.Socially);
+  const yScores = type === 1 ? totalScores(eventLogs, allCategories, TendScore.Educated) : totalScores(eventLogs, allCategories, TendScore.Lecture);
   const xAxis = type === 2 ? '実用性-教養性' : '個性的-社会的';
   const yAxis = type === 1 ? '教養性-実用性' : '参加型-講義型';
   return [
