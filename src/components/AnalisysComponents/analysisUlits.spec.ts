@@ -51,4 +51,39 @@ describe('analysisUtils', () => {
       expect(filterEventLogsByYear(EVENT_SAMPLES, isSingleYear, year, yearRange)).toEqual(expectedResult);
     });
   });
+
+  describe('filterEventLogsByTags', () => {
+    // 前提：EventLogリストは昇順にソートされたものがやってくる。EVENT_SAMPLEも対応済み
+    it('person=すべて, selectTag=すべてで、素のEventLogリストが返ってくる', () => {
+      const expectedResult: EventLog[] = EVENT_SAMPLES;
+      const person = 'すべて';
+      const selectTag = 'すべて';
+
+      expect(filterEventLogsByTags(EVENT_SAMPLES, person, selectTag)).toEqual(expectedResult);
+    });
+
+    it('person=任意の発表者, selectTag=すべてで、該当発表者のEventLogリストが返ってくる', () => {
+      const expectedResult: EventLog[] = [EVENT_SAMPLES[1]];
+      const person = '垣内さん';
+      const selectTag = 'すべて';
+
+      expect(filterEventLogsByTags(EVENT_SAMPLES, person, selectTag)).toEqual(expectedResult);
+    });
+
+    it('person=すべて, selectTag=任意の発表者で、該当発表者のEventLogリストが返ってくる', () => {
+      const expectedResult: EventLog[] = [EVENT_SAMPLES[1], EVENT_SAMPLES[2]];
+      const person = 'すべて';
+      const selectTag = '教養';
+
+      expect(filterEventLogsByTags(EVENT_SAMPLES, person, selectTag)).toEqual(expectedResult);
+    });
+
+    it('person=任意, selectTag=任意で、被害等の場合は空のリストが返ってくる', () => {
+      const expectedResult: EventLog[] = [];
+      const person = 'ボブさん';
+      const selectTag = 'すべて';
+
+      expect(filterEventLogsByTags(EVENT_SAMPLES, person, selectTag)).toEqual(expectedResult);
+    });
+  });
 });
