@@ -1,4 +1,4 @@
-import { createYearList, dateYMD, filterEventLogsByTags, filterEventLogsByYear } from './analysisUtils';
+import { createYearList, createYearRange, dateYMD, filterEventLogsByTags, filterEventLogsByYear } from './analysisUtils';
 import { EVENT_SAMPLES, CATEGORY_SAMPLES } from '../../fixtures/samples/samples';
 import { EventLog } from '../utilTypes';
 
@@ -92,6 +92,22 @@ describe('analysisUtils', () => {
       const expectedResult: string[] = ['2013年', '2014年', '2015年'];
 
       expect(createYearList(CATEGORY_SAMPLES)).toEqual(expectedResult);
+    });
+  });
+
+  describe('createYearRange', () => {
+    it('startYear～lastYearの範囲で1年毎の"○○年"という文字列配列を返す', () => {
+      const expectResult = ['2010年', '2011年', '2012年', '2013年', '2014年'];
+      const startYear = '2010年';
+      const lastYear = '2014年';
+
+      expect(createYearRange(startYear, lastYear)).toEqual(expectResult);
+    });
+
+    it('startYearとlastYearに規定外の入力があったらエラーを投げる', () => {
+      const startYear = '2010';
+      const lastYear = '2014年';
+      expect(() => createYearRange(startYear, lastYear)).toThrow('入力に誤りがあります。\n start：2010\n last:2014年');
     });
   });
 });

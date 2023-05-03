@@ -13,12 +13,7 @@ export const tagFilter = (tags: string[]): string[] => {
 };
 
 // 発表資料を年でフィルタリング
-export const filterEventLogsByYear = (
-  allEventLogs: EventLog[],
-  isSingleYear: boolean,
-  selectedYear: string,
-  yearRange: string[]
-): EventLog[] => {
+export const filterEventLogsByYear = (allEventLogs: EventLog[], isSingleYear: boolean, selectedYear: string, yearRange: string[]): EventLog[] => {
   // 単年指定時
   if (isSingleYear) {
     if (selectedYear !== 'すべて') {
@@ -49,4 +44,23 @@ export const filterEventLogsByTags = (eventLogs: EventLog[], person: string, sel
 // 発表年選択用
 export const createYearList = (allEventLogs: CategoryInfo[]): string[] => {
   return allEventLogs.filter((category) => category.theme === Theme.year).map((value) => value.category);
+};
+
+// todo：データチェックと処理を分けること
+// 選択年の範囲作成用：ここでデータチェックをする
+export const createYearRange = (startYear: string, lastYear: string): string[] => {
+  const startYearRegex = /^\d{1,4}年$/;
+  const lastYearRegex = /^\d{1,4}年$/;
+
+  if (!startYearRegex.test(startYear) || !lastYearRegex.test(lastYear)) {
+    throw new Error(`入力に誤りがあります。\n start：${startYear}\n last:${lastYear}`);
+  }
+
+  const start = Number(startYear.replace('年', ''));
+  const last = Number(lastYear.replace('年', ''));
+  const range: string[] = [];
+  for (let year = start; year <= last; year++) {
+    range.push(String(year) + '年');
+  }
+  return range;
 };
