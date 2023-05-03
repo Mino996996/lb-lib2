@@ -1,5 +1,5 @@
-import { dateYMD, filterEventLogsByTags, filterEventLogsByYear } from './analysisUtils';
-import { EVENT_SAMPLES } from '../../fixtures/samples/samples';
+import { createYearList, dateYMD, filterEventLogsByTags, filterEventLogsByYear } from './analysisUtils';
+import { EVENT_SAMPLES, CATEGORY_SAMPLES } from '../../fixtures/samples/samples';
 import { EventLog } from '../utilTypes';
 
 describe('analysisUtils', () => {
@@ -84,6 +84,14 @@ describe('analysisUtils', () => {
       const selectTag = 'すべて';
 
       expect(filterEventLogsByTags(EVENT_SAMPLES, person, selectTag)).toEqual(expectedResult);
+    });
+  });
+
+  describe('createYearList', () => {
+    it('該当する年の文字列配列を返す', () => {
+      const expectedResult: string[] = ['2013年', '2014年', '2015年'];
+
+      expect(createYearList(CATEGORY_SAMPLES)).toEqual(expectedResult);
     });
   });
 });
