@@ -1,5 +1,11 @@
 import { CategoryInfo, EventLog } from '../utilTypes';
 import { Theme } from '../CategoryComponents/themeList';
+import { TendScore } from './TendScore';
+
+export interface HitTime {
+  name: string;
+  times: number;
+}
 
 // 年月日の数値取り出し用：msデータを日本時刻のDateに変換
 export const dateYMD = (sec: number): Date => {
@@ -70,4 +76,36 @@ export const validateInputYears = (startYear: string, endYear: string): void => 
   if (start >= end) {
     throw new Error(`範囲の終わりは${startYear}より以降の年を選択してください`);
   }
+};
+
+// 該当発表の指定傾向タイプにおける平均値 => グラフのXかY座標と傾向分析用に使用
+export const averageTendScores = (eventLogs: EventLog[], allCategories: CategoryInfo[], type: TendScore): number => {
+  const sums = eventLogs.map((v) => {
+    let score = 0;
+    for (const tag of v.tagList) {
+      if (!tag.includes('さん') && tag.slice(-1) !== '年') {
+        const mainTag = allCategories.find((value) => value.category === tag);
+        if (mainTag?.point?.length != null) {
+          score += mainTag.point[type];
+        }
+      }
+    }
+    return score;
+  });
+  return sums.reduce((pre: number, cur: number) => pre + cur) / eventLogs.length;
+};
+
+// 発表者またはタグの名前と登場回数のオブジェクトを返す
+export const hitTimes = (presentations: EventLog[], allCategory: CategoryInfo[], filter: 'person' | 'tag'): HitTime[] => {
+  const theme = filter === 'person' ? Theme.member : Theme.genre;
+  return allCategory
+    .filter((category) => category.theme === theme)
+    .map((relation) => {
+      return {
+        name: relation.category,
+        times: presentations.filter((eventLog) => eventLog.tagList.includes(relation.category)).length,
+      };
+    })
+    .filter((presenter) => presenter.times !== 0)
+    .sort((a, b) => b.times - a.times);
 };
