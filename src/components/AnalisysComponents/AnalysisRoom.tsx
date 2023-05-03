@@ -4,83 +4,64 @@ import BaseButton from '../UtilComponents/BaseButton';
 import { useEventContext } from '../state/EventProvider';
 import { Theme } from '../CategoryComponents/themeList';
 import { EventLog } from '../utilTypes';
-import Scatter2D from './Graphs/Scatter2D';
-import { Score } from './Graphs/Score';
-import { relations, totalScores } from './Graphs/graphFunctions';
+import Scatter2D from './Scatter2D';
+import { TendScore } from './TendScore';
+import {
+  averageTendScores,
+  createYearList,
+  createYearRange,
+  dateYMD,
+  filterEventLogsByTags,
+  filterEventLogsByYear,
+  hitTimes,
+  tagFilter,
+  validateInputYears,
+} from './analysisUtils';
 
-const dateYMD = (ms: number): Date => {
-  return new Date(ms * 1000);
-};
-
-const tagFilter = (tags: string[]): string[] => {
-  return tags.filter((tag) => tag.slice(-1) !== '年' && !tag.includes('さん'));
-};
-
-const AnalysisRoom: React.FC = (props) => {
+const AnalysisRoom: React.FC = () => {
   const { setIsAnalysisMode } = useConfigContext();
   const { allEventLogs, allCategory } = useEventContext();
-  const [year, setYear] = useState('すべて');
+  const [selectedYear, setSelectedYear] = useState('すべて');
   const [person, setPerson] = useState('すべて');
-  const [selectTag, setSelectTag] = useState('すべて');
+  const [selectedTag, setSelectedTag] = useState('すべて');
   const [presentations, setPresentations] = useState<EventLog[]>([]);
   const [socialScore, setSocialScore] = useState(0);
   const [educateScore, setEducateScore] = useState(0);
   const [lectureScore, setLectureScore] = useState(0);
-  const [yearConfig, setYearConfig] = useState('単年');
+  const [isSingleYear, setIsSingleYear] = useState(true);
   const [startYear, setStartYear] = useState('2013年');
-  const [lastYear, setLastYear] = useState('2022年');
-  const fromYears = allCategory.filter(category => category.theme === Theme.year).map(value => value.category);
-  const sinceYears = allCategory.filter(category => category.theme === Theme.year).map(value => value.category);
-  const [yearRange, setYearRange] = useState(allCategory.filter(category => category.theme === Theme.year).map(value => value.category));
+  const [endYear, setLastYear] = useState('2023年');
+  const years = createYearList(allCategory);
+  const [yearRange, setYearRange] = useState(years);
 
+  // 発表年範囲リストを更新
   useEffect(() => {
-    const start = Number(startYear.replace('年',''));
-    const last = Number(lastYear.replace('年',''));
-    const range:string[] = []
-    for (let year = start; year <= last; year++) {
-      range.push(String(year) + '年');
+    try {
+      validateInputYears(startYear, endYear);
+      const range = createYearRange(startYear, endYear);
+      setYearRange(range);
+    } catch (error) {
+      alert(error);
     }
-    setYearRange(range);
-  }, [startYear, lastYear])
-  
+  }, [startYear, endYear]);
+
+  // 該当した発表リストから表示する情報を更新
   useEffect(() => {
-    let eventLogs = allEventLogs;
-    if (yearConfig === "単年") {
-      if (year !== 'すべて') {
-        eventLogs = eventLogs.filter((eventLog) => eventLog.tagList.includes(year));
-      }
-    } else {
-      const list:EventLog[] = []
-      for (const targetYear of yearRange) {
-        const categories = allEventLogs.filter(eventLog => eventLog.tagList.includes(targetYear))
-        list.push(...categories)
-      }
-      eventLogs = list
-    }
-    if (person !== 'すべて') {
-      eventLogs = eventLogs.filter((eventLog) => eventLog.tagList.includes(person));
-    }
-    if (selectTag !== 'すべて') {
-      eventLogs = eventLogs.filter((eventLogs) => eventLogs.tagList.includes(selectTag));
-    }
-    if (eventLogs.length === 0) {
+    const filteredEventsByYear = filterEventLogsByYear(allEventLogs, isSingleYear, selectedYear, yearRange);
+    const filteredEvents = filterEventLogsByTags(filteredEventsByYear, person, selectedTag);
+
+    if (filteredEvents.length === 0) {
       alert('該当する発表がありません');
-      setYear('すべて');
+      setSelectedYear('すべて');
       setPerson('すべて');
-      setSelectTag('すべて');
+      setSelectedTag('すべて');
     } else {
-      setPresentations(eventLogs.sort((a, b) => b.addTime - a.addTime));
-      setSocialScore(
-        totalScores(eventLogs, allCategory, Score.Socially).reduce((pre: number, cur: number) => pre + cur) / eventLogs.length
-      );
-      setEducateScore(
-        totalScores(eventLogs, allCategory, Score.Educated).reduce((pre: number, cur: number) => pre + cur) / eventLogs.length
-      );
-      setLectureScore(
-        totalScores(eventLogs, allCategory, Score.Lecture).reduce((pre: number, cur: number) => pre + cur) / eventLogs.length
-      );
+      setPresentations(filteredEvents.sort((a, b) => b.addTime - a.addTime));
+      setSocialScore(averageTendScores(filteredEvents, allCategory, TendScore.Socially));
+      setEducateScore(averageTendScores(filteredEvents, allCategory, TendScore.Educated));
+      setLectureScore(averageTendScores(filteredEvents, allCategory, TendScore.Lecture));
     }
-  }, [year, person, selectTag, yearRange, yearConfig]);
+  }, [selectedYear, person, selectedTag, yearRange, isSingleYear]);
 
   return (
     <>
@@ -88,32 +69,29 @@ const AnalysisRoom: React.FC = (props) => {
         <BaseButton onClickCallback={() => setIsAnalysisMode(false)} name={'蔵書室へ'} />
         <input
           className="ml-6"
-          type='radio'
+          type="radio"
           id="single"
-          value={"単年"}
-          onChange={(e)=>{
-            setYearConfig(e.target.value);
-            setYear("すべて");
+          value={'単年'}
+          onChange={() => {
+            setIsSingleYear(true);
+            setSelectedYear('すべて');
           }}
-          checked={yearConfig === "単年"}
+          checked={isSingleYear}
         />
-        <label htmlFor='single' className="text-white">単年</label>
-        <input
-          className="m-1.5"
-          type='radio'
-          id="multi"
-          value={"期間指定"}
-          onChange={(e)=>setYearConfig(e.target.value)}
-          checked={yearConfig === "期間指定"}
-        />
-        <label htmlFor='multi' className="text-white">期間指定</label>
-  
-        {yearConfig === '単年' ? (
+        <label htmlFor="single" className="text-white">
+          単年
+        </label>
+        <input className="m-1.5" type="radio" id="multi" value={'期間指定'} onChange={() => setIsSingleYear(false)} checked={!isSingleYear} />
+        <label htmlFor="multi" className="text-white">
+          期間指定
+        </label>
+
+        {isSingleYear ? (
           <>
             <label className="text-white ml-3" htmlFor="">
               発表年：
             </label>
-            <select onChange={(e) => setYear(e.target.value)} value={year}>
+            <select onChange={(e) => setSelectedYear(e.target.value)} value={selectedYear}>
               <option value="すべて">すべて</option>
               {allCategory
                 .filter((value) => value.theme === Theme.year)
@@ -125,25 +103,23 @@ const AnalysisRoom: React.FC = (props) => {
                 ))}
             </select>
           </>
-        ):(
+        ) : (
           <>
             <select
               onChange={(e) => {
-                if(Number(e.target.value.replace('年','')) >= Number(lastYear.replace('年',''))) {
+                if (Number(e.target.value.replace('年', '')) >= Number(endYear.replace('年', ''))) {
                   alert('正しい範囲ではありません');
                 } else {
-                  setStartYear(e.target.value)}
+                  setStartYear(e.target.value);
                 }
-              }
+              }}
               value={startYear}
             >
-              {fromYears
-                .map((v, index) => (
-                  <option key={index} value={v}>
-                    {v}
-                  </option>
-                ))
-              }
+              {years.map((v, index) => (
+                <option key={index} value={v}>
+                  {v}
+                </option>
+              ))}
             </select>
             <label className="text-white mx-2" htmlFor="">
               〜
@@ -153,22 +129,19 @@ const AnalysisRoom: React.FC = (props) => {
                 if (Number(e.target.value.replace('年', '')) <= Number(startYear.replace('年', ''))) {
                   alert('正しい範囲ではありません');
                 } else {
-                  setLastYear(e.target.value)
+                  setLastYear(e.target.value);
                 }
               }}
-              value={lastYear}
+              value={endYear}
             >
-              {sinceYears
-                .map((v, index) => (
-                  <option key={index} value={v}>
-                    {v}
-                  </option>
-                ))
-              }
+              {years.map((v, index) => (
+                <option key={index} value={v}>
+                  {v}
+                </option>
+              ))}
             </select>
           </>
-          )
-        }
+        )}
         <label className="text-white ml-8" htmlFor="">
           発表者：
         </label>
@@ -185,7 +158,7 @@ const AnalysisRoom: React.FC = (props) => {
         <label className="text-white ml-3" htmlFor="">
           メインタグ：
         </label>
-        <select onChange={(e) => setSelectTag(e.target.value)} value={selectTag}>
+        <select onChange={(e) => setSelectedTag(e.target.value)} value={selectedTag}>
           <option value="すべて">すべて</option>
           {allCategory
             .filter((value) => value.theme === Theme.genre)
@@ -210,10 +183,10 @@ const AnalysisRoom: React.FC = (props) => {
           <div className="bg-white mb-auto">
             <h2 className="bg-orange-200">発表タグ数</h2>
             <ul className="overflow-y-scroll edit-scrollbar" style={{ height: '21vh' }}>
-              {relations(presentations, allCategory, 'tag').map((relation) => (
-                <li key={relation.name}>
-                  <span>{relation.name}:</span>
-                  <span>{relation.times}</span>
+              {hitTimes(presentations, allCategory, 'tag').map((hitTime) => (
+                <li key={hitTime.name}>
+                  <span>{hitTime.name}:</span>
+                  <span>{hitTime.times}</span>
                 </li>
               ))}
             </ul>
@@ -221,10 +194,10 @@ const AnalysisRoom: React.FC = (props) => {
           <div className="bg-white">
             <h2 className="bg-orange-200">発表回数</h2>
             <ul className="overflow-y-scroll edit-scrollbar" style={{ height: '21vh' }}>
-              {relations(presentations, allCategory, 'person').map((relation) => (
-                <li key={relation.name}>
-                  <span>{relation.name}:</span>
-                  <span>{relation.times}</span>
+              {hitTimes(presentations, allCategory, 'person').map((hitTime) => (
+                <li key={hitTime.name}>
+                  <span>{hitTime.name}:</span>
+                  <span>{hitTime.times}</span>
                 </li>
               ))}
             </ul>
@@ -291,33 +264,30 @@ const AnalysisRoom: React.FC = (props) => {
               </p>
               <p className="pl-4 pr-4">
                 実用型 - 教養型スコア平均：
-                <span className={'font-bold ' + (educateScore > 0 ? 'text-emerald-500' : 'text-orange-500')}>
-                  {educateScore.toFixed(2)}
-                </span>
+                <span className={'font-bold ' + (educateScore > 0 ? 'text-emerald-500' : 'text-orange-500')}>{educateScore.toFixed(2)}</span>
               </p>
               <p className="pl-4 pr-4">
                 参加型 - 講義型スコア平均：
-                <span className={'font-bold ' + (lectureScore > 0 ? 'text-emerald-500' : 'text-orange-500')}>
-                  {lectureScore.toFixed(2)}
-                </span>
+                <span className={'font-bold ' + (lectureScore > 0 ? 'text-emerald-500' : 'text-orange-500')}>{lectureScore.toFixed(2)}</span>
               </p>
             </div>
             <div className="p-1.5 text-xl">
               <p className="pl-4 pr-4">
                 発表年:
-                {yearConfig === "単年"
-                  ? <span className="font-bold text-2xl">{year}</span>
-                  : <span className="font-bold text-2xl">{startYear}〜{lastYear}</span>
-                }
+                {isSingleYear ? (
+                  <span className="font-bold text-2xl">{selectedYear}</span>
+                ) : (
+                  <span className="font-bold text-2xl">
+                    {startYear}〜{endYear}
+                  </span>
+                )}
                 , 発表者:<span className="font-bold text-2xl">{person}</span>,
               </p>
               <p className="pl-4 pr-4">
-                指定タグ:<span className="font-bold text-2xl">{selectTag}</span> における傾向としては、
+                指定タグ:<span className="font-bold text-2xl">{selectedTag}</span> における傾向としては、
               </p>
               <p className="pl-4 pr-4 pt-2">
-                <span className={'font-bold text-2xl ' + (socialScore > 0 ? 'text-emerald-500' : 'text-orange-500')}>
-                  {socialScore > 0 ? '社会的視点' : '個性的視点'}
-                </span>
+                <span className={'font-bold text-2xl ' + (socialScore > 0 ? 'text-emerald-500' : 'text-orange-500')}>{socialScore > 0 ? '社会的視点' : '個性的視点'}</span>
                 のテーマが多く
               </p>
               <p className="pl-4 pr-4">
@@ -326,9 +296,7 @@ const AnalysisRoom: React.FC = (props) => {
                 </span>
               </p>
               <p className="pl-4 pr-4">
-                <span className={'font-bold text-2xl ' + (lectureScore > 0 ? 'text-emerald-500' : 'text-orange-500')}>
-                  {lectureScore > 0 ? '参加型' : '講義型'}
-                </span>
+                <span className={'font-bold text-2xl ' + (lectureScore > 0 ? 'text-emerald-500' : 'text-orange-500')}>{lectureScore > 0 ? '参加型' : '講義型'}</span>
                 の発表が多いです。
               </p>
             </div>
