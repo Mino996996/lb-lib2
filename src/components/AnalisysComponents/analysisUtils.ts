@@ -46,7 +46,6 @@ export const createYearList = (allEventLogs: CategoryInfo[]): string[] => {
   return allEventLogs.filter((category) => category.theme === Theme.year).map((value) => value.category);
 };
 
-// todo：データチェックと処理を分けること
 // 選択年の範囲作成用：ここでデータチェックをする
 export const createYearRange = (startYear: string, endYear: string): string[] => {
   const start = Number(startYear.replace('年', ''));
@@ -58,17 +57,16 @@ export const createYearRange = (startYear: string, endYear: string): string[] =>
   return range;
 };
 
+// 入力値バリデーション
 export const validateInputYears = (startYear: string, endYear: string): void => {
   const startYearRegex = /^\d{1,4}年$/;
   const endYearRegex = /^\d{1,4}年$/;
-
   if (!startYearRegex.test(startYear) || !endYearRegex.test(endYear)) {
     throw new Error(`入力に誤りがあります。\n start：${startYear}\n end:${endYear}`);
   }
 
   const start = Number(startYear.replace('年', ''));
   const end = Number(endYear.replace('年', ''));
-
   if (start >= end) {
     throw new Error(`範囲の終わりは${startYear}より以降の年を選択してください`);
   }
