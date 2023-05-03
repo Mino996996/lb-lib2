@@ -48,7 +48,7 @@ export const EVENT_SAMPLES: EventLog[] = [
     addTime: 1369440000,
     title: '時刻表深読み',
     fileImageUrl: 'https://imageUrl/1',
-    tagList: ['雑学', '時刻表', '趣味', '2013年', '沖藤良さん', '鉄道', 'サブカル'],
+    tagList: ['雑学', '時刻表', '趣味', '2013年', '沖藤良さん', '鉄道', 'サブカル', '長野さん'],
     pageTitle: '',
     fileImageId: 'image/j49rbD9fwaXx_fileImage.png',
     fileId: '20130525_時刻表深読み.pdf',

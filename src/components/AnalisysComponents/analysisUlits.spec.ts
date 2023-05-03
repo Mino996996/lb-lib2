@@ -1,6 +1,7 @@
-import { createYearList, createYearRange, dateYMD, filterEventLogsByTags, filterEventLogsByYear, validateInputYears } from './analysisUtils';
+import { averageTendScores, createYearList, createYearRange, dateYMD, filterEventLogsByTags, filterEventLogsByYear, HitTime, hitTimes, validateInputYears } from './analysisUtils';
 import { EVENT_SAMPLES, CATEGORY_SAMPLES } from '../../fixtures/samples/samples';
 import { EventLog } from '../utilTypes';
+import { TendScore } from './TendScore';
 
 describe('analysisUtils', () => {
   describe('dateYMD', () => {
@@ -116,6 +117,55 @@ describe('analysisUtils', () => {
       const startYear = '2010年';
       const endYear = '2009年';
       expect(() => validateInputYears(startYear, endYear)).toThrow('範囲の終わりは2010年より以降の年を選択してください');
+    });
+  });
+
+  describe('averageTendScores', () => {
+    it('発表リストの傾向ごとの平均社会的スコアを返す', () => {
+      const expectedResult = -0.25;
+      const events = EVENT_SAMPLES;
+      const categories = CATEGORY_SAMPLES;
+      const tendType = TendScore.Socially;
+
+      expect(averageTendScores(events, categories, tendType)).toEqual(expectedResult);
+    });
+
+    it('発表リストの傾向ごとの平均教養的スコアを返す', () => {
+      const expectedResult = -0.175;
+      const events = EVENT_SAMPLES;
+      const categories = CATEGORY_SAMPLES;
+      const tendType = TendScore.Educated;
+
+      expect(averageTendScores(events, categories, tendType)).toEqual(expectedResult);
+    });
+
+    it('発表リストの傾向ごとの平均講義的スコアを返す', () => {
+      const expectedResult = 0.625;
+      const events = EVENT_SAMPLES;
+      const categories = CATEGORY_SAMPLES;
+      const tendType = TendScore.Lecture;
+
+      expect(averageTendScores(events, categories, tendType)).toEqual(expectedResult);
+    });
+  });
+
+  describe('hitTimes', () => {
+    it('発表リストから登録されているメインタグを多い順にして配列で返す', () => {
+      const expectedResult: HitTime[] = [{ name: 'LB活性化', times: 1 }];
+      const events = EVENT_SAMPLES;
+      const categories = CATEGORY_SAMPLES;
+      const filter = 'tag';
+
+      expect(hitTimes(events, categories, filter)).toEqual(expectedResult);
+    });
+
+    it('発表リストから登録されている発表者を多い順にして配列で返す', () => {
+      const expectedResult: HitTime[] = [{ name: '長野さん', times: 1 }];
+      const events = EVENT_SAMPLES;
+      const categories = CATEGORY_SAMPLES;
+      const filter = 'person';
+
+      expect(hitTimes(events, categories, filter)).toEqual(expectedResult);
     });
   });
 });
