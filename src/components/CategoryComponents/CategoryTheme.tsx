@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import CategoryItem from './CategoryItem';
-import { Theme, ThemeOption } from '../themeList';
-import { useEventContext } from '../../state/EventProvider';
+import { Theme, ThemeOption } from './themeList';
+import { useEventContext } from '../state/EventProvider';
 
 interface Props {
   themeOption: ThemeOption;
@@ -21,13 +21,9 @@ const setLocalStorage = (theme: Theme, isOpen: boolean): void => {
 const initSetting = (theme: Theme): boolean => {
   switch (theme) {
     case Theme.genre:
-      return localStorage.getItem('genre') != null
-        ? !(localStorage.getItem('genre') == null)
-        : localStorage.getItem('genre') === null;
+      return localStorage.getItem('genre') != null ? !(localStorage.getItem('genre') == null) : localStorage.getItem('genre') === null;
     case Theme.member:
-      return localStorage.getItem('member') != null
-        ? !(localStorage.getItem('member') == null)
-        : localStorage.getItem('member') === null;
+      return localStorage.getItem('member') != null ? !(localStorage.getItem('member') == null) : localStorage.getItem('member') === null;
     default:
       return true;
   }
@@ -49,11 +45,7 @@ export const CategoryTheme: React.FC<Props> = ({ themeOption }) => {
         {themeOption.text}
         <span className="ml-4">{isOpen ? '-' : '+'}</span>
       </p>
-      {isOpen
-        ? allCategory
-            .filter((value) => value.theme === themeOption.value)
-            .map((categoryInfo) => <CategoryItem key={categoryInfo.id} categoryInfo={categoryInfo} />)
-        : ''}
+      {isOpen ? allCategory.filter((value) => value.theme === themeOption.value).map((categoryInfo) => <CategoryItem key={categoryInfo.id} categoryInfo={categoryInfo} />) : ''}
     </ul>
   );
 };

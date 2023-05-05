@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { categoryDb, checkCategoryName } from '../../../firebase/firebase';
-import { Theme, themeOptions } from '../themeList';
-import { createCategory } from '../../../utils/utilFinctions';
-import { alerts } from '../../../utils/alerts';
-import { useEventContext } from '../../state/EventProvider';
+import { categoryDb, checkCategoryName } from '../../firebase/firebase';
+import { Theme, themeOptions } from './themeList';
+import { createCategory } from '../../utils/utilFinctions';
+import { alerts } from '../../utils/alerts';
+import { useEventContext } from '../state/EventProvider';
 const ID_LENGTH = 12;
 
 const CategoryForm: React.FC = () => {

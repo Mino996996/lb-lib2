@@ -1,12 +1,11 @@
 import React from 'react';
-import { CategoryInfo, EventLog } from '../../utilTypes';
-import { categoryDb } from '../../../firebase/firebase';
-import { useConfigContext } from '../../state/ConfigProvider';
-import { useEventContext } from '../../state/EventProvider';
+import { CategoryInfo, EventLog } from '../utilTypes';
+import { categoryDb } from '../../firebase/firebase';
+import { useConfigContext } from '../state/ConfigProvider';
+import { useEventContext } from '../state/EventProvider';
 
 interface Props {
   categoryInfo: CategoryInfo;
-  isEditMode: boolean;
   setIsEditMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -14,7 +13,7 @@ const containNum = (urlInfos: EventLog[], categoryInfo: CategoryInfo): number =>
   return urlInfos.filter((value) => value.tagList.includes(categoryInfo.category)).length;
 };
 
-const CategoryList: React.FC<Props> = ({ categoryInfo, isEditMode, setIsEditMode }) => {
+const CategoryList: React.FC<Props> = ({ categoryInfo, setIsEditMode }) => {
   const { selectedCategory, setSelectedCategory, setKeywords } = useConfigContext();
   const { allCategory, setAllCategory, allEventLogs } = useEventContext();
 
@@ -39,16 +38,8 @@ const CategoryList: React.FC<Props> = ({ categoryInfo, isEditMode, setIsEditMode
   };
 
   return (
-    <li
-      className={
-        'text-white mr-2 flex justify-between ' +
-        (categoryInfo.category === selectedCategory ? 'bg-gray-600 rounded' : '')
-      }
-    >
-      <span
-        className="ml-2 font-bold text-sm cursor-pointer w-40 overflow-hidden"
-        onClick={() => selectCategory(categoryInfo.category)}
-      >
+    <li className={'text-white mr-2 flex justify-between ' + (categoryInfo.category === selectedCategory ? 'bg-gray-600 rounded' : '')}>
+      <span className="ml-2 font-bold text-sm cursor-pointer w-40 overflow-hidden" onClick={() => selectCategory(categoryInfo.category)}>
         # {categoryInfo.category} ({containNum(allEventLogs, categoryInfo)})
       </span>
       <span className="ml-auto pt-0.5 mr-2.5 text-sm text-gray-400 cursor-pointer" onClick={() => setIsEditMode(true)}>

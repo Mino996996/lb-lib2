@@ -1,30 +1,23 @@
 import React, { useState } from 'react';
-import { CategoryInfo } from '../../utilTypes';
-import { categoryDb, checkCategoryName, getAllCategories, getAllUrls } from '../../../firebase/firebase';
-import { themeOptions } from '../themeList';
-import { useEventContext } from '../../state/EventProvider';
+import { CategoryInfo } from '../utilTypes';
+import { categoryDb, checkCategoryName, getAllCategories, getAllUrls } from '../../firebase/firebase';
+import { themeOptions } from './themeList';
+import { useEventContext } from '../state/EventProvider';
 
 interface Props {
   categoryInfo: CategoryInfo;
-  isEditMode: boolean;
   setIsEditMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CategoryListEdit: React.FC<Props> = ({ categoryInfo, isEditMode, setIsEditMode }) => {
+const CategoryListEdit: React.FC<Props> = ({ categoryInfo, setIsEditMode }) => {
   const { allCategory, setAllCategory, setAllEventLogs } = useEventContext();
   const [categoryName, setCategoryName] = useState(categoryInfo.category);
   const [theme, setTheme] = useState(categoryInfo.theme);
-  const [points, setPoints] = useState(
-    categoryInfo.point?.length != null ? String(categoryInfo.point) : String([0, 0, 0])
-  );
+  const [points, setPoints] = useState(categoryInfo.point?.length != null ? String(categoryInfo.point) : String([0, 0, 0]));
 
   const updateCategory = async (): Promise<void> => {
     // 変化点の有無をチェック
-    if (
-      categoryInfo.category !== categoryName ||
-      categoryInfo.theme !== theme ||
-      String(categoryInfo.point) !== points
-    ) {
+    if (categoryInfo.category !== categoryName || categoryInfo.theme !== theme || String(categoryInfo.point) !== points) {
       const isUniqueName = await checkCategoryName(categoryName);
       const isUnique = isUniqueName || categoryInfo.theme !== theme || String(categoryInfo.point) !== points;
       if (categoryName !== '' && isUnique) {
@@ -99,10 +92,7 @@ const CategoryListEdit: React.FC<Props> = ({ categoryInfo, isEditMode, setIsEdit
       >
         更新
       </button>
-      <button
-        className="ml-4 p-0.5 bg-gray-200 rounded border border-gray-600 cursor-pointer text-sm text-gray-700"
-        onClick={() => setIsEditMode(false)}
-      >
+      <button className="ml-4 p-0.5 bg-gray-200 rounded border border-gray-600 cursor-pointer text-sm text-gray-700" onClick={() => setIsEditMode(false)}>
         閉じる
       </button>
     </div>
