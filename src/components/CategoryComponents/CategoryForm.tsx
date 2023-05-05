@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { categoryDb, checkCategoryName } from '../../firebase/firebase';
 import { Theme, themeOptions } from './themeList';
-import { createCategory } from '../../utils/utilFinctions';
 import { alerts } from '../../utils/alerts';
 import { useEventContext } from '../state/EventProvider';
+import { createCategory } from './categoryUtils';
+import { createId } from '../../utils/utilFinctions';
 const ID_LENGTH = 12;
 
 const CategoryForm: React.FC = () => {
@@ -14,7 +15,8 @@ const CategoryForm: React.FC = () => {
   const addCategory = async (categoryName: string): Promise<string> => {
     const isUniqueName = await checkCategoryName(categoryName);
     if (categoryName !== '' && isUniqueName && !(theme === 0)) {
-      const categoryData = createCategory(ID_LENGTH, categoryName, theme);
+      const uid = createId(ID_LENGTH);
+      const categoryData = createCategory(uid, categoryName, theme);
       await categoryDb.add(categoryData);
       allCategory.push(categoryData);
       setAllCategory([...allCategory.sort((a, b) => a.category.localeCompare(b.category))]);
