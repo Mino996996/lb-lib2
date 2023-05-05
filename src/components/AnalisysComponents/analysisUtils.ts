@@ -78,9 +78,9 @@ export const validateInputYears = (startYear: string, endYear: string): void => 
   }
 };
 
-// 該当発表の指定傾向タイプにおける平均値 => グラフのXかY座標と傾向分析用に使用
-export const averageTendScores = (eventLogs: EventLog[], allCategories: CategoryInfo[], type: TendScore): number => {
-  const sums = eventLogs.map((v) => {
+// 該当発表リストから指定傾向タイプリストを生成
+export const totalScores = (eventLogs: EventLog[], allCategories: CategoryInfo[], type: TendScore): number[] => {
+  return eventLogs.map((v) => {
     let score = 0;
     for (const tag of v.tagList) {
       if (!tag.includes('さん') && tag.slice(-1) !== '年') {
@@ -92,6 +92,11 @@ export const averageTendScores = (eventLogs: EventLog[], allCategories: Category
     }
     return score;
   });
+};
+
+// 該当発表の指定傾向タイプにおける平均値 => グラフのXかY座標と傾向分析用に使用
+export const averageTendScores = (eventLogs: EventLog[], allCategories: CategoryInfo[], type: TendScore): number => {
+  const sums = totalScores(eventLogs, allCategories, type);
   return sums.reduce((pre: number, cur: number) => pre + cur) / eventLogs.length;
 };
 

@@ -1,4 +1,15 @@
-import { averageTendScores, createYearList, createYearRange, dateYMD, filterEventLogsByTags, filterEventLogsByYear, HitTime, hitTimes, validateInputYears } from './analysisUtils';
+import {
+  averageTendScores,
+  createYearList,
+  createYearRange,
+  dateYMD,
+  filterEventLogsByTags,
+  filterEventLogsByYear,
+  HitTime,
+  hitTimes,
+  totalScores,
+  validateInputYears,
+} from './analysisUtils';
 import { EVENT_SAMPLES, CATEGORY_SAMPLES } from '../../fixtures/samples/samples';
 import { EventLog } from '../utilTypes';
 import { TendScore } from './TendScore';
@@ -117,6 +128,17 @@ describe('analysisUtils', () => {
       const startYear = '2010年';
       const endYear = '2009年';
       expect(() => validateInputYears(startYear, endYear)).toThrow('範囲の終わりは2010年より以降の年を選択してください');
+    });
+  });
+
+  describe('totalScores', () => {
+    it('該当発表リストから社会的スコアリストを返す', () => {
+      const expectedResult = [0, 0, 0, -1];
+      const events = EVENT_SAMPLES;
+      const categories = CATEGORY_SAMPLES;
+      const tendType = TendScore.Socially;
+
+      expect(totalScores(events, categories, tendType)).toEqual(expectedResult);
     });
   });
 
