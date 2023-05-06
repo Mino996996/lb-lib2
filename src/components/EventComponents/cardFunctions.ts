@@ -1,4 +1,4 @@
-import { CategoryInfo, EventLog } from '../utilTypes';
+import { CategoryInfo, EventLog } from '../../utils/utilTypes';
 import * as pdfjs from 'pdfjs-dist/legacy/build/pdf';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -140,8 +140,6 @@ export const filterEvent = (allEventLogs: EventLog[], keywords: string[], select
     filteredList = filteredList.filter((value) => value.tagList.includes(selectedCategory));
   }
   // ソート
-  asc
-    ? (filteredList = filteredList.sort((a, b) => b.addTime - a.addTime))
-    : (filteredList = filteredList.sort((a, b) => a.addTime - b.addTime));
+  asc ? (filteredList = filteredList.sort((a, b) => b.addTime - a.addTime)) : (filteredList = filteredList.sort((a, b) => a.addTime - b.addTime));
   return filteredList;
 };

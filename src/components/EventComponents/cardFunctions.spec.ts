@@ -1,6 +1,6 @@
 import { createInitTagList, isCategoryTag, pickRelationalTabs, testABC } from './cardFunctions';
 import { urlInfoList } from '../../fixtures/stab/urlStab';
-import { CategoryInfo } from '../utilTypes';
+import { CategoryInfo } from '../../utils/utilTypes';
 
 describe('cardFunctions.ts', () => {
   it('testABC', () => {
