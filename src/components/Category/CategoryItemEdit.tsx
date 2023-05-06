@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { CategoryInfo } from '../../utils/utilTypes';
 import { categoryDb, checkCategoryName, getAllCategories, getAllUrls } from '../../firebase/firebase';
-import { themeOptions } from './themeList';
 import { useEventContext } from '../state/EventProvider';
+import CategoryTextInput from './CategoryTextInput';
+import CategorySelectInput from './CategorySelectInput';
 
 interface Props {
   categoryInfo: CategoryInfo;
@@ -53,35 +54,9 @@ const CategoryItemEdit: React.FC<Props> = ({ categoryInfo, setIsEditMode }) => {
   // todo:inputのコンポーネント分離
   return (
     <div className="my-2 ml-2">
-      <input
-        className="bg-green-50 w-11/12 pl-2 mb-1 border border-gray-500 rounded text-gray-700"
-        type="text"
-        value={categoryName}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          setCategoryName(e.target.value);
-        }}
-      />
-      <input
-        className="bg-green-50 w-11/12 pl-2 mb-1 border border-gray-500 rounded text-gray-700"
-        type="text"
-        value={String(points)}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          setPoints(e.target.value);
-        }}
-      />
-      <select
-        className="w-6/12 bg-green-50 mt-1 mb-2 text-gray-700"
-        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-          setTheme(Number(e.target.value));
-        }}
-        value={theme}
-      >
-        {themeOptions.map((themeOption) => (
-          <option key={themeOption.value} value={themeOption.value}>
-            {themeOption.text}
-          </option>
-        ))}
-      </select>
+      <CategoryTextInput value={categoryName} setValue={setCategoryName} />
+      <CategoryTextInput value={String(points)} setValue={setPoints} />
+      <CategorySelectInput value={theme} setThemeType={setTheme} />
       <button
         className="ml-4 p-0.5 bg-green-100 rounded border border-gray-600 cursor-pointer text-sm text-gray-700"
         onClick={() => {

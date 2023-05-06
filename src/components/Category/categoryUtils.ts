@@ -1,4 +1,4 @@
-import { CategoryInfo, CategoryType } from '../../utils/utilTypes';
+import { CategoryInfo, CategoryType, EventLog } from '../../utils/utilTypes';
 
 // 登録するカテゴリオブジェクトを作る
 export const createCategory = (id: string, category: string, theme: CategoryType): CategoryInfo => {
@@ -26,5 +26,20 @@ export const validateCategoryForm = (id: string, category: string, theme: Catego
   const memberRegex = /^[.+]さん$/; // 1文字以上の文字+"さん"
   if (theme === CategoryType.member && !memberRegex.test(category)) {
     throw new Error('発表者登録は ○○さん の形で 名前+さん で記入ください');
+  }
+};
+
+export const registeredNumber = (urlInfos: EventLog[], categoryInfo: CategoryInfo): number => {
+  return urlInfos.filter((value) => value.tagList.includes(categoryInfo.category)).length;
+};
+
+export const initSetting = (theme: CategoryType): boolean => {
+  switch (theme) {
+    case CategoryType.genre:
+      return localStorage.getItem('genre') != null ? !(localStorage.getItem('genre') == null) : localStorage.getItem('genre') === null;
+    case CategoryType.member:
+      return localStorage.getItem('member') != null ? !(localStorage.getItem('member') == null) : localStorage.getItem('member') === null;
+    default:
+      return true;
   }
 };
