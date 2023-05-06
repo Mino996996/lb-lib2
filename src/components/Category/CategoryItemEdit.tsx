@@ -56,7 +56,7 @@ const CategoryItemEdit: React.FC<Props> = ({ categoryInfo, setIsEditMode }) => {
     <div className="my-2 ml-2">
       <CategoryTextInput value={categoryName} setValue={setCategoryName} />
       <CategoryTextInput value={String(points)} setValue={setPoints} />
-      <CategorySelectInput value={theme} setThemeType={setTheme} />
+      <CategorySelectInput value={theme} setThemeType={setTheme} className={'w-6/12 bg-green-50 mt-1 mb-2 text-gray-700'} />
       <button
         className="ml-4 p-0.5 bg-green-100 rounded border border-gray-600 cursor-pointer text-sm text-gray-700"
         onClick={() => {
