@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { categoryDb, checkCategoryName } from '../../firebase/firebase';
-import { Theme, themeOptions } from './themeList';
+import { themeOptions } from './themeList';
 import { alerts } from '../../utils/alerts';
 import { useEventContext } from '../state/EventProvider';
 import { createCategory } from './categoryUtils';
 import { createId } from '../../utils/utilFinctions';
+import { CategoryType } from '../../utils/utilTypes';
 const ID_LENGTH = 12;
 
 const CategoryForm: React.FC = () => {
   const { allCategory, setAllCategory } = useEventContext();
   const [categoryName, setCategoryName] = useState<string>('');
-  const [theme, setTheme] = useState<Theme>(Theme.unselected);
+  const [theme, setTheme] = useState<CategoryType>(CategoryType.unselected);
 
+  // todo: if文以下関数化
   const addCategory = async (categoryName: string): Promise<string> => {
     const isUniqueName = await checkCategoryName(categoryName);
     if (categoryName !== '' && isUniqueName && !(theme === 0)) {
@@ -21,7 +23,7 @@ const CategoryForm: React.FC = () => {
       allCategory.push(categoryData);
       setAllCategory([...allCategory.sort((a, b) => a.category.localeCompare(b.category))]);
       setCategoryName('');
-      setTheme(Theme.unselected);
+      setTheme(CategoryType.unselected);
       return 'Done';
     } else {
       return alerts(isUniqueName, categoryName);
@@ -52,10 +54,10 @@ const CategoryForm: React.FC = () => {
           setCategoryName(e.target.value);
         }}
       />
-      {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
       <button
         className="ml-2 p-1 bg-green-200 rounded-lg border border-indigo-400 cursor-pointer text-lg text-gray-700 font-bold"
         onClick={() => {
+          // todo:addCategoryの関数化 try&catchの記述に更新
           addCategory(categoryName)
             .then((result) => {
               if (result !== 'Done') alert(result);

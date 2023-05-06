@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CategoryInfo } from '../utilTypes';
+import { CategoryInfo } from '../../utils/utilTypes';
 import { categoryDb, checkCategoryName, getAllCategories, getAllUrls } from '../../firebase/firebase';
 import { themeOptions } from './themeList';
 import { useEventContext } from '../state/EventProvider';
@@ -9,7 +9,7 @@ interface Props {
   setIsEditMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CategoryListEdit: React.FC<Props> = ({ categoryInfo, setIsEditMode }) => {
+const CategoryItemEdit: React.FC<Props> = ({ categoryInfo, setIsEditMode }) => {
   const { allCategory, setAllCategory, setAllEventLogs } = useEventContext();
   const [categoryName, setCategoryName] = useState(categoryInfo.category);
   const [theme, setTheme] = useState(categoryInfo.theme);
@@ -50,6 +50,7 @@ const CategoryListEdit: React.FC<Props> = ({ categoryInfo, setIsEditMode }) => {
     }
   };
 
+  // todo:inputのコンポーネント分離
   return (
     <div className="my-2 ml-2">
       <input
@@ -81,7 +82,6 @@ const CategoryListEdit: React.FC<Props> = ({ categoryInfo, setIsEditMode }) => {
           </option>
         ))}
       </select>
-      {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
       <button
         className="ml-4 p-0.5 bg-green-100 rounded border border-gray-600 cursor-pointer text-sm text-gray-700"
         onClick={() => {
@@ -99,4 +99,4 @@ const CategoryListEdit: React.FC<Props> = ({ categoryInfo, setIsEditMode }) => {
   );
 };
 
-export default CategoryListEdit;
+export default CategoryItemEdit;

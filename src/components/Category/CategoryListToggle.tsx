@@ -1,13 +1,14 @@
 import React from 'react';
-import { Theme, ThemeOption } from './themeList';
+import { ThemeOption } from './themeList';
+import { CategoryType } from '../../utils/utilTypes';
 
 // todo: move
-const setLocalStorage = (theme: Theme, isOpen: boolean): void => {
+const setLocalStorage = (theme: CategoryType, isOpen: boolean): void => {
   switch (theme) {
-    case Theme.genre:
+    case CategoryType.genre:
       isOpen ? localStorage.setItem('genre', 'true') : localStorage.setItem('genre', '');
       break;
-    case Theme.member:
+    case CategoryType.member:
       isOpen ? localStorage.setItem('member', 'true') : localStorage.setItem('member', '');
       break;
   }

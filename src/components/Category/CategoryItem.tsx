@@ -1,5 +1,5 @@
 import React from 'react';
-import { CategoryInfo, EventLog } from '../utilTypes';
+import { CategoryInfo, EventLog } from '../../utils/utilTypes';
 import { categoryDb } from '../../firebase/firebase';
 import { useConfigContext } from '../state/ConfigProvider';
 import { useEventContext } from '../state/EventProvider';
@@ -9,11 +9,13 @@ interface Props {
   setIsEditMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const containNum = (urlInfos: EventLog[], categoryInfo: CategoryInfo): number => {
+// todo: ロジックファイルに移動する
+const hitCounts = (urlInfos: EventLog[], categoryInfo: CategoryInfo): number => {
   return urlInfos.filter((value) => value.tagList.includes(categoryInfo.category)).length;
 };
 
-const CategoryList: React.FC<Props> = ({ categoryInfo, setIsEditMode }) => {
+// カテゴリ名と編集ボタン込みのコンポーネント
+const CategoryItem: React.FC<Props> = ({ categoryInfo, setIsEditMode }) => {
   const { selectedCategory, setSelectedCategory, setKeywords } = useConfigContext();
   const { allCategory, setAllCategory, allEventLogs } = useEventContext();
 
@@ -40,7 +42,7 @@ const CategoryList: React.FC<Props> = ({ categoryInfo, setIsEditMode }) => {
   return (
     <li className={'text-white mr-2 flex justify-between ' + (categoryInfo.category === selectedCategory ? 'bg-gray-600 rounded' : '')}>
       <span className="ml-2 font-bold text-sm cursor-pointer w-40 overflow-hidden" onClick={() => selectCategory(categoryInfo.category)}>
-        # {categoryInfo.category} ({containNum(allEventLogs, categoryInfo)})
+        # {categoryInfo.category} ({hitCounts(allEventLogs, categoryInfo)})
       </span>
       <span className="ml-auto pt-0.5 mr-2.5 text-sm text-gray-400 cursor-pointer" onClick={() => setIsEditMode(true)}>
         [編集]
@@ -52,4 +54,4 @@ const CategoryList: React.FC<Props> = ({ categoryInfo, setIsEditMode }) => {
   );
 };
 
-export default CategoryList;
+export default CategoryItem;
