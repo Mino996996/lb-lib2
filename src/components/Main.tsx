@@ -7,7 +7,7 @@ import { useConfigContext } from './state/ConfigProvider';
 import { getAllCategories, getAllUrls } from '../firebase/firebase';
 import MobileHeader from './Mobile/MobileHeader';
 import { useEventContext } from './state/EventProvider';
-import AnalysisRoom from './AnalisysComponents/AnalysisRoom';
+import AnalysisRoom from './AnalisysRoom/AnalysisRoom';
 
 // const saveAsJson = (data: any, fileName: string) => {
 //   const name = `${fileName}.json`;
