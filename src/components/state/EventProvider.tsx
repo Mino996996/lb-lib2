@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, useContext, useState } from 'react';
-import { CategoryInfo, EventLog } from '../utilTypes';
+import { CategoryInfo, EventLog } from '../../utils/utilTypes';
 
 interface EventContextType {
   allCategory: CategoryInfo[];

@@ -1,6 +1,6 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
-import { CategoryInfo, EventLog } from '../utilTypes';
+import { CategoryInfo, EventLog } from '../../utils/utilTypes';
 import * as Plotly from 'plotly.js';
 import { TendScore } from './TendScore';
 import { totalScores } from './analysisUtils';

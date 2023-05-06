@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PDFDocumentProxy } from 'pdfjs-dist';
 import { pdfPageImage } from '../../cardFunctions';
-import { EventLog } from '../../../utilTypes';
+import { EventLog } from '../../../../utils/utilTypes';
 
 interface Props {
   urlInfo: EventLog;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { EventLog } from '../../utilTypes';
+import { EventLog } from '../../../utils/utilTypes';
 import { FilePreview } from './FileInfoParts/FilePreview';
 import { FileThumbnail } from './FileInfoParts/FileThumbnail';
 import { PDFDocumentProxy } from 'pdfjs-dist';

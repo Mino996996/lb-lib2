@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import MobileSideBar from './Mobile/MobileSidebar';
-import CategoryArea from './CategoryComponents/CategoryArea';
+import Category from './Category/Category';
 import EventArea from './EventComponents/EventArea';
 import ConfigArea from './ConfigComponents/ConfigArea';
 import { useConfigContext } from './state/ConfigProvider';
@@ -68,7 +68,7 @@ const Main: React.FC = () => {
           <MobileHeader sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
           <div className="p-2 sm:py-0 flex justify-center">
             <div className="hidden lg:block w-72 mr-3 ">
-              <CategoryArea />
+              <Category />
             </div>
             <Articles />
           </div>

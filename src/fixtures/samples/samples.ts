@@ -1,4 +1,4 @@
-import { CategoryInfo, EventLog } from '../../components/utilTypes';
+import { CategoryInfo, EventLog } from '../../utils/utilTypes';
 
 export const CATEGORY_SAMPLES: CategoryInfo[] = [
   {

@@ -4,7 +4,7 @@ import { collection, deleteDoc, doc, getDocs, getFirestore, query, setDoc, updat
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { getStorage, ref, uploadBytes, deleteObject, getDownloadURL } from 'firebase/storage';
 
-import { CategoryInfo, UploadFileData, UploadFileImageData, EventLog } from '../components/utilTypes';
+import { CategoryInfo, UploadFileData, UploadFileImageData, EventLog } from '../utils/utilTypes';
 // import {urlInfoList} from "../fixtures/stab/urlStab";
 import { Obj } from '../components/EventComponents/cardFunctions';
 import { createId } from '../utils/utilFinctions';
