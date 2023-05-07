@@ -122,10 +122,14 @@ export const getAllCategories = async (): Promise<CategoryInfo[]> => {
 };
 
 export const checkCategoryName = async (categoryName: string): Promise<boolean> => {
-  const categoryRef = collection(db, 'category');
-  const q = query(categoryRef, where('category', '==', categoryName));
-  const cateDoc = await getDocs(q);
-  return cateDoc.empty;
+  try {
+    const categoryRef = collection(db, 'category');
+    const q = query(categoryRef, where('category', '==', categoryName));
+    const cateDoc = await getDocs(q);
+    return cateDoc.empty;
+  } catch (error) {
+    throw new Error(`データベース接続に失敗しました \n${String(error)}`);
+  }
 };
 
 // 全URLデータ取得
