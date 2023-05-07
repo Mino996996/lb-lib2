@@ -45,7 +45,22 @@ export const initSetting = (theme: CategoryType): boolean => {
 };
 
 export const validateOnRegisterCategory = (isUniqueName: boolean, categoryName: string, categoryType: CategoryType): void => {
+  // 他の登録名との重複チェック
   if (!isUniqueName) throw new Error('すでにデータベースに登録されています');
+  // 空白入力のチェック
   if (categoryName === '' || categoryName.startsWith(' ') || categoryName.startsWith('　')) throw new Error('空白では登録できません');
+  // 登録先の未選択チェック
   if (categoryType === CategoryType.unselected) throw new Error('分類先を選択してください');
+};
+
+export const validateOnUpdateCategory = (categoryInfo: CategoryInfo, isUniqueName: boolean, categoryName: string, categoryType: CategoryType, points: string): void => {
+  // 変更しており、かつ他の登録名との重複チェック
+  if (categoryInfo.category !== categoryName && isUniqueName) throw new Error('他の登録名と重複しています');
+  // 空白入力のチェック
+  if (categoryName === '' || categoryName.startsWith(' ') || categoryName.startsWith('　')) throw new Error('空白では登録できません');
+  // 登録先の未選択チェック
+  if (categoryType === CategoryType.unselected) throw new Error('分類先を選択してください');
+  // 未変更のチェック
+  if (categoryInfo.category === categoryName && categoryInfo.theme === categoryType && String(categoryInfo.point) === points)
+    throw new Error('すでにデータベースに登録されています');
 };

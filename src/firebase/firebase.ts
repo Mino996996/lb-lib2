@@ -121,6 +121,8 @@ export const getAllCategories = async (): Promise<CategoryInfo[]> => {
   }
 };
 
+// 登録してあるかどうかをboolで返す。
+// 名前変更時の重複チェックにも使うため、登録してあってもエラーは投げない。boolで返す。
 export const checkCategoryName = async (categoryName: string): Promise<boolean> => {
   try {
     const categoryRef = collection(db, 'category');
