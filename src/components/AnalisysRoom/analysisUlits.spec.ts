@@ -11,7 +11,7 @@ import {
   validateInputYears,
 } from './analysisUtils';
 import { EVENT_SAMPLES, CATEGORY_SAMPLES } from '../../fixtures/samples/samples';
-import { EventLog } from '../utilTypes';
+import { EventLog } from '../../utils/utilTypes';
 import { TendScore } from './TendScore';
 
 describe('analysisUtils', () => {

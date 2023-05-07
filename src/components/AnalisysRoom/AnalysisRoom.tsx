@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useConfigContext } from '../state/ConfigProvider';
 import BaseButton from '../UtilComponents/BaseButton';
 import { useEventContext } from '../state/EventProvider';
-import { Theme } from '../CategoryComponents/themeList';
-import { EventLog } from '../utilTypes';
+import { CategoryType, EventLog } from '../../utils/utilTypes';
 import Scatter2D from './Scatter2D';
 import { TendScore } from './TendScore';
 import {
@@ -94,7 +93,7 @@ const AnalysisRoom: React.FC = () => {
             <select onChange={(e) => setSelectedYear(e.target.value)} value={selectedYear}>
               <option value="すべて">すべて</option>
               {allCategory
-                .filter((value) => value.theme === Theme.year)
+                .filter((value) => value.theme === CategoryType.year)
                 .reverse()
                 .map((v, index) => (
                   <option key={index} value={v.category}>
@@ -148,7 +147,7 @@ const AnalysisRoom: React.FC = () => {
         <select onChange={(e) => setPerson(e.target.value)} value={person}>
           <option value="すべて">すべて</option>
           {allCategory
-            .filter((value) => value.theme === Theme.member)
+            .filter((value) => value.theme === CategoryType.member)
             .map((v, index) => (
               <option key={index} value={v.category}>
                 {v.category}
@@ -161,7 +160,7 @@ const AnalysisRoom: React.FC = () => {
         <select onChange={(e) => setSelectedTag(e.target.value)} value={selectedTag}>
           <option value="すべて">すべて</option>
           {allCategory
-            .filter((value) => value.theme === Theme.genre)
+            .filter((value) => value.theme === CategoryType.genre)
             .map((v, index) => (
               <option key={index} value={v.category}>
                 {v.category}

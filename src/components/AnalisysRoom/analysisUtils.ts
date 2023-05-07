@@ -1,5 +1,4 @@
-import { CategoryInfo, EventLog } from '../utilTypes';
-import { Theme } from '../CategoryComponents/themeList';
+import { CategoryInfo, CategoryType, EventLog } from '../../utils/utilTypes';
 import { TendScore } from './TendScore';
 
 export interface HitTime {
@@ -49,7 +48,7 @@ export const filterEventLogsByTags = (eventLogs: EventLog[], person: string, sel
 
 // 発表年選択用
 export const createYearList = (allEventLogs: CategoryInfo[]): string[] => {
-  return allEventLogs.filter((category) => category.theme === Theme.year).map((value) => value.category);
+  return allEventLogs.filter((category) => category.theme === CategoryType.year).map((value) => value.category);
 };
 
 // 選択年の範囲作成用：ここでデータチェックをする
@@ -102,7 +101,7 @@ export const averageTendScores = (eventLogs: EventLog[], allCategories: Category
 
 // 発表者またはタグの名前と登場回数のオブジェクトを返す
 export const hitTimes = (presentations: EventLog[], allCategory: CategoryInfo[], filter: 'person' | 'tag'): HitTime[] => {
-  const theme = filter === 'person' ? Theme.member : Theme.genre;
+  const theme = filter === 'person' ? CategoryType.member : CategoryType.genre;
   return allCategory
     .filter((category) => category.theme === theme)
     .map((relation) => {

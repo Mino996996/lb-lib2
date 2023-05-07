@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FormCard } from './FormCard/FormCard';
 import EventCard from './EventCard/EventCard';
-import { EventLog } from '../utilTypes';
+import { EventLog } from '../../utils/utilTypes';
 import { useConfigContext } from '../state/ConfigProvider';
 import EventKeyword from './EventCard/EventKeyword';
 import { useEventContext } from '../state/EventProvider';

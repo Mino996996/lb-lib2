@@ -1,6 +1,6 @@
 import React from 'react';
 import { fbStorageDelete, urlDb } from '../../../../firebase/firebase';
-import { EventLog } from '../../../utilTypes';
+import { EventLog } from '../../../../utils/utilTypes';
 import { useEventContext } from '../../../state/EventProvider';
 
 interface Props {
@@ -13,15 +13,7 @@ interface Props {
   setIsEdit: React.Dispatch<React.SetStateAction<boolean>> | null;
 }
 
-const FormButtonArea: React.FC<Props> = ({
-  mode,
-  initUrlInfo,
-  inputTitle,
-  post,
-  isInputFieldOpen,
-  setIsInputFieldOpen,
-  setIsEdit = null,
-}) => {
+const FormButtonArea: React.FC<Props> = ({ mode, initUrlInfo, inputTitle, post, isInputFieldOpen, setIsInputFieldOpen, setIsEdit = null }) => {
   const { allEventLogs, setAllEventLogs } = useEventContext();
 
   const deleteUrlInfo = (): void => {

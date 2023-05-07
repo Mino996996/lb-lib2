@@ -1,11 +1,12 @@
-# URL共有ページ
+[![Test and build on merge](https://github.com/Mino996996/lb-lib2/actions/workflows/test-build-merge.yml/badge.svg)](https://github.com/Mino996996/lb-lib2/actions/workflows/test-build-merge.yml)
+# LBの図書館
 
-業務やライブラリ、言語、セットアップなどで参考にしたURLと備考を記録・共有するサイト
+朝活発表資料の管理、閲覧、DL、及び傾向分析アプリ
 
 ## バージョン情報
 
-node: 15.13.1  
-npm: 8.1.2  
+node: 19.13.1  
+npm: 9.1.1  
 React: 18.0.0  
 Tailwind: 3.0.24  
 Firebase: 10.2.0  
@@ -31,4 +32,4 @@ Firebase: 10.2.0
       - cardFunction.spec.ts: ファンクション用の単体テスト
       - cardFunction.ts: ファンクション用TSファイル
       - EventArea.tsx
-- .env: Firebaseのkeyと簡易なログインパスワード
+

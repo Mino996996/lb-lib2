@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import CategoryArea from '../CategoryComponents/CategoryArea';
+import Category from '../Category/Category';
 import ConfigArea from '../ConfigComponents/ConfigArea';
 
 interface Props {
@@ -44,11 +44,7 @@ const MobileSideBarCF: React.FC<Props> = ({ sidebarOpen, setSidebarOpen }) => {
               leaveTo="opacity-0"
             >
               <div className="absolute top-0 right-0 -mr-12 pt-2">
-                <button
-                  type="button"
-                  className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none text-white"
-                  onClick={() => setSidebarOpen(false)}
-                >
+                <button type="button" className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none text-white" onClick={() => setSidebarOpen(false)}>
                   [X]
                 </button>
               </div>
@@ -57,8 +53,7 @@ const MobileSideBarCF: React.FC<Props> = ({ sidebarOpen, setSidebarOpen }) => {
               <span
                 onClick={() => setCategoryTab(true)}
                 className={
-                  'ml-1 border-2 border-b-0 border-gray-400 rounded-t-lg p-2 cursor-pointer font-bold box-content ' +
-                  (categoryTab ? 'bg-indigo-200' : 'bg-gray-300 text-gray-600')
+                  'ml-1 border-2 border-b-0 border-gray-400 rounded-t-lg p-2 cursor-pointer font-bold box-content ' + (categoryTab ? 'bg-indigo-200' : 'bg-gray-300 text-gray-600')
                 }
               >
                 カテゴリ選択
@@ -73,7 +68,7 @@ const MobileSideBarCF: React.FC<Props> = ({ sidebarOpen, setSidebarOpen }) => {
                 表示/タグ選択
               </span>
             </div>
-            <div className="items-center px-4">{categoryTab ? <CategoryArea /> : <ConfigArea />}</div>
+            <div className="items-center px-4">{categoryTab ? <Category /> : <ConfigArea />}</div>
           </div>
         </Transition.Child>
         <div className="flex-shrink-0 w-14" aria-hidden="true">
