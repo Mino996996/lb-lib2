@@ -33,12 +33,30 @@ export const registeredNumber = (urlInfos: EventLog[], categoryInfo: CategoryInf
   return urlInfos.filter((value) => value.tagList.includes(categoryInfo.category)).length;
 };
 
+export const setIsOpenListOfLocalStorage = (theme: CategoryType, isOpen: boolean): void => {
+  switch (theme) {
+    case CategoryType.genre:
+      isOpen ? localStorage.setItem('isGenreListOpen', 'open') : localStorage.setItem('isGenreListOpen', 'close');
+      break;
+    case CategoryType.member:
+      isOpen ? localStorage.setItem('isMemberListOpen', 'open') : localStorage.setItem('isMemberListOpen', 'close');
+      break;
+    case CategoryType.year:
+      isOpen ? localStorage.setItem('isYearListOpen', 'open') : localStorage.setItem('isYearListOpen', 'close');
+      break;
+    default:
+      break;
+  }
+};
+
 export const initSetting = (theme: CategoryType): boolean => {
   switch (theme) {
     case CategoryType.genre:
-      return localStorage.getItem('genre') != null ? !(localStorage.getItem('genre') == null) : localStorage.getItem('genre') === null;
+      return localStorage.getItem('isGenreListOpen') === 'open' || localStorage.getItem('isGenreListOpen') === null;
     case CategoryType.member:
-      return localStorage.getItem('member') != null ? !(localStorage.getItem('member') == null) : localStorage.getItem('member') === null;
+      return localStorage.getItem('isMemberListOpen') === 'open' || localStorage.getItem('isMemberListOpen') === null;
+    case CategoryType.year:
+      return localStorage.getItem('isYearListOpen') === 'open' || localStorage.getItem('isYearListOpen') === null;
     default:
       return true;
   }
@@ -54,8 +72,8 @@ export const validateOnRegisterCategory = (isUniqueName: boolean, categoryName: 
 };
 
 export const validateOnUpdateCategory = (categoryInfo: CategoryInfo, isUniqueName: boolean, categoryName: string, categoryType: CategoryType, points: string): void => {
-  // 変更しており、かつ他の登録名との重複チェック
-  if (categoryInfo.category !== categoryName && isUniqueName) throw new Error('他の登録名と重複しています');
+  // 名前を変更する場合、登録名が旧登録名以外と重複するかチェック
+  if (categoryInfo.category !== categoryName && !isUniqueName) throw new Error('他の登録名と重複しています');
   // 空白入力のチェック
   if (categoryName === '' || categoryName.startsWith(' ') || categoryName.startsWith('　')) throw new Error('空白では登録できません');
   // 登録先の未選択チェック
