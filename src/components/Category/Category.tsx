@@ -1,7 +1,7 @@
 import React from 'react';
 import CategoryForm from './CategoryForm';
 import { themeOptions } from './themeList';
-import { CategoryList } from './CategoryList';
+import CategoryList from './CategoryList';
 import CategoryHeader from './CategoryHeader';
 
 const Category: React.FC = () => {
