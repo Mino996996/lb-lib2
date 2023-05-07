@@ -119,6 +119,10 @@ describe('categoryUtils', () => {
       expect(initSetting(CategoryType.member)).toBeFalsy();
       expect(initSetting(CategoryType.year)).toBeFalsy();
     });
+
+    it('CategoryTypeが条件外ならtrueを返す', () => {
+      expect(initSetting(CategoryType.unselected)).toBeTruthy();
+    });
   });
 
   describe('validationOnRegisterCategory', () => {
