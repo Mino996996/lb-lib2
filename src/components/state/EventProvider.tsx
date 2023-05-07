@@ -24,7 +24,8 @@ const EventProvider: React.FC<Props> = ({ children }) => {
 
   const fetchEventsAndCategories = async (): Promise<void> => {
     const [allUrls, allCategories] = await Promise.all([getAllUrls(), getAllCategories()]);
-    setAllEventLogs(allUrls);
+    const isAsc = localStorage.getItem('asc');
+    setAllEventLogs(isAsc === 'true' || isAsc === null ? allUrls.sort((a, b) => b.addTime - a.addTime) : allUrls.sort((a, b) => a.addTime - b.addTime));
     setAllCategory(allCategories.sort((a, b) => a.category.localeCompare(b.category)));
   };
 
