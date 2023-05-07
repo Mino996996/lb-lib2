@@ -15,12 +15,10 @@ Firebase: 10.2.0
 
 - src: reactのコンポーネント
   - components: メインと認証ページのコンポーネント
-    - CategoryComponents: 左側/カテゴリ一覧表示
-      - Parts
-      - CategoryArea.tsx
-    - ConfigComponents: 右側/表示設定と関連タグを表示
-      - Parts
-      - ConfigArea.tsx
+    - Category: 左側/カテゴリ一覧表示
+      - Category.tsx
+    - Config: 右側/表示設定と関連タグを表示
+      - Config.tsx
     - MobileSidebar: スマホ時のサイドバー/CategoryComponentの役目
       - MobileSidebar.tsx
     - state: 認証系のreducerとuseProviderファイル

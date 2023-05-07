@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import Category from '../Category/Category';
-import ConfigArea from '../ConfigComponents/ConfigArea';
+import Config from '../Config/Config';
 
 interface Props {
   sidebarOpen: boolean;
@@ -68,7 +68,7 @@ const MobileSideBarCF: React.FC<Props> = ({ sidebarOpen, setSidebarOpen }) => {
                 表示/タグ選択
               </span>
             </div>
-            <div className="items-center px-4">{categoryTab ? <Category /> : <ConfigArea />}</div>
+            <div className="items-center px-4">{categoryTab ? <Category /> : <Config />}</div>
           </div>
         </Transition.Child>
         <div className="flex-shrink-0 w-14" aria-hidden="true">

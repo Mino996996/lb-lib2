@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import MobileSideBar from './Mobile/MobileSidebar';
 import Category from './Category/Category';
 import EventArea from './EventComponents/EventArea';
-import ConfigArea from './ConfigComponents/ConfigArea';
+import Config from './Config/Config';
 import { useConfigContext } from './state/ConfigProvider';
 import { getAllCategories, getAllUrls } from '../firebase/firebase';
 import MobileHeader from './Mobile/MobileHeader';
@@ -28,7 +28,7 @@ const Articles: React.FC = () => {
         <EventArea />
       </div>
       <div className="hidden sm:block w-80 pl-4 border-l border-gray-500 ">
-        <ConfigArea />
+        <Config />
       </div>
     </>
   );
