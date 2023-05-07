@@ -8,6 +8,7 @@ interface EventContextType {
   allEventLogs: EventLog[];
   setAllEventLogs: React.Dispatch<React.SetStateAction<EventLog[]>>;
   fetchEventsAndCategories: () => Promise<void>;
+  sortEventLogs: (isAsc: boolean) => void;
 }
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
@@ -27,12 +28,18 @@ const EventProvider: React.FC<Props> = ({ children }) => {
     setAllCategory(allCategories.sort((a, b) => a.category.localeCompare(b.category)));
   };
 
+  const sortEventLogs = (isAsc: boolean): void => {
+    const filteredList = isAsc ? allEventLogs.sort((a, b) => b.addTime - a.addTime) : allEventLogs.sort((a, b) => a.addTime - b.addTime);
+    setAllEventLogs(filteredList);
+  };
+
   const value: EventContextType = {
     allCategory,
     setAllCategory,
     allEventLogs,
     setAllEventLogs,
     fetchEventsAndCategories,
+    sortEventLogs,
   };
 
   return <EventContext.Provider value={value}>{children}</EventContext.Provider>;
