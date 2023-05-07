@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FormCard } from './FormCard/FormCard';
 import EventCard from './EventCard/EventCard';
-import { EventLog } from '../utilTypes';
+import { EventLog } from '../../utils/utilTypes';
 import { useConfigContext } from '../state/ConfigProvider';
 import EventKeyword from './EventCard/EventKeyword';
 import { useEventContext } from '../state/EventProvider';
@@ -32,7 +32,7 @@ const EventArea: React.FC = () => {
 
   // カテゴリまたは選択タグ変更時の表示URLデータをフィルタリング
   useEffect(() => {
-    const filteredList = filterEvent(allEventLogs, keywords, selectedCategory, asc);
+    const filteredList = filterEvent(allEventLogs, keywords, selectedCategory);
     setEventLogs(filteredList);
   }, [keywords, selectedCategory, allEventLogs, asc]);
 

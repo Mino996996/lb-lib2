@@ -1,5 +1,5 @@
 import React from 'react';
-import { EventLog } from '../../../utilTypes';
+import { EventLog } from '../../../../utils/utilTypes';
 
 interface Props {
   urlInfo: EventLog;

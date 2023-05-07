@@ -1,5 +1,3 @@
-import { Theme } from './CategoryComponents/themeList';
-
 export interface EventLog {
   id: string;
   title: string;
@@ -17,10 +15,17 @@ export interface EventLog {
   fileImageUrl: string;
 }
 
+export enum CategoryType {
+  unselected,
+  genre,
+  member,
+  year,
+}
+
 export interface CategoryInfo {
   id: string;
   category: string;
-  theme: Theme;
+  theme: CategoryType;
   point?: number[];
 }
 

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { EventLog } from '../../utilTypes';
+import { EventLog } from '../../../utils/utilTypes';
 import { ConfigContext } from '../../state/ConfigProvider';
 import { isCategoryTag } from '../cardFunctions';
 import { FormCard } from '../FormCard/FormCard';
@@ -59,10 +59,7 @@ const EventCard: React.FC<Props> = ({ urlInfo, index }) => {
               {visible ? (
                 <FileInfo urlInfo={urlInfo} setVisible={setVisible} />
               ) : (
-                <button
-                  className="px-2 mr-8 ml-auto text-sm font-bold cursor-pointer bg-gray-200 border border-gray-400 rounded shadow"
-                  onClick={() => setVisible(true)}
-                >
+                <button className="px-2 mr-8 ml-auto text-sm font-bold cursor-pointer bg-gray-200 border border-gray-400 rounded shadow" onClick={() => setVisible(true)}>
                   イメージ表示
                 </button>
               )}
@@ -72,13 +69,7 @@ const EventCard: React.FC<Props> = ({ urlInfo, index }) => {
           {/* 備考欄 */}
           <div className="px-4 py-1 border-b border-gray-300">
             <div className="flex w-full">
-              <p
-                className={
-                  'inline-block w-10/12 mr-2 sm:mr-0 sm:w-11/12 whitespace-pre-wrap truncate overflow-hidden ' + (allMemo ? '' : 'h-5')
-                }
-              >
-                {urlInfo.memo}
-              </p>
+              <p className={'inline-block w-10/12 mr-2 sm:mr-0 sm:w-11/12 whitespace-pre-wrap truncate overflow-hidden ' + (allMemo ? '' : 'h-5')}>{urlInfo.memo}</p>
               <span className="cursor-pointer text-xs font-bold" onClick={() => setAllMemo(!allMemo)}>
                 {allMemo ? '[省略]' : '[全文]'}
               </span>

@@ -3,7 +3,7 @@ import TitleForm from './Parts/TitleForm';
 import UrlForm from './Parts/UrlForm';
 import TagForm from './Parts/TagForm';
 import MemoForm from './Parts/MemoForm';
-import { EventLog } from '../../utilTypes';
+import { EventLog } from '../../../utils/utilTypes';
 import { addUrl, fbPdfImageUpload, fbStorageDelete, fbStorageUpload, updateUrl } from '../../../firebase/firebase';
 import { ClosedFormCard } from './ClosedFormCard';
 import { useConfigContext } from '../../state/ConfigProvider';
@@ -87,12 +87,7 @@ export const FormCard: React.FC<Props> = ({ initUrlInfo, mode, setIsEdit = null 
         // 更新時の処理
         if (inputFileId !== '' && inputFile != null && inputFile.name.includes('.pdf')) {
           await fbStorageDelete(inputFileId);
-          const result = await Promise.all([
-            fbStorageUpload(inputFile),
-            fbPdfImageUpload(base64Image),
-            fbStorageDelete(inputFileId),
-            fbStorageDelete(fileImageId),
-          ]);
+          const result = await Promise.all([fbStorageUpload(inputFile), fbPdfImageUpload(base64Image), fbStorageDelete(inputFileId), fbStorageDelete(fileImageId)]);
           urlInfo.fileId = result[0].id;
           urlInfo.fileName = result[0].name;
           urlInfo.fileUrl = result[0].url;
@@ -160,13 +155,7 @@ export const FormCard: React.FC<Props> = ({ initUrlInfo, mode, setIsEdit = null 
           {status && <h2 className="text-green-500 text-sm p-2">Now Uploading...</h2>}
           <TitleForm inputTitle={inputTitle} setInputTitle={setInputTitle} />
           <DateForm publicationTime={inputAddTime} setPublicationTime={setInputAddTime} />
-          <FileForm
-            inputFile={inputFile}
-            setInputFile={setInputFile}
-            inputFileName={inputFileName}
-            base64Image={base64Image}
-            setBase64Image={setBase64Image}
-          />
+          <FileForm inputFile={inputFile} setInputFile={setInputFile} inputFileName={inputFileName} base64Image={base64Image} setBase64Image={setBase64Image} />
           <UrlForm
             inputUrl={inputUrl}
             setInputUrl={setInputUrl}
@@ -175,12 +164,7 @@ export const FormCard: React.FC<Props> = ({ initUrlInfo, mode, setIsEdit = null 
             setInputPageDescription={setInputPageDescription}
             inputPageTitle={inputPageTitle}
           />
-          <TagForm
-            inputTagStr={inputTagStr}
-            setInputTagStr={setInputTagStr}
-            inputTagList={inputTagList}
-            setInputTagList={setInputTagList}
-          />
+          <TagForm inputTagStr={inputTagStr} setInputTagStr={setInputTagStr} inputTagList={inputTagList} setInputTagList={setInputTagList} />
           <MemoForm inputMemo={inputMemo} setInputMemo={setInputMemo} />
           <FormButtonArea
             mode={mode}

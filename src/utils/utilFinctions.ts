@@ -1,6 +1,3 @@
-import { Theme } from '../components/CategoryComponents/themeList';
-import { CategoryInfo } from '../components/utilTypes';
-
 export const testABCD = (): string => 'ABCD';
 // オリジナルIDを作成
 export const createId = (digit: number): string => {
@@ -8,14 +5,6 @@ export const createId = (digit: number): string => {
   return Array.from(crypto.getRandomValues(new Uint32Array(digit)))
     .map((n) => S[n % S.length])
     .join('');
-};
-
-export const createCategory = (idLength: number, categoryName: string, theme: Theme): CategoryInfo => {
-  return {
-    id: createId(idLength),
-    category: categoryName,
-    theme,
-  };
 };
 
 export const checkSelectedKeywords = (_keywords: string | null): string[] => {
