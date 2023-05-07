@@ -43,3 +43,9 @@ export const initSetting = (theme: CategoryType): boolean => {
       return true;
   }
 };
+
+export const validateOnRegisterCategory = (isUniqueName: boolean, categoryName: string, categoryType: CategoryType): void => {
+  if (!isUniqueName) throw new Error('すでにデータベースに登録されています');
+  if (categoryName === '' || categoryName.startsWith(' ') || categoryName.startsWith('　')) throw new Error('空白では登録できません');
+  if (categoryType === CategoryType.unselected) throw new Error('分類先を選択してください');
+};
