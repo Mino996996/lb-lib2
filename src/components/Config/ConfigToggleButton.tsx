@@ -1,17 +1,20 @@
 import React, { useContext } from 'react';
 import { Switch } from '@headlessui/react';
-import { ConfigContext } from '../../state/ConfigProvider';
+import { ConfigContext } from '../state/ConfigProvider';
+import { setConfigLocalStorage } from './configUtils';
+import { EventContext } from '../state/EventProvider';
 
 const classNames = (...classes: string[]): string => classes.filter(Boolean).join(' ');
 
 interface Props {
-  kind: 'image' | 'memo';
+  kind: 'image' | 'memo' | 'asc';
 }
 
-export const ToggleButton: React.FC<Props> = ({ kind }) => {
-  const { imageVisible, setImageVisible, memoVisible, setMemoVisible } = useContext(ConfigContext);
-  const visible = kind === 'image' ? imageVisible : memoVisible;
-  const setVisible = kind === 'image' ? setImageVisible : setMemoVisible;
+export const ConfigToggleButton: React.FC<Props> = ({ kind }) => {
+  const { imageVisible, setImageVisible, memoVisible, setMemoVisible, asc, setAsc } = useContext(ConfigContext);
+  const { sortEventLogs } = useContext(EventContext);
+  const visible = kind === 'image' ? imageVisible : kind === 'memo' ? memoVisible : asc;
+  const setVisible = kind === 'image' ? setImageVisible : kind === 'memo' ? setMemoVisible : setAsc;
 
   return (
     <Switch
@@ -21,12 +24,9 @@ export const ToggleButton: React.FC<Props> = ({ kind }) => {
         'mx-2 relative inline-flex flex-shrink-0 h-4 w-9 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-700'
       )}
       onChange={() => {
-        if (kind === 'image') {
-          visible ? localStorage.setItem('image', '') : localStorage.setItem('image', 'true');
-        } else {
-          visible ? localStorage.setItem('memo', '') : localStorage.setItem('memo', 'true');
-        }
+        setConfigLocalStorage(kind, !visible);
         setVisible(!visible);
+        if (kind === 'asc') sortEventLogs(!visible);
       }}
     >
       <span

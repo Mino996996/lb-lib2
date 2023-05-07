@@ -32,7 +32,7 @@ const EventArea: React.FC = () => {
 
   // カテゴリまたは選択タグ変更時の表示URLデータをフィルタリング
   useEffect(() => {
-    const filteredList = filterEvent(allEventLogs, keywords, selectedCategory, asc);
+    const filteredList = filterEvent(allEventLogs, keywords, selectedCategory);
     setEventLogs(filteredList);
   }, [keywords, selectedCategory, allEventLogs, asc]);
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import CategoryItemAndEdit from './CategoryItemAndEdit';
 import { ThemeOption } from './themeList';
 import { useEventContext } from '../state/EventProvider';
@@ -10,7 +10,7 @@ interface Props {
 }
 
 // 該当カテゴリ一覧の表示
-export const CategoryList: React.FC<Props> = ({ themeOption }) => {
+const CategoryList: React.FC<Props> = ({ themeOption }) => {
   const { allCategory } = useEventContext();
   const [isOpen, setIsOpen] = useState<boolean>(initSetting(themeOption.value));
 
@@ -21,3 +21,5 @@ export const CategoryList: React.FC<Props> = ({ themeOption }) => {
     </ul>
   );
 };
+
+export default memo(CategoryList);

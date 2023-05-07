@@ -122,7 +122,7 @@ export const pdfPageImage = async (pdfData: PDFDocumentProxy, scale: number, pag
 };
 
 // イベントを条件でフィルタリング
-export const filterEvent = (allEventLogs: EventLog[], keywords: string[], selectedCategory: string, asc: boolean): EventLog[] => {
+export const filterEvent = (allEventLogs: EventLog[], keywords: string[], selectedCategory: string): EventLog[] => {
   let filteredList: EventLog[] = allEventLogs;
   if (!(keywords.length === 0) && !(selectedCategory === '')) {
     // 両方データあり
@@ -140,6 +140,6 @@ export const filterEvent = (allEventLogs: EventLog[], keywords: string[], select
     filteredList = filteredList.filter((value) => value.tagList.includes(selectedCategory));
   }
   // ソート
-  asc ? (filteredList = filteredList.sort((a, b) => b.addTime - a.addTime)) : (filteredList = filteredList.sort((a, b) => a.addTime - b.addTime));
+  // asc ? (filteredList = filteredList.sort((a, b) => b.addTime - a.addTime)) : (filteredList = filteredList.sort((a, b) => a.addTime - b.addTime));
   return filteredList;
 };

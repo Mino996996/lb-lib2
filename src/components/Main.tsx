@@ -2,24 +2,11 @@ import React, { useEffect, useState } from 'react';
 import MobileSideBar from './Mobile/MobileSidebar';
 import Category from './Category/Category';
 import EventArea from './EventComponents/EventArea';
-import ConfigArea from './ConfigComponents/ConfigArea';
+import Config from './Config/Config';
 import { useConfigContext } from './state/ConfigProvider';
-import { getAllCategories, getAllUrls } from '../firebase/firebase';
 import MobileHeader from './Mobile/MobileHeader';
 import { useEventContext } from './state/EventProvider';
 import AnalysisRoom from './AnalisysRoom/AnalysisRoom';
-
-// const saveAsJson = (data: any, fileName: string) => {
-//   const name = `${fileName}.json`;
-//   const blobData = new Blob([JSON.stringify(data)], { type: 'text/json' });
-//   const jsonURL = window.URL.createObjectURL(blobData);
-//   const link = document.createElement('a');
-//   document.body.appendChild(link);
-//   link.href = jsonURL;
-//   link.setAttribute('download', name);
-//   link.click();
-//   document.body.removeChild(link);
-// }
 
 const Articles: React.FC = () => {
   return (
@@ -28,7 +15,7 @@ const Articles: React.FC = () => {
         <EventArea />
       </div>
       <div className="hidden sm:block w-80 pl-4 border-l border-gray-500 ">
-        <ConfigArea />
+        <Config />
       </div>
     </>
   );
@@ -36,20 +23,18 @@ const Articles: React.FC = () => {
 
 const Main: React.FC = () => {
   const { login, isAnalysisMode } = useConfigContext();
-  const { setAllCategory, setAllEventLogs } = useEventContext();
+  const { setAllCategory, setAllEventLogs, fetchEventsAndCategories } = useEventContext();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // 各データの取得/消去管理
   useEffect(() => {
     const getAllData = (): void => {
-      Promise.all([getAllUrls(), getAllCategories()])
-        .then((value) => {
-          setAllEventLogs(value[0]);
-          setAllCategory(value[1].sort((a, b) => a.category.localeCompare(b.category)));
-        })
+      fetchEventsAndCategories()
+        .then()
         .catch((e) => alert(e));
     };
-    login && getAllData(); // ログインしているならデータを取得しにいく
+    // ログインしているならデータを取得しにいく
+    login && getAllData();
 
     return () => {
       // ログアウト時に画面が消えるのでその際にデータを消去
